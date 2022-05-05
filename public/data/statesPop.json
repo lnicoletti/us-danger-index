@@ -1,0 +1,314 @@
+[
+  {
+    "state": "Mississippi",
+    "totPop": 2988762,
+    "malePop": 1450379,
+    "femalePop": 1538383
+  },
+  {
+    "state": "Missouri",
+    "totPop": 6090062,
+    "malePop": 2988772,
+    "femalePop": 3101290
+  },
+  {
+    "state": "Montana",
+    "totPop": 1041732,
+    "malePop": 524220,
+    "femalePop": 517512
+  },
+  {
+    "state": "Nebraska",
+    "totPop": 1904760,
+    "malePop": 949910,
+    "femalePop": 954850
+  },
+  {
+    "state": "Nevada",
+    "totPop": 2922849,
+    "malePop": 1467165,
+    "femalePop": 1455684
+  },
+  {
+    "state": "New Hampshire",
+    "totPop": 1343622,
+    "malePop": 664983,
+    "femalePop": 678639
+  },
+  {
+    "state": "New Jersey",
+    "totPop": 8881845,
+    "malePop": 4335930,
+    "femalePop": 4545915
+  },
+  {
+    "state": "New Mexico",
+    "totPop": 2092434,
+    "malePop": 1035850,
+    "femalePop": 1056584
+  },
+  {
+    "state": "New York",
+    "totPop": 19618453,
+    "malePop": 9519555,
+    "femalePop": 10098898
+  },
+  {
+    "state": "North Carolina",
+    "totPop": 10155624,
+    "malePop": 4944759,
+    "femalePop": 5210865
+  },
+  {
+    "state": "North Dakota",
+    "totPop": 752201,
+    "malePop": 386183,
+    "femalePop": 366018
+  },
+  {
+    "state": "Ohio",
+    "totPop": 11641879,
+    "malePop": 5703967,
+    "femalePop": 5937912
+  },
+  {
+    "state": "Oklahoma",
+    "totPop": 3918137,
+    "malePop": 1941576,
+    "femalePop": 1976561
+  },
+  {
+    "state": "Oregon",
+    "totPop": 4081943,
+    "malePop": 2023021,
+    "femalePop": 2058922
+  },
+  {
+    "state": "Pennsylvania",
+    "totPop": 12791181,
+    "malePop": 6263189,
+    "femalePop": 6527992
+  },
+  {
+    "state": "Rhode Island",
+    "totPop": 1056611,
+    "malePop": 513332,
+    "femalePop": 543279
+  },
+  {
+    "state": "South Carolina",
+    "totPop": 4955925,
+    "malePop": 2405726,
+    "femalePop": 2550199
+  },
+  {
+    "state": "South Dakota",
+    "totPop": 864289,
+    "malePop": 435761,
+    "femalePop": 428528
+  },
+  {
+    "state": "Tennessee",
+    "totPop": 6651089,
+    "malePop": 3243678,
+    "femalePop": 3407411
+  },
+  {
+    "state": "Texas",
+    "totPop": 27885195,
+    "malePop": 13849775,
+    "femalePop": 14035420
+  },
+  {
+    "state": "Vermont",
+    "totPop": 624977,
+    "malePop": 307973,
+    "femalePop": 317004
+  },
+  {
+    "state": "Utah",
+    "totPop": 3045350,
+    "malePop": 1532768,
+    "femalePop": 1512582
+  },
+  {
+    "state": "Virginia",
+    "totPop": 8413774,
+    "malePop": 4138574,
+    "femalePop": 4275200
+  },
+  {
+    "state": "Washington",
+    "totPop": 7294336,
+    "malePop": 3645665,
+    "femalePop": 3648671
+  },
+  {
+    "state": "West Virginia",
+    "totPop": 1829054,
+    "malePop": 904196,
+    "femalePop": 924858
+  },
+  {
+    "state": "Wisconsin",
+    "totPop": 5778394,
+    "malePop": 2872376,
+    "femalePop": 2906018
+  },
+  {
+    "state": "Wyoming",
+    "totPop": 581836,
+    "malePop": 296979,
+    "femalePop": 284857
+  },
+  {
+    "state": "Puerto Rico",
+    "totPop": 3386941,
+    "malePop": 1612865,
+    "femalePop": 1774076
+  },
+  {
+    "state": "Alabama",
+    "totPop": 4864680,
+    "malePop": 2355799,
+    "femalePop": 2508881
+  },
+  {
+    "state": "Alaska",
+    "totPop": 738516,
+    "malePop": 385579,
+    "femalePop": 352937
+  },
+  {
+    "state": "Arizona",
+    "totPop": 6946685,
+    "malePop": 3453439,
+    "femalePop": 3493246
+  },
+  {
+    "state": "Arkansas",
+    "totPop": 2990671,
+    "malePop": 1468412,
+    "femalePop": 1522259
+  },
+  {
+    "state": "California",
+    "totPop": 39148760,
+    "malePop": 19453769,
+    "femalePop": 19694991
+  },
+  {
+    "state": "Colorado",
+    "totPop": 5531141,
+    "malePop": 2780831,
+    "femalePop": 2750310
+  },
+  {
+    "state": "Delaware",
+    "totPop": 949495,
+    "malePop": 459570,
+    "femalePop": 489925
+  },
+  {
+    "state": "District of Columbia",
+    "totPop": 684498,
+    "malePop": 324881,
+    "femalePop": 359617
+  },
+  {
+    "state": "Connecticut",
+    "totPop": 3581504,
+    "malePop": 1747131,
+    "femalePop": 1834373
+  },
+  {
+    "state": "Florida",
+    "totPop": 20598139,
+    "malePop": 10071925,
+    "femalePop": 10526214
+  },
+  {
+    "state": "Georgia",
+    "totPop": 10297484,
+    "malePop": 5012229,
+    "femalePop": 5285255
+  },
+  {
+    "state": "Idaho",
+    "totPop": 1687809,
+    "malePop": 845564,
+    "femalePop": 842245
+  },
+  {
+    "state": "Hawaii",
+    "totPop": 1422029,
+    "malePop": 713772,
+    "femalePop": 708257
+  },
+  {
+    "state": "Illinois",
+    "totPop": 12821497,
+    "malePop": 6295915,
+    "femalePop": 6525582
+  },
+  {
+    "state": "Indiana",
+    "totPop": 6637426,
+    "malePop": 3271068,
+    "femalePop": 3366358
+  },
+  {
+    "state": "Iowa",
+    "totPop": 3132499,
+    "malePop": 1554481,
+    "femalePop": 1578018
+  },
+  {
+    "state": "Kansas",
+    "totPop": 2908776,
+    "malePop": 1449413,
+    "femalePop": 1459363
+  },
+  {
+    "state": "Kentucky",
+    "totPop": 4440204,
+    "malePop": 2186715,
+    "femalePop": 2253489
+  },
+  {
+    "state": "Louisiana",
+    "totPop": 4663616,
+    "malePop": 2279968,
+    "femalePop": 2383648
+  },
+  {
+    "state": "Maine",
+    "totPop": 1332813,
+    "malePop": 652299,
+    "femalePop": 680514
+  },
+  {
+    "state": "Maryland",
+    "totPop": 6003435,
+    "malePop": 2910323,
+    "femalePop": 3093112
+  },
+  {
+    "state": "Massachusetts",
+    "totPop": 6830193,
+    "malePop": 3313979,
+    "femalePop": 3516214
+  },
+  {
+    "state": "Michigan",
+    "totPop": 9957488,
+    "malePop": 4899118,
+    "femalePop": 5058370
+  },
+  {
+    "state": "Minnesota",
+    "totPop": 5527358,
+    "malePop": 2751748,
+    "femalePop": 2775610
+  }
+]
