@@ -4,7 +4,7 @@
     export let currentStep;
     // export let innerHeight;
     export let innerWidth;
-    import { max, mean, scaleSequential, scaleSqrt, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
+    import { max, mean, scaleSequential, scaleSqrt, interpolateLab, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
     import { fade, draw, fly } from 'svelte/transition';
     import Legend from './Legend.svelte';
 
@@ -59,7 +59,8 @@
 
     // color scales
     $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
-    $: colorFR = scaleSequential(interpolateRdPu).domain([0, max(states, d=>d.frhSI)])
+    // $: colorFR = scaleSequential(interpolateRdPu).domain([0, max(states, d=>d.frhSI)])
+    $: colorFR = scaleSequential(interpolateLab("white", "#008080")).domain([0.2, max(states, d=>d.frhSI)])
     $: colorLS = scaleSequential(interpolateGnBu).domain([0, max(states, d=>d.lsSI)])
     $: colorVC = scaleSequential(interpolateOranges).domain([0, max(states, d=>d.vcSI)])
     $: colorDI = scaleSequential(interpolateBuPu).domain([0, max(states, d=>d.deadlyIndex)])
@@ -195,7 +196,7 @@
             The most dangerous state {currentIndex} is <b>{deadlyState}</b>
             {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==0}
             There are <b>{maxStates.length}</b> dangerous states {currentIndex}
-            {:else}
+            {:else if currentStep!==0}
             On average, <b><span style="fill:#0080c9">red</span></b> states are <b>{partyGap.toFixed()}%</b> more dangerous than <b><span color="#dd2c35">blue</span></b> states.
             {/if}
         </h3>
