@@ -1,7 +1,7 @@
 <script>
 	// export let name;
 	import { onMount } from "svelte";
-	import { csv, json, csvParseRows, scaleLinear, extent } from 'd3';
+	import { csv, json, csvParseRows, scaleLinear, extent, selectAll} from 'd3';
 	import CartogramArc from './components/CartogramArc.svelte';
 	import Scroll from "./components/Scrolly.svelte";
 
@@ -14,60 +14,81 @@
 	let statesPop=[];
 	let stateParty=[];
 	let activeBans = [
-  		 {state: 'ME', ban: ""}
+		{state: 'ME', ban: 0}
 		,{state: 'WI', ban: 1}
-		,{state: 'VT', ban: ''}
-		,{state: 'NH', ban: ''}
-		,{state: 'WA', ban: ''}
+		,{state: 'VT', ban: 0}
+		,{state: 'NH', ban: 0.33}
+		,{state: 'WA', ban: 0}
 		,{state: 'ID', ban: 1}
-		,{state: 'MT', ban: ''}
+		,{state: 'MT', ban: 0.66}
 		,{state: 'ND', ban: 1}
-		,{state: 'MN', ban: ''}
-		,{state: 'IL', ban: ''}
+		,{state: 'MN', ban: 0}
+		,{state: 'IL', ban: 0}
 		,{state: 'MI', ban: 1}
-		,{state: 'NY', ban: ''}
-		,{state: 'MA', ban: ''}
-		,{state: 'OR', ban: ''}
-		,{state: 'NV', ban: ''}
+		,{state: 'NY', ban: 0}
+		,{state: 'MA', ban: 0}
+		,{state: 'OR', ban: 0}
+		,{state: 'NV', ban: 0}
 		,{state: 'WY', ban: 1}
 		,{state: 'SD', ban: 1}
 		,{state: 'IA', ban: 1}
-		,{state: 'IN', ban: ''}
+		,{state: 'IN', ban: 0.66}
 		,{state: 'OH', ban: 1}
-		,{state: 'PA', ban: ''}
-		,{state: 'NJ', ban: ''}
-		,{state: 'CT', ban: ''}
-		,{state: 'RI', ban: ''}
-		,{state: 'CA', ban: ''}
+		,{state: 'PA', ban: 0.33}
+		,{state: 'NJ', ban: 0}
+		,{state: 'CT', ban: 0}
+		,{state: 'RI', ban: 0}
+		,{state: 'CA', ban: 0}
 		,{state: 'UT', ban: 1}
-		,{state: 'CO', ban: ''}
-		,{state: 'NE', ban: ''}
+		,{state: 'CO', ban: 0}
+		,{state: 'NE', ban: 0.66}
 		,{state: 'MO', ban: 1}
 		,{state: 'KY', ban: 1}
 		,{state: 'WV', ban: 1}
-		,{state: 'VA', ban: ''}
-		,{state: 'MD', ban: ''},
-		{state: 'DE', ban: ''},
+		,{state: 'VA', ban: 0.33}
+		,{state: 'MD', ban: 0},
+		{state: 'DE', ban: 0},
 		{state: 'AZ', ban: 1},
-		{state: 'NM', ban: ''},
-		{state: 'KS', ban: 1},
+		{state: 'NM', ban: 0.33},
+		{state: 'KS', ban: 0},
 		{state: 'AR', ban: 1}
 		,{state: 'TN', ban: 1}
-		,{state: 'NC', ban: 1}
+		,{state: 'NC', ban: 0.66}
 		,{state: 'SC', ban: 1}
-		,{state: 'DC', ban: ''}
+		,{state: 'DC', ban: 0}
 		,{state: 'OK', ban: 1}
 		,{state: 'LA', ban: 1}
 		,{state: 'MS', ban: 1}
 		,{state: 'AL', ban: 1}
 		,{state: 'GA', ban: 1}
-		,{state: 'HI', ban: ''}
-		,{state: 'AK', ban: ''}
+		,{state: 'HI', ban: 0}
+		,{state: 'AK', ban: 0}
 		,{state: 'TX', ban: 1}
-		,{state: 'FL', ban: ''}
+		,{state: 'FL', ban: 0.66}
 	]
 	let states = [];
-	let steps = ["step 1", "step 2", "step 3", "step 4"]
+	let steps = ["Here's how to read this cartogram", 
+				 "Row vs. Wade Index", 
+				 "Row vs. Wade Index",
+				 "Row vs. Wade Index",
+				 "Row vs. Wade Index",
+				 "Row vs. Wade Index",
+				 "Female Reproductive Rights Index", 
+				 "Female Reproductive Rights Index",
+				 "Female Reproductive Rights Index",
+				 "Violent Crime Index", 
+				 "Violent Crime Index", 
+				 "Violent Crime Index", 
+				 "Legal Protection Index", 
+				 "Legal Protection Index", 
+				 "Legal Protection Index", 
+				 "Danger Index", 
+				 "Danger Index", 
+				 "Danger Index", 
+				 "Political Party",
+				 "explore the app",
+				 "<div id='lastStep'>explore the app</div>"
+		];
 
 	onMount(async () => {
 
@@ -106,7 +127,7 @@
 			stateAbbrv: state[0],
 			stateName: state[1][2],
 			// row v wade ban
-			activeBan: activeBans.filter(d=>d.state===state[0])[0].ban===""?0:1,
+			activeBan: activeBans.filter(d=>d.state===state[0])[0].ban,
 			// legal structures (protective crime laws)
 			protSHW:+legalStructures.filter(d=>d.State===state[1][2])[0]["Protect all workers from sexual harassment in the workplace, regardless of company size?"],
 			firearmSurrender:+legalStructures.filter(d=>d.State===state[1][2])[0]["Require the relinquishment of firearms from abusers subject to DV protective orders?"],
@@ -201,23 +222,39 @@
 	// $: mainWidth = innerWidth>640?innerWidth*0.7:innerWidth*0.9
 	// $: console.log(mainWidth)
 
+	// make the last step invisible
+	$: if (currentStep===20) {
+		selectAll(".step-content").style("visibility", "hidden")
+	} else if (currentStep!==20) {
+		selectAll(".step-content").style("visibility", "visible")
+	}
+
 </script>
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
 <main>
-	<h1>The <i><strong>Deadliest</strong></i> places to own a vagina in the United States</h1>
-	<p>This is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph </p>
-	<div class="chart">
-		<CartogramArc states = {statesIndex} {position} {innerWidth} {innerHeight} {currentStep}/>
-	</div>
-	<Scroll bind:value={currentStep}>
-		{#each steps as text, i}
-		  <div class="step" class:active={currentStep === i}>
-			<div class="step-content">
-			  {@html text}
+	<section>
+		<h1>The <i><strong>Most Dangerous</strong></i> U.S. States to reside in if you are not a cis-gender man</h1>
+		<p>This is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph </p>
+	</section>
+	<section>
+		<div class="chart">
+			<CartogramArc states = {statesIndex} {position} {innerWidth} {innerHeight} {currentStep}/>
+		</div>
+		<Scroll bind:value={currentStep}>
+			{#each steps as text, i}
+			<div class="step" class:active={currentStep === i}>
+				<div class="step-content">
+				{@html text}
+				</div>
 			</div>
-		  </div>
-		{/each}
-	</Scroll>
+			{/each}
+		</Scroll>
+	</section>
+	<section>
+		<p>
+		methodology section here methmethodology section here methodology section here odology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here 
+		</p>
+	</section>
 </main>
 
 <style>
