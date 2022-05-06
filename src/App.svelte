@@ -67,26 +67,48 @@
 		,{state: 'FL', ban: 0.66}
 	]
 	let states = [];
-	let steps = ["Here's how to read this cartogram", 
-				 "Row vs. Wade Index", 
-				 "Row vs. Wade Index",
-				 "Row vs. Wade Index",
-				 "Row vs. Wade Index",
-				 "Row vs. Wade Index",
-				 "Female Reproductive Rights Index", 
-				 "Female Reproductive Rights Index",
-				 "Female Reproductive Rights Index",
-				 "Violent Crime Index", 
-				 "Violent Crime Index", 
-				 "Violent Crime Index", 
-				 "Legal Protection Index", 
-				 "Legal Protection Index", 
-				 "Legal Protection Index", 
-				 "Danger Index", 
-				 "Danger Index", 
-				 "Danger Index", 
-				 "Political Party",
-				 "explore the app",
+	// let steps = ["Here's how to read this cartogram", 
+	// 			 "Row vs. Wade Index", 
+	// 			 "Row vs. Wade Index",
+	// 			 "Row vs. Wade Index",
+	// 			 "Row vs. Wade Index",
+	// 			 "Row vs. Wade Index",
+	// 			 "Female Reproductive Rights Index", 
+	// 			 "Female Reproductive Rights Index",
+	// 			 "Female Reproductive Rights Index",
+	// 			 "Violent Crime Index", 
+	// 			 "Violent Crime Index", 
+	// 			 "Violent Crime Index", 
+	// 			 "Legal Protection Index", 
+	// 			 "Legal Protection Index", 
+	// 			 "Legal Protection Index", 
+	// 			 "Danger Index", 
+	// 			 "Danger Index", 
+	// 			 "Danger Index", 
+	// 			 "Political Party",
+	// 			 "explore the app",
+	// 			 "<div id='lastStep'>explore the app</div>"
+	// 	];
+	let steps = ["As outlined by a cartogram approach, we consider each of these sub-indices and, ultimately, our overall danger 				Index at the state-level.", 
+				 "First, in creating the Erosion of Abortion Rights Sub-Index, we have considered state stances on banning or greatly restricting access to abortion if Roe v. Wade is to be overturned.<br><br>In the following cartogram, each square represents a US state, and the level of completion of each circle within each square represents the risk to the right of abortion imposed by each state.  For example, squares (i.e., states) denoted by full circles have trigger laws that would ban abortion.  Squares denoted by circles that are two-thirds completed represent states that are likely to restrict access to abortion.  Squares marked by one-third completed circles indicate states that pose no imminent threat to access to abortion.  Finally, if not marked with a complete or incomplete circle, a state legally protects abortion and an overturn of Roe v. Wade does not pose a risk to residents of that state.", 
+				 "In the following example, we can see that Washington legally protects rights to abortion, regardless of a Roe v. Wade overturning.",
+				 "It can also be observed that while New Hampshire does not have laws that legally protect the rights to abortion, an overturning of Roe v. Wade is unlikely to threaten residents' access to abortion.",
+				 "However, in states like Florida, if Roe v. Wade is to be overturned, state action to try and ban abortion is likely.",
+				 "Finally, states like Arizona have trigger laws in place that will ban abortion if Roe v. Wade is overturned.",
+				 "In a similar vein, the Lack of Reproductive Health Services Sub-Index was then created in order to better understand the inaccessibility of reproductive health services per state.  In calculating this sub-index, the number of Title X centers, publicly funded family planning centers, and abortion providers per state were considered.  State mandatory in-person counseling for access to abortion was also noted.  Finally, for each state, the distribution of reproductive services was also taken into account, and the percentage of state counties with a known abortion provider was considered.", 
+				 "With the same cartogram approach, each state’s Lack of Reproductive Health Services Sub-Index score can be observed.  Here, squares denoted by full circles represent states that score 100% on the Lack of Reproductive Health Services Sub-Index.  This means that these states lack the most in this category, and they provide the least amount of reproductive health support to residents when compared to other states.  Contrastingly, squares denoted by partial circles with smaller accompanying percentages represent states that provide better reproductive health support to residents.",
+				 "For example, it can be observed that both Alaska (#) and Washington D.C. (#) provide the most reproductive health services to residents.  Contrastingly, Texas (#) lacks the most in reproductive health services for residents.",
+				 "We then considered instances of homicide, rape, robbery, and aggravated assault committed against women per state in order to calculate the Violent Crime Against Women Sub-Index.  In calculating this sub-index, state-level violent crime data for the year 2020 was considered in relation to the most recent state-level female population data.", 
+				 "Similarly to the previous cartograms and sub-indices, the following cartogram outlines each state's Violent Crime Against Women Sub-Index score.  Here, squares denoted by complete circles or almost-complete circles represent states that score highest on the Violent Crime Against Women Sub-Index.  In these states, women are subjected to higher levels of violent crime.  Squares marked by partial circles with smaller accompanying percentages represent states where women are subjected to lower levels of violent crime.", 
+				 "Below, we can see that women are subjected to the least amount of violent crime in the state of New York (#).  In Arkansas (#), however, women are subjected to the most amount of violent crime.", 
+				 "Finally, in creating the Lack of Legal Protections Sub-Index, we have considered whether or not a state offers critical justice-based legal protections for women's rights as outlined by the Georgetown Institute for Women, Peace, and Security (GIWPS).  In calculating this sub-index, we considered whether or not a state has laws for: 1) protection of all workers from sexual harassment in the workpace, regardless of company size; 2) guaranteed unempoyment benefits for victims of domestic violence, sexual assault, or stalking; 3) mandated parental leave; 4) mandated minimum wage above the low-income threshold; 5) ratified Equal Rights Amendment; and 6) required relinquishment of firearms from abusers subject to domestic violcence protective orders.", 
+				 "In the cartogram below, each state's score for the Lack of Legal Protections Sub-Index can be observed.  States that lack the most in legal protections are indicated by squares with complete or almost-complete circles.  States that lack the least in legal protections are marked by squares with partial circles and smaller accompanying percentages.", 
+				 "In our last example, we can see that Oregon (#) provides the most legal protections for residents.  Shockingly, residents of (list of states here) do not have any legal protections.", 
+				 "In considering all of these sub-indices, we created our overall danger index.", 
+				 "As illustrated below, Washington D.C (#) scores the lowest on our overall danger index,  rendering it the safest place for female assigned at birth (AFAB) and femme folx to reside in.", 
+				 "On the other hand, with a calculated value of #, Arkansas scores the highest on our overall danger index, making it the most dangerous place for female assigned at birth (AFAB) and femme folx to take up residence.", 
+				 "But what does politics have to do with it?<br><br>Our analysis illustrates that red states (i.e., states whose voters predominantly choose the Republican Party) are consistently more dangerous than blue states (i.e., states whose voters predominantly choose the Democratic Party) for female assigned at birth (AFAB) and femme folx.  In fact, our overall danger index indicates that, on average, red states are 80% more dangerous than blue states for these people.",
+				 "Interested in learning more? Checkout our tool below and explore the data for yourself.",
 				 "<div id='lastStep'>explore the app</div>"
 		];
 
@@ -234,7 +256,12 @@
 <main>
 	<section>
 		<h1>The <i><strong>Most Dangerous</strong></i> U.S. States to reside in if you are not a cis-gender man</h1>
-		<p>This is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph </p>
+		<h3>A Tool Designed with Female Assigned at Birth (AFAB) and Femme Folx' Safety in Mind</h3>
+		<p>As leaked by Politico on May 2, 2022, the Supreme Court vote to overturn Roe v. Wade further exemplifies institutional harm towards folx who do not identify as cisgender men.  In recognizing a persistent attack on the rights of people of marginalized genders, we created the following tool.  Specifically focused on the safety of female assigned at birth (AFAB) and femme folx, an overall danger index has been created to identify US states that have been rendered more or less dangerous for those who are not cisgender men.  In creating this tool, we hope to highlight and bring greater transparency to the fact that across all US states, institutional systems of oppression perpetuate gender-based harm.</p><br>
+		<p>Interested in understanding what went into this overall danger index?  Scroll through the following story to find out.  Alternatively, jump to the bottom of the screen to access our tool immediately.</p><br>
+		<p>Firstly, what constitutes danger?  Additionally, how does danger vary across states?<br><br>
+
+		In creating the overall danger index for our tool, several sub-indices, related to: 1) the erosion of abortion rights; 2) a lack of reproductive health services; 3) violent crimes committed against women; and 4) the lack of state legal protections, were considered.</p>
 	</section>
 	<section>
 		<div class="chart">

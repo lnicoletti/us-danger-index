@@ -4,7 +4,7 @@
     export let currentStep;
     // export let innerHeight;
     export let innerWidth;
-    import { max, scaleSequential, scaleSqrt, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
+    import { max, mean, scaleSequential, scaleSqrt, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
     import { fade, draw, fly } from 'svelte/transition';
     import Legend from './Legend.svelte';
 
@@ -25,13 +25,17 @@
     let cellPadding = 2;
     $: gridHeight = max(position, ([, [, j,]]) => j) + 1
     $: gridWidth = max(position, ([, [i]]) => i) + 1
-    $: cellSize = innerWidth>640?(innerWidth*0.7)/gridWidth:(innerWidth*0.9)/gridWidth;
+    $: cellSize = innerWidth>1200?(innerWidth*0.5)/gridWidth:
+                  innerWidth>1100?(innerWidth*0.6)/gridWidth:
+                  innerWidth>1000?(innerWidth*0.65)/gridWidth:
+                  innerWidth>640?(innerWidth*0.7)/gridWidth:(innerWidth*0.9)/gridWidth;
     $: cellInner = cellSize - cellPadding * 2;
     $: w = gridWidth * cellSize + 2 * svgPadding;
-    $: h = gridHeight * cellSize + 2 * svgPadding + cellSize*0.5;
+    $: h = gridHeight * cellSize + 2 * svgPadding + cellSize*0.2;
 
     // arc variables
     let bar = ({width: 6, padding: 0});
+    // $: minRadius = cellInner*0.2;
     let minRadius = 10;
     $: innerRadius = i => minRadius + (bar.width + bar.padding);
     $: outerRadius = i => innerRadius(i) + bar.width;
@@ -89,6 +93,12 @@
                     "party";
 
     $: currentIndex = indexDict[showVar]
+
+    $: averageBlue = mean(states.filter(d=>d.party==="democrat"), d=>d.deadlyIndex)
+    $: averageRed = mean(states.filter(d=>d.party==="republican"), d=>d.deadlyIndex)
+    $: partyGap = ((averageRed-averageBlue)/averageBlue)*100
+
+    console.log("av. blue", averageBlue)
 
 </script>
 
@@ -181,51 +191,67 @@
     </svg>
     <div class="maxState">
         <h3>
-            <span>{deadlyState!==null? "The most dangerous state "+currentIndex+ " is "+deadlyState: "There are "+maxStates.length+" dangerous states "+currentIndex}
-            </span>
+            {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==0}
+            The most dangerous state {currentIndex} is <b>{deadlyState}</b>
+            {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==0}
+            There are <b>{maxStates.length}</b> dangerous states {currentIndex}
+            {:else}
+            On average, <b><span style="fill:#0080c9">red</span></b> states are <b>{partyGap.toFixed()}%</b> more dangerous than <b><span color="#dd2c35">blue</span></b> states.
+            {/if}
         </h3>
     </div>
     {#if currentStep === 20}
-        <div style="display:flex;text-align: center;margin:auto" class="buttons">
-            <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
-                <input type=radio group={buttons} name="buttons" value={1} style="margin-left:40px;" on:click={
-                    ()=>{
-                        showVar="activeBan"
-                        colorScale=colorRW
-                    }}>
-                <div style="max-width:100px">Erosion of Abortion Rights Index</div>
-            </div>
-            <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
-                <input type=radio group={buttons} name="buttons" value={2} style="margin-left:40px" on:click={
-                    ()=>{
-                        showVar="frhSI"
-                        colorScale=colorFR
-                    }}>
-                <div style="max-width:100px">Lack of Reproductive Health Services Index</div>
-            </div>
-            <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
-                <input type=radio group={buttons} name="buttons" value={3} style="margin-left:40px" on:click={
-                    ()=>{
-                        showVar="vcSI"
-                        colorScale=colorVC
-                    }}>
-                <div style="max-width:100px">Violent Crime Against Women Index</div>
-            </div>
-            <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
-                <input type=radio group={buttons} name="buttons" value={3} style="margin-left:40px" on:click={
-                    ()=>{
-                        showVar="lsSI"
-                        colorScale=colorLS
-                    }}>
-                <div style="max-width:100px">Lack of Legal Protections Index</div>
-            </div>
-            <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
-                <input type=radio group={buttons} name="buttons" style="margin-left:40px" checked="checked" on:click={
-                    ()=>{
-                        showVar="deadlyIndex"
-                        colorScale=colorDI
-                    }}>
-                <div style="max-width:100px">Overall Danger Index</div>
+        <h3>Color according to:</h3>
+        <div style="text-align: center;margin:auto">
+            <div style="display:flex;text-align: center;margin:auto" class="buttons">
+                <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                    <input type=radio group={buttons} name="buttons" value={1} style="margin-left:40px;" on:click={
+                        ()=>{
+                            showVar="deadlyIndex"
+                            colorScale=colorPolitical
+                        }}>
+                    <div style="max-width:100px">Political Party</div>
+                </div>
+                <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                    <input type=radio group={buttons} name="buttons" value={1} style="margin-left:40px;" on:click={
+                        ()=>{
+                            showVar="activeBan"
+                            colorScale=colorRW
+                        }}>
+                    <div style="max-width:100px">Erosion of Abortion Rights Index</div>
+                </div>
+                <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                    <input type=radio group={buttons} name="buttons" value={2} style="margin-left:40px" on:click={
+                        ()=>{
+                            showVar="frhSI"
+                            colorScale=colorFR
+                        }}>
+                    <div style="max-width:100px">Lack of Reproductive Health Services Index</div>
+                </div>
+                <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                    <input type=radio group={buttons} name="buttons" value={3} style="margin-left:40px" on:click={
+                        ()=>{
+                            showVar="vcSI"
+                            colorScale=colorVC
+                        }}>
+                    <div style="max-width:100px">Violent Crime Against Women Index</div>
+                </div>
+                <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                    <input type=radio group={buttons} name="buttons" value={3} style="margin-left:40px" on:click={
+                        ()=>{
+                            showVar="lsSI"
+                            colorScale=colorLS
+                        }}>
+                    <div style="max-width:100px">Lack of Legal Protections Index</div>
+                </div>
+                <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                    <input type=radio group={buttons} name="buttons" style="margin-left:40px" checked="checked" on:click={
+                        ()=>{
+                            showVar="deadlyIndex"
+                            colorScale=colorDI
+                        }}>
+                    <div style="max-width:100px">Overall Danger Index</div>
+                </div>
             </div>
         </div>
     {/if}
@@ -235,7 +261,13 @@
 
     .buttons {
         font-size:11px;
-        font-weight:700px
+        font-weight:700px;
+        margin-bottom:50px
+    }
+
+    h3 {
+        font-size:16px;
+        font-weight:400;
     }
     
     /* .stateName {

@@ -72,7 +72,7 @@
                 <!-- {#if currentStep > 0} -->
                 <text 
                 class="stateName"
-                font-size={innerWidth > 640 ? cellInner/6 : cellInner/4}
+                font-size={innerWidth > 640 ? cellInner/7 : cellInner/4}
                 x={cellInner/2}
                 y={cellInner/2+3}
                 text-anchor="middle" 
