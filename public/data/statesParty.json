@@ -1,0 +1,206 @@
+[
+  {
+    "state": "AK",
+    "party": "republican"
+  },
+  {
+    "state": "AL",
+    "party": "republican"
+  },
+  {
+    "state": "AR",
+    "party": "republican"
+  },
+  {
+    "state": "AZ",
+    "party": "democrat"
+  },
+  {
+    "state": "CA",
+    "party": "democrat"
+  },
+  {
+    "state": "CO",
+    "party": "democrat"
+  },
+  {
+    "state": "CT",
+    "party": "democrat"
+  },
+  {
+    "state": "DC",
+    "party": "democrat"
+  },
+  {
+    "state": "DE",
+    "party": "democrat"
+  },
+  {
+    "state": "FL",
+    "party": "republican"
+  },
+  {
+    "state": "GA",
+    "party": "democrat"
+  },
+  {
+    "state": "HI",
+    "party": "democrat"
+  },
+  {
+    "state": "IA",
+    "party": "republican"
+  },
+  {
+    "state": "ID",
+    "party": "republican"
+  },
+  {
+    "state": "IL",
+    "party": "democrat"
+  },
+  {
+    "state": "IN",
+    "party": "republican"
+  },
+  {
+    "state": "KS",
+    "party": "republican"
+  },
+  {
+    "state": "KY",
+    "party": "republican"
+  },
+  {
+    "state": "LA",
+    "party": "republican"
+  },
+  {
+    "state": "MA",
+    "party": "democrat"
+  },
+  {
+    "state": "MD",
+    "party": "democrat"
+  },
+  {
+    "state": "ME",
+    "party": "democrat"
+  },
+  {
+    "state": "MI",
+    "party": "democrat"
+  },
+  {
+    "state": "MN",
+    "party": "democrat"
+  },
+  {
+    "state": "MO",
+    "party": "republican"
+  },
+  {
+    "state": "MS",
+    "party": "republican"
+  },
+  {
+    "state": "MT",
+    "party": "republican"
+  },
+  {
+    "state": "NC",
+    "party": "republican"
+  },
+  {
+    "state": "ND",
+    "party": "republican"
+  },
+  {
+    "state": "NE",
+    "party": "republican"
+  },
+  {
+    "state": "NH",
+    "party": "democrat"
+  },
+  {
+    "state": "NJ",
+    "party": "democrat"
+  },
+  {
+    "state": "NM",
+    "party": "democrat"
+  },
+  {
+    "state": "NV",
+    "party": "democrat"
+  },
+  {
+    "state": "NY",
+    "party": "democrat"
+  },
+  {
+    "state": "OH",
+    "party": "republican"
+  },
+  {
+    "state": "OK",
+    "party": "republican"
+  },
+  {
+    "state": "OR",
+    "party": "democrat"
+  },
+  {
+    "state": "PA",
+    "party": "democrat"
+  },
+  {
+    "state": "RI",
+    "party": "democrat"
+  },
+  {
+    "state": "SC",
+    "party": "republican"
+  },
+  {
+    "state": "SD",
+    "party": "republican"
+  },
+  {
+    "state": "TN",
+    "party": "republican"
+  },
+  {
+    "state": "TX",
+    "party": "republican"
+  },
+  {
+    "state": "UT",
+    "party": "republican"
+  },
+  {
+    "state": "VA",
+    "party": "democrat"
+  },
+  {
+    "state": "VT",
+    "party": "democrat"
+  },
+  {
+    "state": "WA",
+    "party": "democrat"
+  },
+  {
+    "state": "WI",
+    "party": "democrat"
+  },
+  {
+    "state": "WV",
+    "party": "republican"
+  },
+  {
+    "state": "WY",
+    "party": "republican"
+  }
+]

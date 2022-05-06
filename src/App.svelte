@@ -2,7 +2,7 @@
 	// export let name;
 	import { onMount } from "svelte";
 	import { csv, json, csvParseRows, scaleLinear, extent } from 'd3';
-	import Cartogram from './components/Cartogram.svelte';
+	import CartogramArc from './components/CartogramArc.svelte';
 	import Scroll from "./components/Scrolly.svelte";
 
 	let currentStep;
@@ -12,6 +12,7 @@
 	let femaleHealth=[];
 	let legalStructures=[];
 	let statesPop=[];
+	let stateParty=[];
 	let activeBans = [
   		 {state: 'ME', ban: ""}
 		,{state: 'WI', ban: 1}
@@ -75,7 +76,8 @@
 			csv("/data/stateAbbrv.csv"),
 			csv("/data/femaleHealth.csv"),
 			csv("/data/legalStructures.csv"),
-			json("/data/statesPop.json")
+			json("/data/statesPop.json"),
+			json("/data/statesParty.json"),
 		])
 		.then((datasets)=>{
 			femaleCrime = datasets[0];
@@ -83,6 +85,7 @@
 			femaleHealth = datasets[2];
 			legalStructures = datasets[3];
 			statesPop = datasets[4];
+			stateParty = datasets[5];
 			position = grid`
 				,  ,  ,  ,  ,  ,  ,  ,  ,  ,ME
 				,  ,  ,  ,  ,WI,  ,  ,  ,VT,NH
@@ -129,6 +132,8 @@
 			femalePop: +statesPop.filter(d=>d.state===state[1][2])[0].femalePop,
 			// total population
 			totPop: +statesPop.filter(d=>d.state===state[1][2])[0].totPop,
+			 // party
+			 party: stateParty.filter(d=>d.state===state[0])[0].party,
 			// cartogram position
 			position: [state[1][0], state[1][1]],
 		}
@@ -149,7 +154,7 @@
 						(1-(d.countiesWoAProvidersPct/100))+
 						FamPlanCenterNormScale((d.totalPubDollarsFamPlanCenter/d.femalePop))+
 						d.noCounselAbortion+
-						AbortionDollarsNormScale((d.totalPubDollarsAbortion/d.femalePop))+
+						// AbortionDollarsNormScale((d.totalPubDollarsAbortion/d.femalePop))+
 						d.noCounselAbortion
 						)/7),
 						vcSI:
@@ -202,7 +207,7 @@
 	<h1>The <i><strong>Deadliest</strong></i> places to own a vagina in the United States</h1>
 	<p>This is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph this is the intro paragraph </p>
 	<div class="chart">
-		<Cartogram states = {statesIndex} {position} {innerWidth} {innerHeight} {currentStep}/>
+		<CartogramArc states = {statesIndex} {position} {innerWidth} {innerHeight} {currentStep}/>
 	</div>
 	<Scroll bind:value={currentStep}>
 		{#each steps as text, i}
