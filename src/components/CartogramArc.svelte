@@ -59,7 +59,7 @@
     $: maxStates = maxState.map(d => d.stateName);
     $: deadlyState = maxState.length===1?maxState[0].stateName:null
     // }
-    $: console.log("the most deadly state is", maxState, deadlyState)
+    // $: console.log("the most deadly state is", maxState, deadlyState)
 
     // color scales
     // $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
@@ -105,7 +105,31 @@
     $: averageRed = mean(states.filter(d=>d.party==="republican"), d=>d.deadlyIndex)
     $: partyGap = ((averageRed-averageBlue)/averageBlue)*100
 
-    console.log("av. blue", averageBlue)
+    // console.log("av. blue", averageBlue)
+
+    // annotation variables
+    $: highlightedState = currentStep===2?["WA"]:
+                          currentStep===3?["NH"]:
+                          currentStep===4?["FL"]:
+                          currentStep===5?["AZ"]:
+                          currentStep===8?["AK", "DC", "TX"]:
+                          currentStep===11?["NY", "AK"]:
+                          currentStep===14?["OR"]:
+                          currentStep===16?"DC":
+                          currentStep===17?"AK":null
+
+    // $: console.log(highlightedState)
+    // $: console.log(currentStep)
+
+    const handleMouseOver = (d) => {
+        highlightedState=d.stateAbbrv
+    }
+
+    const handleMouseLeave = (d) => {
+        highlightedState=null
+    }
+
+    $: console.log(colorScale(0.8))
 
 </script>
 
@@ -118,7 +142,13 @@
         <g transform="translate({svgPadding}, {svgPadding})">
             {#each states as state, i}
             <g transform="translate({state.position[0] * cellSize}, {state.position[1] * cellSize})">
-                <g transform="translate({cellPadding}, {cellPadding})" cursor={currentStep===20?"pointer":""}>
+                <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+                <g 
+                transform="translate({cellPadding}, {cellPadding})" 
+                cursor={currentStep===20?"pointer":""}
+                on:mouseover={()=>{currentStep===20?handleMouseOver(state):null}}
+                on:mouseleave={()=>{currentStep===20?handleMouseLeave(state):null}}
+                >
                     <!-- <rect 
                     width="{cellInner}" 
                     height="{cellInner}" 
@@ -126,10 +156,12 @@
                     fill=#eee
                     /> -->
                     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+                    <!-- width="{state.stateAbbrv==="NE"?cellInner*3+cellPadding*4:cellInner}" 
+                    height="{state.stateAbbrv==="NE"?cellInner*3+cellPadding*4:cellInner}"  -->
                     <rect 
                     width="{cellInner}" 
                     height="{cellInner}" 
-                    opacity=1 
+                    opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0.3:1}
                     fill={currentStep > 0 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
                     />
                     <!-- <text 
@@ -201,19 +233,18 @@
             {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==0}
             The most dangerous state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}"><b>{currentIndex}</b></div> {indexLabAft} is <b>{deadlyState}</b>
             {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==0}
-            There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}"><b>{currentIndex}</b></div> {indexLabAft}
+            There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}"><b>{currentIndex}</b></div> {indexLabAft}
             {:else if Politicalsteps.includes(currentStep)}
             On average, <div class="specialWordWrap" style="background-color:#dd2c35"><b>red</b></div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <br><div class="specialWordWrap" style="background-color:#0080c9"><b>blue</b></div> states.
             {/if}
         </h3>
-
-        <!-- red:#0080c9 blue:#dd2c35-->
     </div>
     {#if currentStep === 20}
         <h5>Choose a view</h5>
         <div class="buttonsContainer">
             <div class="buttons">
                 <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                <!-- <div> -->
                     <input type=radio group={buttons} name="buttons" bind:value={togglePolitical} style="margin-left:40px;" on:click={
                         ()=>{
                             showVar="deadlyIndex"
@@ -224,6 +255,7 @@
                     <div style="max-width:100px">Political Party</div>
                 </div>
                 <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                <!-- <div> -->
                     <input type=radio group={buttons} name="buttons" value={1} style="margin-left:40px;" on:click={
                         ()=>{
                             showVar="activeBan"
@@ -233,6 +265,7 @@
                     <div style="max-width:100px">Erosion of Abortion Rights Index</div>
                 </div>
                 <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                <!-- <div> -->
                     <input type=radio group={buttons} name="buttons" value={2} style="margin-left:40px" on:click={
                         ()=>{
                             showVar="frhSI"
@@ -242,6 +275,7 @@
                     <div style="max-width:100px">Lack of Reproductive Health Services Index</div>
                 </div>
                 <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                <!-- <div> -->
                     <input type=radio group={buttons} name="buttons" value={3} style="margin-left:40px" on:click={
                         ()=>{
                             showVar="vcSI"
@@ -251,6 +285,7 @@
                     <div style="max-width:100px">Violent Crime Against Women Index</div>
                 </div>
                 <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                <!-- <div> -->
                     <input type=radio group={buttons} name="buttons" value={3} style="margin-left:40px" on:click={
                         ()=>{
                             showVar="lsSI"
@@ -260,6 +295,7 @@
                     <div style="max-width:100px">Lack of Legal Protections Index</div>
                 </div>
                 <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                <!-- <div> -->
                     <input type=radio group={buttons} name="buttons" style="margin-left:40px" checked="checked" on:click={
                         ()=>{
                             showVar="deadlyIndex"
@@ -278,7 +314,12 @@
     .buttons {
         font-size:11px;
         font-weight:700px;
-        margin-bottom:50px
+        margin-bottom:50px;
+        text-align: center;
+        }
+
+    input {
+        cursor: pointer;
     }
 
     h3 {

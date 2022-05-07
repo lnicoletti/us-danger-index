@@ -18,7 +18,7 @@
 <p>Interested in understanding what went into this overall danger index?  Scroll through the following story to find out.  Alternatively, Click <button class="scrollButton" on:click={() => revertFrameOne()}>here</button> to jump to the bottom of the screen and access our tool immediately.</p><br>
 <p><span class="questions">Firstly, what constitutes danger?  Additionally, how does danger vary across states?</span></p><br><br>
 
-<div class="specialPar">In creating the overall danger index for our tool, several sub-indices, related to:<div class="specialWordWrapPar">the erosion of abortion rights</div>; <div class="specialWordWrapPar">a lack of reproductive health services</div>; <div class="specialWordWrapPar">violent crimes committed against women</div>; and <div class="specialWordWrapPar">the lack of state legal protections</div>, were considered.</div>
+<div class="specialPar">In creating the overall danger index for our tool, several sub-indices, related to:<div class="specialWordWrapPar" style="background-color:#e66101">the erosion of abortion rights</div>; <div class="specialWordWrapPar" style="background-color:rgb(61, 102, 102)">a lack of reproductive health services</div>; <div class="specialWordWrapPar" style="background-color:rgb(189, 62, 2)">violent crimes committed against women</div>; and <div class="specialWordWrapPar" style="background-color:rgb(58, 59, 83)">the lack of state legal protections</div>, were considered.</div>
 
 <style>
 
@@ -37,7 +37,7 @@
     }
 
     .specialWordWrapPar {
-        background-color: #730f71;
+        /* background-color: #730f71; */
         padding-right: 5px;
         padding-left: 5px;
         display: inline-block;

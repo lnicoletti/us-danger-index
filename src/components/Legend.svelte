@@ -10,15 +10,18 @@
     import { scaleLinear, arc } from 'd3';
 
     let legendColor = "black";
-    let bar = ({width: 6, padding: 0});
-    let minRadius = 10;
-    let innerRadius = i => minRadius + (bar.width + bar.padding);
-    let outerRadius = i => innerRadius(i) + bar.width;
+    // let bar = ({width: 6, padding: 0});
+    // let minRadius = 10;
+    $: bar = ({width: innerWidth>700?cellInner/9:cellInner/12, padding: 0});
+    // $: minRadius = cellInner*0.2;
+    $: minRadius = innerWidth>700?cellInner*0.17:cellInner*0.3;
+    $:  innerRadius = i => minRadius + (bar.width + bar.padding);
+    $:  outerRadius = i => innerRadius(i) + bar.width;
     let maxValue = 0.97
     let x = scaleLinear()
         .domain([0, maxValue])
         .range([0, 2 * Math.PI])
-    let arcLine = (d, i) => arc()
+    $:  arcLine = (d, i) => arc()
         .innerRadius(innerRadius(i))
         .outerRadius(outerRadius(i))
         .startAngle(0)
