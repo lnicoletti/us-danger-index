@@ -4,16 +4,20 @@
     export let currentStep;
     // export let innerHeight;
     export let innerWidth;
-    import { max, mean, scaleSequential, scaleSqrt, interpolateLab, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
+    import { max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
     import { fade, draw, fly } from 'svelte/transition';
     import Legend from './Legend.svelte';
 
     // init current index
-    let indexDict = {activeBan: "according to the Erosion of Abortion Rights Sub-Index", 
-                     frhSI: "according to the Lack of Reproductive Health Services Sub-Index", 
-                     vcSI: "according to the Violent Crime Against Women Sub-Index", 
-                     lsSI: "according to the Lack of Legal Protections Sub-Index", 
+    let indexDict = {activeBan: "Erosion of Abortion Rights", 
+                     frhSI: "Lack of Reproductive Health Services", 
+                     vcSI: "Violent Crime Against Women", 
+                     lsSI: "Lack of Legal Protections", 
                      deadlyIndex: "overall"};
+
+    $: indexLabPre = ["activeBan", "frhSI", "vcSI", "lsSI"].includes(showVar) ? "according to the " : "";
+    $: indexLabAft = ["activeBan", "frhSI", "vcSI", "lsSI"].includes(showVar) ? " Sub-Index" : "";
+    $: togglePolitical=false
     // init deadly state
     let deadlyState;
     let maxState;
@@ -34,9 +38,9 @@
     $: h = gridHeight * cellSize + 2 * svgPadding + cellSize*0.2;
 
     // arc variables
-    let bar = ({width: 6, padding: 0});
+    $: bar = ({width: innerWidth>700?cellInner/9:cellInner/12, padding: 0});
     // $: minRadius = cellInner*0.2;
-    let minRadius = 10;
+    $: minRadius = cellInner*0.17;
     $: innerRadius = i => minRadius + (bar.width + bar.padding);
     $: outerRadius = i => innerRadius(i) + bar.width;
     let maxRadius = 100;
@@ -58,11 +62,13 @@
     $: console.log("the most deadly state is", maxState, deadlyState)
 
     // color scales
-    $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
+    // $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
+    $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#5e3c99","#b2abd2","#fdb863","#e66101"])
     // $: colorFR = scaleSequential(interpolateRdPu).domain([0, max(states, d=>d.frhSI)])
-    $: colorFR = scaleSequential(interpolateLab("white", "#008080")).domain([0.2, max(states, d=>d.frhSI)])
-    $: colorLS = scaleSequential(interpolateGnBu).domain([0, max(states, d=>d.lsSI)])
-    $: colorVC = scaleSequential(interpolateOranges).domain([0, max(states, d=>d.vcSI)])
+    $: colorFR = scaleSequential(interpolateLab("white", "#014242")).domain([0.25, max(states, d=>d.frhSI)])
+    $: colorLS = scaleSequential(interpolateLab("white", "#0b0c29")).domain([0.1, max(states, d=>d.lsSI)])
+    // $: colorLS = scaleSequential(interpolateGnBu).domain([0, max(states, d=>d.lsSI)])
+    $: colorVC = scaleSequential(interpolateOranges).domain([-0.1, max(states, d=>d.vcSI)])
     $: colorDI = scaleSequential(interpolateBuPu).domain([0, max(states, d=>d.deadlyIndex)])
     $: colorPolitical = scaleOrdinal().domain(["republican", "democrat"]).range(["#dd2c35", "#0080c9"])
 
@@ -124,7 +130,7 @@
                     width="{cellInner}" 
                     height="{cellInner}" 
                     opacity=1 
-                    fill={currentStep > 5 ? colorScale(state[showVar]):"#ccc"}
+                    fill={currentStep > 0 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
                     />
                     <!-- <text 
                     class="stateName"
@@ -138,7 +144,7 @@
                     </text> -->
                     <text 
                     class="stateName"
-                    font-size={innerWidth > 640 ? cellInner/6 : cellInner/4}
+                    font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
                     x="2" 
                     y="5" 
                     text-anchor="left" 
@@ -167,14 +173,14 @@
                     />
                     <text 
                     class="stateName"
-                    font-size={innerWidth > 640 ? cellInner/7 : cellInner/4}
+                    font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
                     x={cellInner/2}
                     y={cellInner/2+3}
                     text-anchor="middle" 
                     opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.5 ? 1 : 0 :
                                                                     state.deadlyIndex > 0.5 ? 1 : 0}
                     font-weight={maxStates.includes(state.stateName)?900:300}
-                    fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale(state[showVar]) : "white":"white"}
+                    fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
                     >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
                     </text>
                     {/if}
@@ -193,23 +199,27 @@
     <div class="maxState">
         <h3>
             {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==0}
-            The most dangerous state {currentIndex} is <b>{deadlyState}</b>
+            The most dangerous state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}"><b>{currentIndex}</b></div> {indexLabAft} is <b>{deadlyState}</b>
             {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==0}
-            There are <b>{maxStates.length}</b> dangerous states {currentIndex}
-            {:else if currentStep!==0}
-            On average, <b><span style="fill:#0080c9">red</span></b> states are <b>{partyGap.toFixed()}%</b> more dangerous than <b><span color="#dd2c35">blue</span></b> states.
+            There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}"><b>{currentIndex}</b></div> {indexLabAft}
+            {:else if Politicalsteps.includes(currentStep)}
+            On average, <div class="specialWordWrap" style="background-color:#dd2c35"><b>red</b></div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <br><div class="specialWordWrap" style="background-color:#0080c9"><b>blue</b></div> states.
             {/if}
         </h3>
+
+        <!-- red:#0080c9 blue:#dd2c35-->
     </div>
     {#if currentStep === 20}
-        <h3>Color according to:</h3>
-        <div style="text-align: center;margin:auto">
-            <div style="display:flex;text-align: center;margin:auto" class="buttons">
+        <h5>Choose a view</h5>
+        <div class="buttonsContainer">
+            <div class="buttons">
                 <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
-                    <input type=radio group={buttons} name="buttons" value={1} style="margin-left:40px;" on:click={
+                    <input type=radio group={buttons} name="buttons" bind:value={togglePolitical} style="margin-left:40px;" on:click={
                         ()=>{
                             showVar="deadlyIndex"
                             colorScale=colorPolitical
+                            togglePolitical=true
+                            // console.log(togglePolitical)
                         }}>
                     <div style="max-width:100px">Political Party</div>
                 </div>
@@ -218,6 +228,7 @@
                         ()=>{
                             showVar="activeBan"
                             colorScale=colorRW
+                            togglePolitical=false
                         }}>
                     <div style="max-width:100px">Erosion of Abortion Rights Index</div>
                 </div>
@@ -226,6 +237,7 @@
                         ()=>{
                             showVar="frhSI"
                             colorScale=colorFR
+                            togglePolitical=false
                         }}>
                     <div style="max-width:100px">Lack of Reproductive Health Services Index</div>
                 </div>
@@ -234,6 +246,7 @@
                         ()=>{
                             showVar="vcSI"
                             colorScale=colorVC
+                            togglePolitical=false
                         }}>
                     <div style="max-width:100px">Violent Crime Against Women Index</div>
                 </div>
@@ -242,6 +255,7 @@
                         ()=>{
                             showVar="lsSI"
                             colorScale=colorLS
+                            togglePolitical=false
                         }}>
                     <div style="max-width:100px">Lack of Legal Protections Index</div>
                 </div>
@@ -250,6 +264,7 @@
                         ()=>{
                             showVar="deadlyIndex"
                             colorScale=colorDI
+                            togglePolitical=false
                         }}>
                     <div style="max-width:100px">Overall Danger Index</div>
                 </div>
@@ -267,8 +282,38 @@
     }
 
     h3 {
-        font-size:16px;
-        font-weight:400;
+        /* color: black; */
+		font-family: 'Roboto Flex', sans-serif;
+		font-weight: 300;
+	}
+
+    h5 {
+        color: black;
+		font-family: 'Roboto Flex', sans-serif;
+		font-weight: 400;
+	}
+
+    .buttonsContainer {
+        text-align: center;
+        margin:auto;
+        max-width: 50vw;
+    }
+
+    .buttons {
+        display:flex;
+        text-align: center;
+        margin:auto;
+        flex-wrap: wrap;
+    }
+
+    .specialWordWrap {
+        /* background-color: #730f71; */
+        padding-right: 5px;
+        padding-left: 5px;
+        display: inline-block;
+        transform:skew(-.312rad);
+        color: white;
+        font-weight: 700;
     }
     
     /* .stateName {
@@ -284,4 +329,9 @@
 			max-width: none;
 		}
 	} */
+    @media (max-width: 640px) {
+		.buttonsContainer {
+			max-width: 90vw;
+		}
+	}
 </style>

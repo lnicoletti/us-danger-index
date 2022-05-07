@@ -4,6 +4,8 @@
 	import { csv, json, csvParseRows, scaleLinear, extent, selectAll} from 'd3';
 	import CartogramArc from './components/CartogramArc.svelte';
 	import Scroll from "./components/Scrolly.svelte";
+	import Header from "./components/Header.svelte";
+	import Footer from "./components/Footer.svelte";
 
 	let currentStep;
 	let position = new Map;
@@ -255,16 +257,7 @@
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
 <main>
 	<section>
-		<h1>The <i><strong>Most Dangerous</strong></i> U.S. States to reside in if you are not a cis-gender man</h1>
-		<h3>A Tool Designed with Female Assigned at Birth (AFAB) and Femme Folx' Safety in Mind</h3>
-		<div class="credits">
-			by <a href='https://www.leonardonicoletti.com/' style='text-decoration:underline; color:black' target='_blank'><b>LEONARDO NICOLETTI</b></a><br> and <a href='https://www.carolinecullinan.com/' style='text-decoration:underline; color:black' target='_blank'><b>CAROLINE CULLINAN</b></a>
-		</div>
-		<p>As leaked by Politico on May 2, 2022, the Supreme Court vote to overturn Roe v. Wade further exemplifies institutional harm towards folx who do not identify as cisgender men.  In recognizing a persistent attack on the rights of people of marginalized genders, we created the following tool.  Specifically focused on the safety of female assigned at birth (AFAB) and femme folx, an overall danger index has been created to identify US states that have been rendered more or less dangerous for those who are not cisgender men.  In creating this tool, we hope to highlight and bring greater transparency to the fact that across all US states, institutional systems of oppression perpetuate gender-based harm.</p><br>
-		<p>Interested in understanding what went into this overall danger index?  Scroll through the following story to find out.  Alternatively, jump to the bottom of the screen to access our tool immediately.</p><br>
-		<p>Firstly, what constitutes danger?  Additionally, how does danger vary across states?<br><br>
-
-		In creating the overall danger index for our tool, several sub-indices, related to: 1) the erosion of abortion rights; 2) a lack of reproductive health services; 3) violent crimes committed against women; and 4) the lack of state legal protections, were considered.</p>
+		<Header />
 	</section>
 	<section>
 		<div class="chart">
@@ -281,9 +274,7 @@
 		</Scroll>
 	</section>
 	<section>
-		<p>
-		methodology section here methmethodology section here methodology section here odology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here methodology section here 
-		</p>
+		<Footer />
 	</section>
 </main>
 
@@ -343,11 +334,6 @@
 		/* font-size: 12px; */
 	}
 
-	@media (max-width: 640px) {
-		main, h1, p {
-			max-width: 90vw;
-		}
-	}
 
 	.chart {
     /* background: whitesmoke; */
@@ -380,7 +366,7 @@
     display: flex;
     place-items: center;
     justify-content: center;
-    max-width: 450px;
+    max-width: 50vw;
     margin-left:auto;
     margin-right:auto;
     /* z-index: 1000; */
@@ -401,12 +387,18 @@
     /* transition: background 500ms ease; */
     /* box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2); */
     z-index: 10;
-	font-family: 'Jost', sans-serif;
-    font-weight: 300;
+	font-family: 'Roboto Flex', sans-serif;
+	font-weight: 400;
   }
 
   .step.active .step-content {
     background: rgb(255, 255, 255, 0.92);
     color: black;
   }
+
+  @media (max-width: 640px) {
+		main, h1, p, .step {
+			max-width: 90vw;
+		}
+	}
 </style>
