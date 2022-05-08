@@ -7,9 +7,13 @@
     export let svgPadding;
     export let innerWidth;
     export let currentStep;
+    export let showVar;
+    export let colorScale;
     import { scaleLinear, arc } from 'd3';
 
-    let legendColor = "black";
+    let inTextColor = "white";
+    let outTextColor = "grey";
+    let tileColor = "lightgrey";
     // let bar = ({width: 6, padding: 0});
     // let minRadius = 10;
     $: bar = ({width: innerWidth>700?cellInner/9:cellInner/12, padding: 0});
@@ -32,7 +36,8 @@
                 {deadlyIndex:0.33, position:[1,0], label:"low"}, 
                 {deadlyIndex:0.75, position:[0,0], label:""}]
 
-    console.log("legend data", data)
+    // console.log("legend data", data)
+    $: console.log("test", colorScale(0.8))
 
 
 </script>
@@ -41,7 +46,11 @@
         <g transform="translate({d.position[0] * cellSize}, {d.position[1] * cellSize})">
             <g transform="translate({cellPadding}, {cellPadding})">
                 <!-- <rect width="{cellInner}" height="{cellInner}" fill="#eee" opacity=0.5 /> -->
-                <!-- <rect width="{cellInner}" height="{cellInner}" fill="white" /> -->
+                <rect 
+                width="{cellInner}" 
+                height="{cellInner}" 
+                fill={showVar!==null&&i!==3?colorScale(d.deadlyIndex):tileColor} 
+                />
                 <text 
                 class="stateName"
                 font-size={innerWidth > 640 ? cellInner/6 : cellInner/4}
@@ -50,7 +59,7 @@
                 text-anchor="left" 
                 dy="0.71em" 
                 font-weight=700
-                fill={legendColor}
+                fill={inTextColor}
                 >{i===3?"State":""}
                 </text>
                 <!-- <text 
@@ -73,6 +82,7 @@
                 >{(data.deadlyIndex*100).toFixed()}%
                 </text> -->
                 <!-- {#if currentStep > 0} -->
+                {#if showVar!=="activeBan"}
                 <text 
                 class="stateName"
                 font-size={innerWidth > 640 ? cellInner/7 : cellInner/4}
@@ -80,10 +90,21 @@
                 y={cellInner/2+3}
                 text-anchor="middle" 
                 font-weight=700
-                fill={{legendColor}}
+                fill={inTextColor}
                 >{i===3?"score":d.label}
                 <!-- {(data.deadlyIndex*100).toFixed()}% -->
                 </text>
+                {:else}
+                <text 
+                font-size={innerWidth > 640 ? cellInner/7 : cellInner/4}
+                x={cellInner/2}
+                y={cellInner/2+3}
+                text-anchor="middle" 
+                font-weight=700
+                fill={inTextColor}
+                >{d.deadlyIndex===0.33?"no threat":d.deadlyIndex===0.66?"restrict":d.deadlyIndex===1?"ban":"risk"}
+                </text>
+                {/if}
                 <!-- <path 
                 transform="translate({cellInner/2}, {cellInner/2})"
                 d={arcLine(data)}
@@ -93,22 +114,22 @@
                 <path 
                 transform="translate({cellInner/2}, {cellInner/2})"
                 d={arcLine(d)}
-                fill={{legendColor}}
+                fill={inTextColor}
                 stroke="none" 
                 stroke-width="1" />
                 <!-- {/if} -->
             </g>
         </g>
         {/each}
-        <text 
+        <!-- <text 
             class="stateName"
             font-size={innerWidth > 640 ? cellInner/6 : cellInner/4}
             x={cellInner*2.2}
-            y="-3" 
+            y="-6" 
             text-anchor="left" 
             dy="0.71em" 
             font-weight=700
-            fill={legendColor}
+            fill={outTextColor}
             >Danger is
-        </text>
+        </text> -->
     </g>

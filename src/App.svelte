@@ -257,7 +257,7 @@
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
 <main>
 	<section>
-		<Header />
+		<Header {innerWidth}/>
 	</section>
 	<section>
 		<div class="chart">
@@ -343,7 +343,9 @@
     position: sticky;
     top: 2vh;
     margin: auto;
-    height:100%;
+    height:100vh;
+	/* line-height: 100vh; */
+	/* vertical-align: middle; */
     /* display:table; */
     /* position: relative; */
     /* height: 100vh */
@@ -354,11 +356,6 @@
     display:table-cell;
     vertical-align:middle
   } */
-
-  .chartElements {
-    z-index: -1;
-    position: relative;
-  }
 
   /* Scrollytelling CSS */
   .step {

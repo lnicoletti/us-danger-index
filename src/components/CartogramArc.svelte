@@ -63,7 +63,8 @@
 
     // color scales
     // $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
-    $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#5e3c99","#b2abd2","#fdb863","#e66101"])
+    // $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#5e3c99","#b2abd2","#fdb863","#e66101"])
+    $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#ccc","pink","red","darkred"])
     // $: colorFR = scaleSequential(interpolateRdPu).domain([0, max(states, d=>d.frhSI)])
     $: colorFR = scaleSequential(interpolateLab("white", "#014242")).domain([0.25, max(states, d=>d.frhSI)])
     $: colorLS = scaleSequential(interpolateLab("white", "#0b0c29")).domain([0.1, max(states, d=>d.lsSI)])
@@ -113,11 +114,12 @@
                           currentStep===4?["FL"]:
                           currentStep===5?["AZ"]:
                           currentStep===8?["AK", "DC", "TX"]:
-                          currentStep===11?["NY", "AK"]:
+                          currentStep===11?["NY", "AR"]:
                           currentStep===14?["OR"]:
                           currentStep===16?"DC":
-                          currentStep===17?"AK":null
+                          currentStep===17?"AR":null
 
+    let highlightSteps = [2,3,4,5,8,11,14,16,17]
     // $: console.log(highlightedState)
     // $: console.log(currentStep)
 
@@ -129,7 +131,7 @@
         highlightedState=null
     }
 
-    $: console.log(colorScale(0.8))
+    // $: console.log(colorScale(0.8))
 
 </script>
 
@@ -137,7 +139,7 @@
     <svg width="{w}px" height="{h}px" ><!--viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet" fill={stateFill}
     -->
         {#if currentStep > 0}
-        <Legend {svgPadding} {cellPadding} {cellInner} {cellSize} {gridWidth} {gridHeight} {innerWidth} {currentStep}/>
+        <Legend {svgPadding} {cellPadding} {cellInner} {cellSize} {gridWidth} {gridHeight} {innerWidth} {currentStep} {showVar} {colorScale}/>
         {/if}
         <g transform="translate({svgPadding}, {svgPadding})">
             {#each states as state, i}
@@ -162,6 +164,8 @@
                     width="{cellInner}" 
                     height="{cellInner}" 
                     opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0.3:1}
+                    stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":colorScale(1):"none"}
+                    stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
                     fill={currentStep > 0 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
                     />
                     <!-- <text 
@@ -203,18 +207,33 @@
                     r={minRadius + (bar.width*0.9 + bar.padding)}
                     opacity={deadlyState!==null?deadlyState.includes(state.stateName) ? 1 : 0:0}
                     />
-                    <text 
-                    class="stateName"
-                    font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
-                    x={cellInner/2}
-                    y={cellInner/2+3}
-                    text-anchor="middle" 
-                    opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.5 ? 1 : 0 :
-                                                                    state.deadlyIndex > 0.5 ? 1 : 0}
-                    font-weight={maxStates.includes(state.stateName)?900:300}
-                    fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
-                    >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
-                    </text>
+                        {#if showVar!=="activeBan"}
+                        <text 
+                        class="stateName"
+                        font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
+                        x={cellInner/2}
+                        y={cellInner/2+3}
+                        text-anchor="middle" 
+                        opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.5 ? 1 : 0 :
+                                                                        state.deadlyIndex > 0.5 ? 1 : 0}
+                        font-weight={maxStates.includes(state.stateName)?900:300}
+                        fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
+                        >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
+                        </text>
+                        {:else}
+                        <text 
+                        class="stateName"
+                        font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
+                        x={cellInner/2}
+                        y={cellInner/2+3}
+                        text-anchor="middle" 
+                        opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.2 ? 1 : 0 :
+                                                                        state.deadlyIndex > 0.2 ? 1 : 0}
+                        font-weight={maxStates.includes(state.stateName)?900:300}
+                        fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
+                        >{!blanksteps.includes(currentStep) ? state[showVar]===0.33?"no threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"":""}
+                        </text>
+                        {/if}
                     {/if}
                     <!-- <path 
                     in:draw="{{duration: 10000}}"
@@ -228,7 +247,7 @@
             {/each}
         </g>
     </svg>
-    <div class="maxState">
+    <div class="maxState" style="min-height:45px">
         <h3>
             {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==0}
             The most dangerous state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}"><b>{currentIndex}</b></div> {indexLabAft} is <b>{deadlyState}</b>
@@ -310,6 +329,16 @@
 </div>
 
 <style>
+
+    .chartElements {
+        /* z-index: -1;
+        position: relative; */
+        /* margin: 0; */
+        position: relative;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
 
     .buttons {
         font-size:11px;
