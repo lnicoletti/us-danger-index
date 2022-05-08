@@ -8,6 +8,7 @@
     export let innerWidth;
     export let currentStep;
     export let showVar;
+    export let togglePolitical;
     export let colorScale;
     import { scaleLinear, arc } from 'd3';
 
@@ -49,7 +50,7 @@
                 <rect 
                 width="{cellInner}" 
                 height="{cellInner}" 
-                fill={showVar!==null&&i!==3?colorScale(d.deadlyIndex):tileColor} 
+                fill={showVar!==null&&showVar!=="party"&&togglePolitical!==true&&i!==3?colorScale(d.deadlyIndex):tileColor} 
                 />
                 <text 
                 class="stateName"
@@ -133,3 +134,11 @@
             >Danger is
         </text> -->
     </g>
+
+    <style>
+
+        .stateName {
+            font-family: 'Roboto Flex', sans-serif;
+        }
+
+    </style>

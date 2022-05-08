@@ -48,7 +48,7 @@
         padding-right: 20px;
         padding-left: 20px;
         display: inline-block;
-        transform:skew(-.312rad)
+        /* transform:skew(-.312rad) */
     }
     .specialWordWrapSquare {
         background-color: #4a095c;
@@ -66,9 +66,10 @@
         padding-right: 5px;
         padding-left: 5px;
         display: inline-block;
-        transform:skew(-.312rad);
+        /* transform:skew(-.312rad); */
         color:white;
-        border:1px solid white
+        border:1px solid white;
+        border-radius: 2.5px;
 
     }
 

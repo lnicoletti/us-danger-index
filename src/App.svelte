@@ -198,10 +198,11 @@
 						aProvidersNormScale((d.aProvidersNum/d.femalePop))+
 						(1-(d.countiesWoAProvidersPct/100))+
 						FamPlanCenterNormScale((d.totalPubDollarsFamPlanCenter/d.femalePop))+
-						d.noCounselAbortion+
-						// AbortionDollarsNormScale((d.totalPubDollarsAbortion/d.femalePop))+
 						d.noCounselAbortion
-						)/7),
+						// +
+						// AbortionDollarsNormScale((d.totalPubDollarsAbortion/d.femalePop))+
+						// d.noCounselAbortion
+						)/6),
 						vcSI:
 						femaleCrimesNormScale((d.femaleCrimes/d.femalePop)),
 						lsSI:

@@ -15,6 +15,38 @@
                      lsSI: "Lack of Legal Protections", 
                      deadlyIndex: "overall"};
 
+    // data for click event
+    // let clickData = [{var:"activeBan", label:"Erosion of Abortion Rights"}, 
+    //                  {var:"frhSI", label: "Lack of Reproductive Health Services"}, 
+    //                  {var:"vcSI", label: "Violent Crime Against Women"}, 
+    //                  {var:"lsSI", label: "Lack of Legal Protections"}, 
+    //                  {var:"deadlyIndex", label: "overall"}];
+    let clickData = {deadlyIndex:
+                    [{var:"activeBan", label:"Erosion of Abortion Rights"}, 
+                     {var:"frhSI", label: "Lack of Reproductive Health Services"}, 
+                     {var:"vcSI", label: "Violent Crime Against Women"}, 
+                     {var:"lsSI", label: "Lack of Legal Protections"}, 
+                     {var:"deadlyIndex", label: "overall"}],
+                     activeBan:
+                     [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade"}],
+                     frhSI:
+                     [{var:"titlexNum", label:"# of Title X Centers per 100,000"},
+                      {var:"famPlanCentersNum", label:"# of Family Planning Centers per 100,000"},
+                      {var:"aProvidersNum", label:"# of Abortion Providers per 100,000"},
+                      {var:"countiesWoAProvidersPct", label:"% of Counties with a Known Abortion Provider"},
+                      {var:"totalPubDollarsFamPlanCenter", label:"Per Capita Public Expenditure For Family Planning"},
+                      {var:"noCounselAbortion", label:"Does the State Mandate Counseling prior to Abortion?"}],
+                     vcSI:
+                     [{var:"femaleCrimes", label:"# of Violent Crimes per 100,000"}],
+                     lsSI:
+                     [{var:"protSHW", label:"Protection Against Sexual Harassment at work?"},
+                      {var:"firearmSurrender", label:"Firearm Surrender?"},
+                      {var:"unempBenefits", label:"Unemployment Benefits?"},
+                      {var:"parLeave", label:"Parental Leave?"},
+                      {var:"minWage", label:"Minimum Wage?"},
+                      {var:"ERA", label:"Employment Rights Act"}],
+                    };
+
     $: indexLabPre = ["activeBan", "frhSI", "vcSI", "lsSI"].includes(showVar) ? "according to the " : "";
     $: indexLabAft = ["activeBan", "frhSI", "vcSI", "lsSI"].includes(showVar) ? " Sub-Index" : "";
     $: togglePolitical=false
@@ -120,11 +152,18 @@
                           currentStep===17?"AR":null
 
     let highlightSteps = [2,3,4,5,8,11,14,16,17]
+
+    let clickedState = null;
     // $: console.log(highlightedState)
     // $: console.log(currentStep)
 
     const handleMouseOver = (d) => {
         highlightedState=d.stateAbbrv
+    }
+
+    const handleClick = (d) => {
+        clickedState=d
+        console.log(clickedState)
     }
 
     const handleMouseLeave = (d) => {
@@ -139,192 +178,242 @@
     <svg width="{w}px" height="{h}px" ><!--viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet" fill={stateFill}
     -->
         {#if currentStep > 0}
-        <Legend {svgPadding} {cellPadding} {cellInner} {cellSize} {gridWidth} {gridHeight} {innerWidth} {currentStep} {showVar} {colorScale}/>
+        <Legend {svgPadding} {cellPadding} {cellInner} {cellSize} {gridWidth} {gridHeight} {innerWidth} {currentStep} {showVar} {colorScale} {togglePolitical}/>
         {/if}
         <g transform="translate({svgPadding}, {svgPadding})">
             {#each states as state, i}
-            <g transform="translate({state.position[0] * cellSize}, {state.position[1] * cellSize})">
-                <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                <g 
-                transform="translate({cellPadding}, {cellPadding})" 
-                cursor={currentStep===20?"pointer":""}
-                on:mouseover={()=>{currentStep===20?handleMouseOver(state):null}}
-                on:mouseleave={()=>{currentStep===20?handleMouseLeave(state):null}}
-                >
-                    <!-- <rect 
-                    width="{cellInner}" 
-                    height="{cellInner}" 
-                    opacity=0.5
-                    fill=#eee
-                    /> -->
+                <g transform="translate({state.position[0] * cellSize}, {state.position[1] * cellSize})">
                     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                    <!-- width="{state.stateAbbrv==="NE"?cellInner*3+cellPadding*4:cellInner}" 
-                    height="{state.stateAbbrv==="NE"?cellInner*3+cellPadding*4:cellInner}"  -->
-                    <rect 
-                    width="{cellInner}" 
-                    height="{cellInner}" 
-                    opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0.3:1}
-                    stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":colorScale(1):"none"}
-                    stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
-                    fill={currentStep > 0 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
-                    />
-                    <!-- <text 
-                    class="stateName"
-                    font-size={innerWidth > 640 ? cellInner/6 : cellInner/4}
-                    x="2" 
-                    y="5" 
-                    text-anchor="left" 
-                    dy="0.71em" 
-                    font-weight=700
-                    >{state.stateAbbrv}
-                    </text> -->
-                    <text 
-                    class="stateName"
-                    font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
-                    x="2" 
-                    y="5" 
-                    text-anchor="left" 
-                    dy="0.71em" 
-                    font-weight=700
-                    fill="white"
-                    >{state.stateAbbrv}
-                    </text>
-                    <!-- font-weight={!Politicalsteps.includes(currentStep)? state[showVar] > 0.5 ? 700 : state[showVar] > 0.7 ? 900 : 400 : state.deadlyIndex > 0.5 ? 700 : state.deadlyIndex > 0.7 ? 900 : 400} -->
-                    {#if !blanksteps.includes(currentStep)}
-                    <path 
-                    transform="translate({cellInner/2}, {cellInner/2})"
-                    d={arcLine(state, i)}
-                    fill={"white"}
-                    stroke="none" 
-                    stroke-width="1" 
-                    />
-                    <circle 
-                    transform="translate({cellInner/2}, {cellInner/2})"
-                    cx="0"
-                    cy="0"
-                    fill={"white"}
-                    stroke="none" 
-                    r={minRadius + (bar.width*0.9 + bar.padding)}
-                    opacity={deadlyState!==null?deadlyState.includes(state.stateName) ? 1 : 0:0}
-                    />
-                        {#if showVar!=="activeBan"}
+                    <g 
+                    transform="translate({cellPadding}, {cellPadding})" 
+                    cursor={currentStep===20?"pointer":""}
+                    on:mouseover={()=>{currentStep===20?handleMouseOver(state):null}}
+                    on:mouseleave={()=>{currentStep===20?handleMouseLeave(state):null}}
+                    on:click={()=>{currentStep===20?handleClick(state):null}}
+                    id="{state.stateAbbrv}"
+                    >
+                    <!-- position=relative
+                    style="z-index:{state.stateAbbrv!==clickedState?-1:100}" -->
+                        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+                        <!-- width="{state.stateAbbrv==="NE"?cellInner*3+cellPadding*4:cellInner}" 
+                        height="{state.stateAbbrv==="NE"?cellInner*3+cellPadding*4:cellInner}"  -->
+                        <rect 
+                        width="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===20?cellInner*3+cellPadding*4:cellInner}" 
+                        height="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===20?cellInner*3+cellPadding*4:cellInner}"
+                        opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)&&currentStep!==20?0.3:1}
+                        stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":colorScale(1):"none"}
+                        stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
+                        fill={currentStep > 0 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
+                        />
                         <text 
                         class="stateName"
-                        font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
-                        x={cellInner/2}
-                        y={cellInner/2+3}
-                        text-anchor="middle" 
-                        opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.5 ? 1 : 0 :
-                                                                        state.deadlyIndex > 0.5 ? 1 : 0}
-                        font-weight={maxStates.includes(state.stateName)?900:300}
-                        fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
-                        >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
+                        font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
+                        x="2" 
+                        y="5" 
+                        text-anchor="left" 
+                        dy="0.71em" 
+                        font-weight=700
+                        fill="white"
+                        >{state.stateAbbrv}
                         </text>
-                        {:else}
-                        <text 
-                        class="stateName"
-                        font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
-                        x={cellInner/2}
-                        y={cellInner/2+3}
-                        text-anchor="middle" 
-                        opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.2 ? 1 : 0 :
-                                                                        state.deadlyIndex > 0.2 ? 1 : 0}
-                        font-weight={maxStates.includes(state.stateName)?900:300}
-                        fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
-                        >{!blanksteps.includes(currentStep) ? state[showVar]===0.33?"no threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"":""}
-                        </text>
+                        {#if !blanksteps.includes(currentStep)}
+                            <path 
+                            transform="translate({cellInner/2}, {cellInner/2})"
+                            d={arcLine(state, i)}
+                            fill={"white"}
+                            stroke="none" 
+                            stroke-width="1" 
+                            />
+                            <circle 
+                            transform="translate({cellInner/2}, {cellInner/2})"
+                            cx="0"
+                            cy="0"
+                            fill={"white"}
+                            stroke="none" 
+                            r={minRadius + (bar.width*0.9 + bar.padding)}
+                            opacity={deadlyState!==null?deadlyState.includes(state.stateName) ? 1 : 0:0}
+                            />
+                            {#if showVar!=="activeBan"}
+                                <text 
+                                class="stateName"
+                                font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
+                                x={cellInner/2}
+                                y={cellInner/2+3}
+                                text-anchor="middle" 
+                                opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.5 ? 1 : 0 :
+                                                                                state.deadlyIndex > 0.5 ? 1 : 0}
+                                font-weight={maxStates.includes(state.stateName)?900:300}
+                                fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
+                                >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
+                                </text>
+                            {:else}
+                                <text 
+                                class="stateName"
+                                font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
+                                x={cellInner/2}
+                                y={cellInner/2+3}
+                                text-anchor="middle" 
+                                opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.2 ? 1 : 0 :
+                                                                                state.deadlyIndex > 0.2 ? 1 : 0}
+                                font-weight={maxStates.includes(state.stateName)?900:300}
+                                fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
+                                >{!blanksteps.includes(currentStep) ? state[showVar]===0.33?"no threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"":""}
+                                </text>
+                            {/if}
                         {/if}
-                    {/if}
-                    <!-- <path 
-                    in:draw="{{duration: 10000}}"
-                    transform="translate({cellInner/2}, {cellInner/2})"
-                    d={arcLine(state, i)}
-                    fill="none"
-                    stroke="white" 
-                    stroke-width="5" /> -->
+                        <!-- <path 
+                        in:draw="{{duration: 10000}}"
+                        transform="translate({cellInner/2}, {cellInner/2})"
+                        d={arcLine(state, i)}
+                        fill="none"
+                        stroke="white" 
+                        stroke-width="5" /> -->
+                    </g>
                 </g>
-            </g>
+                {#if clickedState!==null&&currentStep===20}
+                <!-- transform="translate({clickedState.position[1]!==6?
+                        clickedState.position[0] * cellSize+","+clickedState.position[1] * cellSize:
+                        clickedState.position[0] * cellSize+","+4 * cellSize})" -->
+                    <use 
+                    id="use" 
+                    xlink:href="#{clickedState.stateAbbrv}" 
+                    transform="translate({clickedState.position[0] * cellSize+","+clickedState.position[1] * cellSize})"
+                    on:click={()=>{clickedState=null}}
+                    />
+                    {#each clickData[showVar] as data, i}
+                        <text 
+                        class="stateName"
+                        transform="translate({clickedState.position[0] * cellSize}, {clickedState.position[1] * cellSize})"
+                        font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
+                        x="5" 
+                        y={i*15+65} 
+                        text-anchor="left" 
+                        dy="0.71em" 
+                        font-weight=400
+                        fill="white"
+                        >
+                        <!-- {clickedState.stateName} is a dangerous state<br> -->
+                        {data.label}: {data.var!=="activeBan"?(clickedState[data.var]*100).toFixed()+"%":
+                                       clickedState[data.var]===0.33?"no threat":clickedState[data.var]===0.66?"restrict":clickedState[data.var]===1?"ban":"protected"}
+                        </text>
+                    {/each}
+                {/if}
             {/each}
         </g>
+        
     </svg>
     <div class="maxState" style="min-height:45px">
         <h3>
             {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==0}
-            The most dangerous state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}"><b>{currentIndex}</b></div> {indexLabAft} is <b>{deadlyState}</b>
+            The most dangerous state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}">{currentIndex}</div> {indexLabAft} is <b>{deadlyState}</b>
             {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==0}
-            There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}"><b>{currentIndex}</b></div> {indexLabAft}
+            There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}">{currentIndex}</div> {indexLabAft}
             {:else if Politicalsteps.includes(currentStep)}
-            On average, <div class="specialWordWrap" style="background-color:#dd2c35"><b>red</b></div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <br><div class="specialWordWrap" style="background-color:#0080c9"><b>blue</b></div> states.
+            On average, <div class="specialWordWrap" style="background-color:#dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <br><div class="specialWordWrap" style="background-color:#0080c9">blue</div> states.
             {/if}
         </h3>
     </div>
     {#if currentStep === 20}
-        <h5>Choose a view</h5>
-        <div class="buttonsContainer">
             <div class="buttons">
-                <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                <div class="buttonContainer">
                 <!-- <div> -->
-                    <input type=radio group={buttons} name="buttons" bind:value={togglePolitical} style="margin-left:40px;" on:click={
+                    <input 
+                    type=button group={buttons} 
+                    name="buttons" 
+                    value="politics" 
+                    style="background-color:{colorPolitical("democrat")};border:0px solid {colorPolitical("republican")}"
+                    on:click={
                         ()=>{
                             showVar="deadlyIndex"
                             colorScale=colorPolitical
                             togglePolitical=true
                             // console.log(togglePolitical)
                         }}>
-                    <div style="max-width:100px">Political Party</div>
+                    <!-- <span class="buttonLabel">Political Party</span> -->
                 </div>
-                <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                <div class="buttonContainer">
                 <!-- <div> -->
-                    <input type=radio group={buttons} name="buttons" value={1} style="margin-left:40px;" on:click={
+                    <input 
+                    type=button 
+                    group={buttons} 
+                    name="buttons" 
+                    value={"Abortion Rights"}
+                    style="background-color:{colorRW(1)};border:0px solid {colorRW(1)}" 
+                    on:click={
                         ()=>{
                             showVar="activeBan"
                             colorScale=colorRW
                             togglePolitical=false
                         }}>
-                    <div style="max-width:100px">Erosion of Abortion Rights Index</div>
+                    <!-- <span class="buttonLabel">Erosion of Abortion Rights Index</span> -->
                 </div>
-                <div style="display:flex;flex-direction:column;text-align: center;margin-right:30px">
+                <div class="buttonContainer">
                 <!-- <div> -->
-                    <input type=radio group={buttons} name="buttons" value={2} style="margin-left:40px" on:click={
+                    <input 
+                    type=button 
+                    group={buttons} 
+                    name="buttons" 
+                    value={"Repr. Health Services"} 
+                    style="background-color:{colorFR(0.7)};border:0px solid {colorFR(1)}"
+                    on:click={
                         ()=>{
                             showVar="frhSI"
                             colorScale=colorFR
                             togglePolitical=false
                         }}>
-                    <div style="max-width:100px">Lack of Reproductive Health Services Index</div>
+                    <!-- <span class="buttonLabel">Lack of Reproductive Health Services Index</span> -->
                 </div>
-                <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                <div class="buttonContainer">
                 <!-- <div> -->
-                    <input type=radio group={buttons} name="buttons" value={3} style="margin-left:40px" on:click={
+                    <input 
+                    type=button 
+                    group={buttons} 
+                    name="buttons" 
+                    value={"Violent Crime"} 
+                    style="background-color:{colorVC(0.7)};border:0px solid {colorVC(1)}}"
+                    on:click={
                         ()=>{
                             showVar="vcSI"
                             colorScale=colorVC
                             togglePolitical=false
                         }}>
-                    <div style="max-width:100px">Violent Crime Against Women Index</div>
+                    <!-- <span class="buttonLabel">Violent Crime Against Women Index</span> -->
                 </div>
-                <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                <div class="buttonContainer">
                 <!-- <div> -->
-                    <input type=radio group={buttons} name="buttons" value={3} style="margin-left:40px" on:click={
+                    <input 
+                    type=button 
+                    group={buttons} 
+                    name="buttons" 
+                    value={"Legal Protections"} 
+                    style="background-color:{colorLS(0.7)};border:0px solid {colorLS(1)}"
+                    on:click={
                         ()=>{
                             showVar="lsSI"
                             colorScale=colorLS
                             togglePolitical=false
                         }}>
-                    <div style="max-width:100px">Lack of Legal Protections Index</div>
+                    <!-- <span class="buttonLabel">Lack of Legal Protections Index</span> -->
                 </div>
-                <div style="display:flex;flex-direction:column;text-align: center; margin-right:30px">
+                <div class="buttonContainer">
                 <!-- <div> -->
-                    <input type=radio group={buttons} name="buttons" style="margin-left:40px" checked="checked" on:click={
+                    <input 
+                    type=button 
+                    group={buttons} 
+                    name="buttons"  
+                    checked="checked" 
+                    value="Danger Index" 
+                    style="background-color:{colorDI(1)};border:0px solid {colorDI(1)}"
+                    on:click={
                         ()=>{
                             showVar="deadlyIndex"
                             colorScale=colorDI
                             togglePolitical=false
                         }}>
-                    <div style="max-width:100px">Overall Danger Index</div>
+                    <!-- <span class="buttonLabel">Overall Danger Index</span> -->
                 </div>
             </div>
-        </div>
+            <h5>Choose a view</h5>
     {/if}
 </div>
 
@@ -340,16 +429,79 @@
         transform: translateY(-50%);
     }
 
-    .buttons {
+    .buttonLabel {
+        width:8vw;
+        font-family: "Roboto Flex", sans-serif;
         font-size:11px;
         font-weight:700px;
-        margin-bottom:50px;
-        text-align: center;
-        }
+    }
+
+    .buttonContainer {
+        display:flex;
+        flex-direction:column;
+        text-align: center; 
+        margin-right:5px;
+        margin-left:5px;
+    }
 
     input {
+        /* margin-left:40%; */
         cursor: pointer;
+
+        /* alternate */
+        font-family: "Roboto Flex", sans-serif;
+        font-size:11px;
+        font-weight:400;
+        color:white;
+        text-transform: uppercase;
+        border-width:0px;
+        padding:5px;
+        /* transform:skew(-.312rad); */
     }
+
+    input:hover {
+        /* border-width: 2px; */
+        opacity: 0.5;
+        /* filter:invert(100%); */
+    }
+
+    input:focus {
+        font-weight: 700;
+        border-width: 2px;
+    }
+
+    .buttons {
+        
+        /* text-align: center; */
+        display:flex;
+        text-align: center;
+        margin:auto;
+        flex-wrap: wrap;
+        justify-content: center;
+        /* max-width: 50vw; */
+        }
+    .buttonsContainer {
+        /* margin-bottom:50px;
+        margin-top:10px; */
+        /* margin-left:auto;
+        margin-right: auto; */
+        /* text-align: center; */
+        
+        /* margin:auto;
+        max-width: 70vw; */
+        /* display:flex;
+        text-align: center;
+        margin:auto;
+        flex-wrap: wrap; */
+        
+        /* text-align: center;
+        margin:auto;
+        max-width: 50vw; */
+    }
+
+    /* span {
+        
+    } */
 
     h3 {
         /* color: black; */
@@ -361,34 +513,26 @@
         color: black;
 		font-family: 'Roboto Flex', sans-serif;
 		font-weight: 400;
+        margin-bottom: 10px;
+        margin-top: 0px
 	}
 
-    .buttonsContainer {
-        text-align: center;
-        margin:auto;
-        max-width: 50vw;
-    }
-
-    .buttons {
-        display:flex;
-        text-align: center;
-        margin:auto;
-        flex-wrap: wrap;
-    }
+    
 
     .specialWordWrap {
         /* background-color: #730f71; */
         padding-right: 5px;
         padding-left: 5px;
         display: inline-block;
-        transform:skew(-.312rad);
+        /* transform:skew(-.312rad); */
         color: white;
-        font-weight: 700;
+        font-weight: 500;
+        border-radius: 2.5px;
     }
     
-    /* .stateName {
-        font-size: 0.8em;
-    } */
+        .stateName {
+            font-family: 'Roboto Flex', sans-serif;
+        }
 
     /* div {
 		max-width: 70vw;
