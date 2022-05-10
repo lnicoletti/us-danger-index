@@ -3,7 +3,7 @@
     import * as animateScroll from "svelte-scrollto";
 
     function revertFrameOne() {
-        animateScroll.scrollTo({element: '#lastStep'})
+        animateScroll.scrollTo({element: '#lastStep', duration:4000});
     }
 
     $: titleFontSize = innerWidth>900?60:innerWidth>750?50:innerWidth>640?40:innerWidth>460?30:23//style="font-size:{titleFontSize}"
@@ -133,7 +133,7 @@
 		margin:auto;
 		/* font-family: 'Jost', sans-serif; */
         font-family: 'Roboto Flex', sans-serif;
-		font-weight: 400;
+		font-weight: 300;
         /* line-height: normal; */
 	}
 
@@ -167,10 +167,10 @@
       /* width: 140px; */
       height:27px;
       color:black;
-      font-weight:700;
+      font-weight:400;
       font-size: 13px;
       font-family: 'Roboto Flex', sans-serif;
-      text-transform: uppercase;
+      /* text-transform: uppercase; */
       border: 1.7px solid black;
       cursor: pointer;
   }

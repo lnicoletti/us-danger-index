@@ -4,7 +4,7 @@
     export let currentStep;
     // export let innerHeight;
     export let innerWidth;
-    import { max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
+    import { ascending, descending, max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
     import { fade, draw, fly } from 'svelte/transition';
     import Legend from './Legend.svelte';
 
@@ -45,7 +45,14 @@
                       {var:"parLeave", label:"Parental Leave?"},
                       {var:"minWage", label:"Minimum Wage?"},
                       {var:"ERA", label:"Employment Rights Act"}],
-                    };
+    };
+
+    $: clickDataSort = clickedState!==null?clickData[showVar].map(d=>{return {
+        value: clickedState[d.var],
+        label: d.label
+    }}).sort((a, b)=>ascending(a.value, b.value)):null;
+
+    $: console.log("click data", clickDataSort)
 
     $: indexLabPre = ["activeBan", "frhSI", "vcSI", "lsSI"].includes(showVar) ? "according to the " : "";
     $: indexLabAft = ["activeBan", "frhSI", "vcSI", "lsSI"].includes(showVar) ? " Sub-Index" : "";
@@ -72,19 +79,44 @@
     // arc variables
     $: bar = ({width: innerWidth>700?cellInner/9:cellInner/12, padding: 0});
     // $: minRadius = cellInner*0.2;
-    $: minRadius = cellInner*0.17;
-    $: innerRadius = i => minRadius + (bar.width + bar.padding);
-    $: outerRadius = i => innerRadius(i) + bar.width;
+    $: minRadius = (d, i) => clickedState!==null&&d.stateAbbrv===clickedState.stateAbbrv?
+                            (cellInner*3+cellPadding*4)*0.25:cellInner*0.17;
+    $: cellCenter = (d, i) => clickedState!==null&&d.stateAbbrv===clickedState.stateAbbrv?(cellInner*3+cellPadding*4)/2:cellInner/2
+    $: innerRadius = (d, i) => minRadius(d, i) + (bar.width + bar.padding)*i;
+    $: outerRadius = (d, i) => innerRadius(d, i) + bar.width;
     let maxRadius = 100;
     $: maxValue = max(states, d => Politicalsteps.includes(currentStep)?+d.deadlyIndex:+d[showVar]);
     $: x = scaleLinear()
         .domain([0, maxValue])
         .range([0, 2 * Math.PI])
     $: arcLine = (d, i) => arc()
-        .innerRadius(innerRadius(i))
-        .outerRadius(outerRadius(i))
+        .innerRadius(innerRadius(d, i))
+        .outerRadius(outerRadius(d, i))
         .startAngle(0)
         .endAngle(Politicalsteps.includes(currentStep)?x(+d.deadlyIndex):x(+d[showVar]))()
+
+    // scales for tooltipChart
+    $: xTtip = scaleLinear()
+        .domain([0, 1.25])
+        .range([0, 2 * Math.PI])
+    $: barTtip = ({width: innerWidth>700?cellInner/6:cellInner/9, padding: 0});
+    $: minRadiusTtip = (d, i) => (cellInner*3+cellPadding*4)*0.15;
+    $: innerRadiusTtip = (d, i) => minRadiusTtip(d, i) + (barTtip.width + barTtip.padding)*i;
+    $: outerRadiusTtip = (d, i) => innerRadiusTtip(d, i) + barTtip.width;
+    // $: cellCenterTtip = (cellInner*3+cellPadding*4)/2
+    $: arcLineTtip = (d, i) => arc()
+        .innerRadius(innerRadiusTtip(d, i))
+        .outerRadius(outerRadiusTtip(d, i))
+        .startAngle(0)
+        .endAngle(xTtip(+d))()
+    
+    // $: xLab = scaleLinear()
+    //     .domain([0, maxValue])
+    //     .range([cellInner*3+cellPadding*4, 0])
+    // $: yLab = 
+    // scaleLinear()
+    // .domain([0, 1])
+    // .range([0, cellInner*3+cellPadding*4])
 
     // $: if (currentStep>0) {
     $: maxState = states.filter(d => +d[showVar] === maxValue);
@@ -172,6 +204,8 @@
 
     // $: console.log(colorScale(0.8))
 
+    $: console.log("test line value", arcLine({deadlyIndex:0.5}, 10))
+
 </script>
 
 <div class="chartElements">
@@ -217,32 +251,76 @@
                         >{state.stateAbbrv}
                         </text>
                         {#if !blanksteps.includes(currentStep)}
-                            <path 
-                            transform="translate({cellInner/2}, {cellInner/2})"
-                            d={arcLine(state, i)}
-                            fill={"white"}
-                            stroke="none" 
-                            stroke-width="1" 
-                            />
-                            <circle 
-                            transform="translate({cellInner/2}, {cellInner/2})"
-                            cx="0"
-                            cy="0"
-                            fill={"white"}
-                            stroke="none" 
-                            r={minRadius + (bar.width*0.9 + bar.padding)}
-                            opacity={deadlyState!==null?deadlyState.includes(state.stateName) ? 1 : 0:0}
-                            />
+                            {#if clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv}
+                                <!-- {#each clickData[showVar] as data, i} -->
+                                {#each clickDataSort as data, i}
+                                    <path 
+                                    transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
+                                    d={arcLineTtip(data.value, i)}
+                                    fill={"white"}
+                                    stroke={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)}
+                                    stroke-width="2" 
+                                    />
+                                    <rect 
+                                    transform="translate({cellCenter(state, i)-((cellInner*3+cellPadding*4)/2-10)},{cellCenter(state, i)-innerRadiusTtip(data.value, i+1)})"
+                                    fill={"white"}
+                                    width={(cellInner*3+cellPadding*4)/2-10}
+                                    height={barTtip.width}
+                                    stroke={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)}
+                                    stroke-width="2" 
+                                    />
+                                    <!-- <text 
+                                    transform="translate({cellCenter(state, i)-((cellInner*3+cellPadding*4)/2-10)},{cellCenter(state, i)-innerRadiusTtip(data.value, i+1)})"
+                                    fill={"white"}
+                                    width={(cellInner*3+cellPadding*4)/2-10}
+                                    height={barTtip.width}
+                                    stroke={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)}
+                                    stroke-width="2" 
+                                    ></text> -->
+                                {/each}
+                                <!-- <text 
+                                class="stateName"
+                                font-size={innerWidth > 640 ? cellInner/5 : cellInner/3}
+                                x={cellCenter(state, i)}
+                                y={cellCenter(state, i)+3}
+                                text-anchor="middle" 
+                                font-weight=700
+                                fill="white"
+                                >{showVar!=="activeBan"?(state[showVar]*100).toFixed()+"%":state[showVar]===0.33?"low threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"protected"}
+                                </text> -->
+                            {:else}
+                                <path 
+                                transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
+                                d={arcLine(state, 1)}
+                                fill={"white"}
+                                stroke="none" 
+                                stroke-width="1" 
+                                />
+                                <circle 
+                                transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
+                                cx="0"
+                                cy="0"
+                                fill={"white"}
+                                stroke="none" 
+                                r={minRadius(state, i) + (bar.width*0.9 + bar.padding)}
+                                opacity={deadlyState!==null?deadlyState.includes(state.stateName) ? 1 : 0:0}
+                                />
+                            {/if}
                             {#if showVar!=="activeBan"}
                                 <text 
                                 class="stateName"
-                                font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
-                                x={cellInner/2}
-                                y={cellInner/2+3}
+                                font-size={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?
+                                            innerWidth > 640 ? cellInner/4 : cellInner/3:
+                                            innerWidth > 640 ? cellInner/7 : cellInner/5}
+                                x={cellCenter(state, i)}
+                                y={cellCenter(state, i)+3}
                                 text-anchor="middle" 
-                                opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.5 ? 1 : 0 :
-                                                                                state.deadlyIndex > 0.5 ? 1 : 0}
-                                font-weight={maxStates.includes(state.stateName)?900:300}
+                                opacity={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?1:
+                                            !Politicalsteps.includes(currentStep)? 
+                                                state[showVar] > 0.5 ? 1 : 0 : 
+                                                state.deadlyIndex > 0.5 ? 1 : 0}
+                                font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
+                                                maxStates.includes(state.stateName)?900:300}
                                 fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
                                 >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
                                 </text>
@@ -250,14 +328,14 @@
                                 <text 
                                 class="stateName"
                                 font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
-                                x={cellInner/2}
-                                y={cellInner/2+3}
+                                x={cellCenter(state, i)}
+                                y={cellCenter(state, i)+3}
                                 text-anchor="middle" 
                                 opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.2 ? 1 : 0 :
                                                                                 state.deadlyIndex > 0.2 ? 1 : 0}
                                 font-weight={maxStates.includes(state.stateName)?900:300}
                                 fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
-                                >{!blanksteps.includes(currentStep) ? state[showVar]===0.33?"no threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"":""}
+                                >{!blanksteps.includes(currentStep) ? state[showVar]===0.33?"low threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"protected":""}
                                 </text>
                             {/if}
                         {/if}
@@ -280,8 +358,16 @@
                     transform="translate({clickedState.position[0] * cellSize+","+clickedState.position[1] * cellSize})"
                     on:click={()=>{clickedState=null}}
                     />
-                    {#each clickData[showVar] as data, i}
-                        <text 
+                    <!-- {#each clickData[showVar] as data, i}
+
+                        <path 
+                        transform="translate({(clickedState.position[0] * cellSize)+cellCenterTtip},{(clickedState.position[0] * cellSize)+cellCenterTtip})"
+                        d={arcLineTtip(clickedState[data.var], i)}
+                        fill={"white"}
+                        stroke="none" 
+                        stroke-width="1" 
+                        /> -->
+                        <!-- <text 
                         class="stateName"
                         transform="translate({clickedState.position[0] * cellSize}, {clickedState.position[1] * cellSize})"
                         font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
@@ -292,11 +378,26 @@
                         font-weight=400
                         fill="white"
                         >
-                        <!-- {clickedState.stateName} is a dangerous state<br> -->
+                        {clickedState.stateName} is a dangerous state<br>
                         {data.label}: {data.var!=="activeBan"?(clickedState[data.var]*100).toFixed()+"%":
                                        clickedState[data.var]===0.33?"no threat":clickedState[data.var]===0.66?"restrict":clickedState[data.var]===1?"ban":"protected"}
-                        </text>
-                    {/each}
+                        </text> -->
+                        <!-- <text 
+                        class="stateName"
+                        transform="translate({clickedState.position[0] * cellSize}, {clickedState.position[1] * cellSize})"
+                        font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
+                        x={Math.cos(x(1-clickedState[data.var]))*minRadius(clickedState, i)+cellCenter(clickedState, i)}
+                        y={Math.sin(x(1-clickedState[data.var]))*minRadius(clickedState, i)+cellCenter(clickedState, i)}
+                        text-anchor="left" 
+                        font-weight=400
+                        fill="white"
+                        >
+                         
+                        {data.var}: 
+                        {data.var!=="activeBan"?(clickedState[data.var]*100).toFixed()+"%":
+                                       clickedState[data.var]===0.33?"no threat":clickedState[data.var]===0.66?"restrict":clickedState[data.var]===1?"ban":"protected"}
+                        </text> -->
+                    <!-- {/each} -->
                 {/if}
             {/each}
         </g>

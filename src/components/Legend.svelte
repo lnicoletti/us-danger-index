@@ -103,7 +103,7 @@
                 text-anchor="middle" 
                 font-weight=700
                 fill={inTextColor}
-                >{d.deadlyIndex===0.33?"no threat":d.deadlyIndex===0.66?"restrict":d.deadlyIndex===1?"ban":"risk"}
+                >{d.deadlyIndex===0.33?"low threat":d.deadlyIndex===0.66?"restrict":d.deadlyIndex===1?"ban":"risk"}
                 </text>
                 {/if}
                 <!-- <path 
