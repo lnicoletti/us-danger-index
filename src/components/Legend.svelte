@@ -36,6 +36,10 @@
                 {deadlyIndex:0.66, position:[2,0], label:"high"}, 
                 {deadlyIndex:0.33, position:[1,0], label:"low"}, 
                 {deadlyIndex:0.75, position:[0,0], label:""}]
+    // let data = [{deadlyIndex:1, position:[6.4,8.5], label:"v. high"}, 
+    //             {deadlyIndex:0.66, position:[5.4,8.5], label:"high"}, 
+    //             {deadlyIndex:0.33, position:[4.4,8.5], label:"low"}, 
+    //             {deadlyIndex:0.75, position:[3.4,8.5], label:""}]
 
     // console.log("legend data", data)
     $: console.log("test", colorScale(0.8))
