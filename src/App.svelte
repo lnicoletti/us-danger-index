@@ -192,6 +192,13 @@
 	$: femaleCrimesNormScale = getNormScale("femaleCrimes", states)
 
 	$: statesIndex = states.map(d=>({...d, 
+						titleXNorm: 1-titlexNormScale(d.titlexNum/d.femalePop),
+						famPlanCentersNorm: 1-famPlanCentersNormScale(d.famPlanCentersNum/d.femalePop),
+						aProvidersNorm: 1-aProvidersNormScale(d.aProvidersNum/d.femalePop),
+						famPlanCenterSpendNorm: 1-FamPlanCenterNormScale(d.totalPubDollarsFamPlanCenter/d.femalePop),
+						abortionDollarsNorm: 1-AbortionDollarsNormScale(d.totalPubDollarsAbortion/d.femalePop),
+						femaleCrimesNorm: femaleCrimesNormScale(d.femaleCrimes/d.femalePop),
+						countiesWoAProvidersNorm: 1-(d.countiesWoAProvidersPct/100),
 						frhSI: 
 						1-((titlexNormScale((d.titlexNum/d.femalePop))+
 						famPlanCentersNormScale((d.famPlanCentersNum/d.femalePop))+

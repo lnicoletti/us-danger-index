@@ -22,35 +22,36 @@
     //                  {var:"lsSI", label: "Lack of Legal Protections"}, 
     //                  {var:"deadlyIndex", label: "overall"}];
     let clickData = {deadlyIndex:
-                    [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:"EOR"}, 
-                     {var:"frhSI", label: "Lack of Repr. H. Serv.", acronym:"LRHS"}, 
-                     {var:"vcSI", label: "Violent Crime Against Women", acronym:"VCAW"}, 
-                     {var:"lsSI", label: "Lack of Legal Protections", acronym:"LLP"}, 
-                     {var:"deadlyIndex", label: "overall", acronym:""}],
+                    [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:"EAR", iOffset:0}, 
+                     {var:"frhSI", label: "Lack of Reproductive Health Services", acronym:"LRH", iOffset:0}, 
+                     {var:"vcSI", label: "Violent Crime Against Women", acronym:"VCW", iOffset:0}, 
+                     {var:"lsSI", label: "Lack of Legal Protections", acronym:"LLP", iOffset:0}, 
+                     {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0}],
                      activeBan:
-                     [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:"Abortion Stance"}],
+                     [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:"Abortion Stance", iOffset:0}],
                      frhSI:
-                     [{var:"titlexNum", label:"# of Title X Centers per 100,000", acronym:"#TitleX"},
-                      {var:"famPlanCentersNum", label:"# of Family Planning Centers per 100,000", acronym:"#FPC"},
-                      {var:"aProvidersNum", label:"# of Abortion Providers per 100,000", acronym:"#AB"},
-                      {var:"countiesWoAProvidersPct", label:"% of Counties with a Known Abortion Provider", acronym:"%CAB"},
-                      {var:"totalPubDollarsFamPlanCenter", label:"Per Capita Public Expenditure For Family Planning", acronym:"FP$"},
-                      {var:"noCounselAbortion", label:"Does the State Mandate Counseling prior to Abortion?", acronym:"MCA"}],
+                     [{var:"titleXNorm", label:"# of Title X Centers per 100,000", acronym:"TTX", iOffset:2},
+                      {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100,000", acronym:"FPC", iOffset:2},
+                      {var:"aProvidersNorm", label:"# of Abortion Providers per 100,000", acronym:"AP", iOffset:2},
+                      {var:"countiesWoAProvidersNorm", label:"% of Counties with a Known Abortion Provider", acronym:"CAB", iOffset:2},
+                      {var:"famPlanCenterSpendNorm", label:"Per Capita Public Expenditure For Family Planning", acronym:"FP$", iOffset:2},
+                      {var:"noCounselAbortion", label:"Does the State Mandate Counseling prior to Abortion?", acronym:"MCA", iOffset:2}],
                      vcSI:
-                     [{var:"femaleCrimes", label:"# of Violent Crimes per 100,000", acronym:"Crime 100k"}],
+                     [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000", acronym:"Crime 100k", iOffset:0}],
                      lsSI:
-                     [{var:"protSHW", label:"Protection Against Sexual Harassment at work?", acronym:"PASH"},
-                      {var:"firearmSurrender", label:"Firearm Surrender?", acronym:"FS"},
-                      {var:"unempBenefits", label:"Unemployment Benefits?", acronym:"UB"},
-                      {var:"parLeave", label:"Parental Leave?", acronym:"PL"},
-                      {var:"minWage", label:"Minimum Wage?", acronym:"MW"},
-                      {var:"ERA", label:"Employment Rights Act", acronym:"ERA"}],
+                     [{var:"protSHW", label:"Protection Against Sexual Harassment at work?", acronym:"SHW", iOffset:2},
+                      {var:"firearmSurrender", label:"Firearm Surrender?", acronym:"FS", iOffset:2},
+                      {var:"unempBenefits", label:"Unemployment Benefits?", acronym:"UB", iOffset:2},
+                      {var:"parLeave", label:"Parental Leave?", acronym:"PL", iOffset:2},
+                      {var:"minWage", label:"Minimum Wage?", acronym:"MW", iOffset:2},
+                      {var:"ERA", label:"Employment Rights Act", acronym:"ERA", iOffset:2}],
     };
 
     $: clickDataSort = clickedState!==null?clickData[showVar].map(d=>{return {
             value: clickedState[d.var],
             label: d.label,
-            acronym: d.acronym
+            acronym: d.acronym,
+            iOffset: d.iOffset
     }}).sort((a, b)=>ascending(a.value, b.value)).filter(d=>d.label!=="overall"):null;
 
     $: console.log("click data", clickDataSort)
@@ -75,7 +76,7 @@
                   innerWidth>640?(innerWidth*0.7)/gridWidth:(innerWidth*0.9)/gridWidth;
     $: cellInner = cellSize - cellPadding * 2;
     $: w = gridWidth * cellSize + 2 * svgPadding;
-    $: h = gridHeight * cellSize + 2 * svgPadding + cellSize*0.1; //+cellSize*1.3
+    $: h = gridHeight * cellSize + 2 * svgPadding + cellSize*0.05; //+cellSize*1.3
 
     // arc variables
     $: bar = ({width: innerWidth>700?cellInner/9:cellInner/12, padding: 0});
@@ -98,10 +99,10 @@
 
     // scales for tooltipChart
     $: xTtip = scaleLinear()
-        .domain([0, 1.25])
+        .domain([0, 1.12])
         .range([0, 2 * Math.PI])
-    $: barTtip = ({width: innerWidth>700?cellInner/6:cellInner/9, padding: 0});
-    $: minRadiusTtip = (d, i) => (cellInner*3+cellPadding*4)*0.15;
+    $: barTtip = ({width: innerWidth>700?cellInner/5.5:cellInner/5, padding: 0});
+    $: minRadiusTtip = (d, i) => (cellInner*3+cellPadding*4)*0.21;
     $: innerRadiusTtip = (d, i) => minRadiusTtip(d, i) + (barTtip.width + barTtip.padding)*i;
     $: outerRadiusTtip = (d, i) => innerRadiusTtip(d, i) + barTtip.width;
     // $: cellCenterTtip = (cellInner*3+cellPadding*4)/2
@@ -129,7 +130,7 @@
     // color scales
     // $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
     // $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#5e3c99","#b2abd2","#fdb863","#e66101"])
-    $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#ccc","pink","red","darkred"])
+    $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["lightblue","pink","red","darkred"])
     // $: colorFR = scaleSequential(interpolateRdPu).domain([0, max(states, d=>d.frhSI)])
     $: colorFR = scaleSequential(interpolateLab("white", "#014242")).domain([0.25, max(states, d=>d.frhSI)])
     $: colorLS = scaleSequential(interpolateLab("white", "#0b0c29")).domain([0.1, max(states, d=>d.lsSI)])
@@ -196,7 +197,7 @@
 
     const handleClick = (d) => {
         clickedState=d
-        console.log(clickedState)
+        // console.log(clickedState)
     }
 
     const handleMouseLeave = (d) => {
@@ -205,7 +206,7 @@
 
     // $: console.log(colorScale(0.8))
 
-    $: console.log("test line value", arcLine({deadlyIndex:0.5}, 10))
+    // $: console.log("test line value", arcLine({deadlyIndex:0.5}, 10))
 
 </script>
 
@@ -257,7 +258,7 @@
                                 {#each clickDataSort as data, i}
                                     <path 
                                     transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
-                                    d={arcLineTtip(data.value+0.02, i)}
+                                    d={clickDataSort.length>1?arcLineTtip(data.value+0.02, i-data.iOffset):arcLineTtip(data.value+0.02, 3)}
                                     fill={"white"}
                                     stroke={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)}
                                     stroke-width="2" 
@@ -273,11 +274,11 @@
                                     /> -->
                                     <!-- fill={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)} -->
                                     <text 
-                                    transform="translate({cellCenter(state, i)},{cellCenter(state, i)-innerRadiusTtip(data.value, i)})"
+                                    transform="translate({cellCenter(state, i)},{clickDataSort.length>1?cellCenter(state, i)-innerRadiusTtip(data.value, i-data.iOffset):cellCenter(state, 3)-innerRadiusTtip(data.value, 3)})"
                                     fill={"white"}
                                     x={-data.acronym.length*6.5}
                                     y="-2"
-                                    font-size="9px"
+                                    font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
                                     >{data.acronym}
                                     </text>
                                 {/each}
@@ -330,15 +331,19 @@
                             {:else}
                                 <text 
                                 class="stateName"
-                                font-size={innerWidth > 640 ? cellInner/7 : cellInner/5}
+                                font-size={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?
+                                    innerWidth > 640 ? cellInner/4 : cellInner/3:
+                                    innerWidth > 640 ? cellInner/7 : cellInner/5}
                                 x={cellCenter(state, i)}
                                 y={cellCenter(state, i)+3}
                                 text-anchor="middle" 
                                 opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.2 ? 1 : 0 :
                                                                                 state.deadlyIndex > 0.2 ? 1 : 0}
-                                font-weight={maxStates.includes(state.stateName)?900:300}
+                                font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
+                                                maxStates.includes(state.stateName)?900:300}
                                 fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
-                                >{!blanksteps.includes(currentStep) ? state[showVar]===0.33?"low threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"protected":""}
+                                >{!blanksteps.includes(currentStep) ? 
+                                    state[showVar]===0.33?"low threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"protected":""}
                                 </text>
                             {/if}
                         {/if}
@@ -414,14 +419,14 @@
                 {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==0}
                 There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}">{currentIndex}</div> {indexLabAft}
                 {:else if Politicalsteps.includes(currentStep)}
-                On average, <div class="specialWordWrap" style="background-color:#dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <br><div class="specialWordWrap" style="background-color:#0080c9">blue</div> states.
+                On average, <div class="specialWordWrap" style="background-color:#dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <div class="specialWordWrap" style="background-color:#0080c9">blue</div> states.
                 {/if}
             </h3>
         </div>
     {:else}
     <div 
     class="legend"
-    style="text-align:center;margin-bottom:10px"
+    style="text-align:center;margin-bottom:7px;min-height:80px"
     >
         <div 
         style="text-align:left;font-size:{innerWidth > 640 ? cellInner/7 : cellInner/4}px;color:grey;max-width:300px;display:inline-block;"
@@ -589,7 +594,7 @@
 
     input:focus {
         font-weight: 700;
-        border-width: 2px;
+        /* border-width: 2px; */
     }
 
     .buttons {

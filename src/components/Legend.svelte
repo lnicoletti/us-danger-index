@@ -32,9 +32,15 @@
         .startAngle(0)
         .endAngle(x(+d.deadlyIndex))()
 
-    let data = [{deadlyIndex:1, position:[3,0], label:"v. high"}, 
+    $: data = showVar!=="activeBan"?
+                [{deadlyIndex:1, position:[3,0], label:"v. high"}, 
                 {deadlyIndex:0.66, position:[2,0], label:"high"}, 
                 {deadlyIndex:0.33, position:[1,0], label:"low"}, 
+                {deadlyIndex:0.75, position:[0,0], label:""}]:
+                [{deadlyIndex:1, position:[4,0], label:"v. high"}, 
+                {deadlyIndex:0.66, position:[3,0], label:"high"}, 
+                {deadlyIndex:0.33, position:[2,0], label:"low"}, 
+                {deadlyIndex:0, position:[1,0], label:""},
                 {deadlyIndex:0.75, position:[0,0], label:""}]
     // let data = [{deadlyIndex:1, position:[6.4,8.5], label:"v. high"}, 
     //             {deadlyIndex:0.66, position:[5.4,8.5], label:"high"}, 
@@ -54,7 +60,7 @@
                 <rect 
                 width="{cellInner}" 
                 height="{cellInner}" 
-                fill={showVar!==null&&showVar!=="party"&&togglePolitical!==true&&i!==3?colorScale(d.deadlyIndex):tileColor} 
+                fill={showVar!==null&&showVar!=="party"&&togglePolitical!==true&&i!==data.length-1?colorScale(d.deadlyIndex):tileColor} 
                 />
                 <text 
                 class="stateName"
@@ -65,7 +71,7 @@
                 dy="0.71em" 
                 font-weight=700
                 fill={inTextColor}
-                >{i===3?"State":""}
+                >{i===data.length-1?"State":""}
                 </text>
                 <!-- <text 
                 class="stateName"
@@ -107,7 +113,7 @@
                 text-anchor="middle" 
                 font-weight=700
                 fill={inTextColor}
-                >{d.deadlyIndex===0.33?"low threat":d.deadlyIndex===0.66?"restrict":d.deadlyIndex===1?"ban":"risk"}
+                >{d.deadlyIndex===0?"protected":d.deadlyIndex===0.33?"low threat":d.deadlyIndex===0.66?"restrict":d.deadlyIndex===1?"ban":"risk"}
                 </text>
                 {/if}
                 <!-- <path 
