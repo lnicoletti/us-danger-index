@@ -30,12 +30,12 @@
                      activeBan:
                      [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:"Abortion Stance", iOffset:0}],
                      frhSI:
-                     [{var:"titleXNorm", label:"# of Title X Centers per 100,000", acronym:"TTX", iOffset:2},
-                      {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100,000", acronym:"FPC", iOffset:2},
-                      {var:"aProvidersNorm", label:"# of Abortion Providers per 100,000", acronym:"AP", iOffset:2},
-                      {var:"countiesWoAProvidersNorm", label:"% of Counties with a Known Abortion Provider", acronym:"CAB", iOffset:2},
-                      {var:"famPlanCenterSpendNorm", label:"Per Capita Public Expenditure For Family Planning", acronym:"FP$", iOffset:2},
-                      {var:"noCounselAbortion", label:"Does the State Mandate Counseling prior to Abortion?", acronym:"MCA", iOffset:2}],
+                     [{var:"titleXNorm", label:"Below Average # of Title X Centers per 100,000", acronym:"TTX", iOffset:2},
+                      {var:"famPlanCentersNorm", label:"Below Average # of Family Planning Centers per 100,000", acronym:"FPC", iOffset:2},
+                      {var:"aProvidersNorm", label:"Below Average # of Abortion Providers per 100,000", acronym:"AP", iOffset:2},
+                      {var:"countiesWoAProvidersNorm", label:"Below Average % of Counties with a Known Abortion Provider", acronym:"CAB", iOffset:2},
+                      {var:"famPlanCenterSpendNorm", label:"Below Average Per Capita Public Expenditure For Family Planning", acronym:"FP$", iOffset:2},
+                      {var:"CounselBeforeAbortion", label:"Women are not Allowed to get an Abortion Without Attending State-Mandated Counseling", acronym:"MCA", iOffset:2}],
                      vcSI:
                      [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000", acronym:"Crime 100k", iOffset:0}],
                      lsSI:
@@ -218,6 +218,7 @@
         {/if}
         <g transform="translate({svgPadding}, {svgPadding})">
             {#each states as state, i}
+            <!-- add one g element for each state and translate it to it's cartogram position -->
                 <g transform="translate({
                     clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv?
                         (state.position[0]+state.xOffset) * cellSize+","+(state.position[1]+state.yOffset) * cellSize:
@@ -231,6 +232,7 @@
                     on:click={()=>{currentStep===20?handleClick(state):null}}
                     id="{state.stateAbbrv}"
                     >
+                    <!-- add rectangle + state name + path to each tile -->
                     <!-- position=relative
                     style="z-index:{state.stateAbbrv!==clickedState?-1:100}" -->
                         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -255,9 +257,10 @@
                         fill="white"
                         >{state.stateAbbrv}
                         </text>
+                        <!-- if not on the first grey step -->
                         {#if !blanksteps.includes(currentStep)}
+                        <!-- if the state is clicked, then show data for click tip -->
                             {#if clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv}
-                                <!-- {#each clickData[showVar] as data, i} -->
                                 {#each clickDataSort as data, i}
                                     <path 
                                     transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
@@ -266,16 +269,6 @@
                                     stroke={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)}
                                     stroke-width="2" 
                                     />
-                                    <!-- <rect 
-                                    transform="translate({cellCenter(state, i)-((cellInner*3+cellPadding*4)/2-10)},{cellCenter(state, i)-innerRadiusTtip(data.value, i+1)})"
-                                    fill={"white"}
-                                    z-index="-1"
-                                    width={(cellInner*3+cellPadding*4)/2-10}
-                                    height={barTtip.width}
-                                    stroke={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)}
-                                    stroke-width="2" 
-                                    /> -->
-                                    <!-- fill={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)} -->
                                     <text 
                                     transform="translate({cellCenter(state, i)},{clickDataSort.length>1?cellCenter(state, i)-innerRadiusTtip(data.value, i-data.iOffset):cellCenter(state, 3)-innerRadiusTtip(data.value, 3)})"
                                     fill={"white"}
@@ -285,17 +278,8 @@
                                     >{data.acronym}
                                     </text>
                                 {/each}
-                                <!-- <text 
-                                class="stateName"
-                                font-size={innerWidth > 640 ? cellInner/5 : cellInner/3}
-                                x={cellCenter(state, i)}
-                                y={cellCenter(state, i)+3}
-                                text-anchor="middle" 
-                                font-weight=700
-                                fill="white"
-                                >{showVar!=="activeBan"?(state[showVar]*100).toFixed()+"%":state[showVar]===0.33?"low threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"protected"}
-                                </text> -->
                             {:else}
+                            <!-- if the state is not clicked, then show normal dimensions -->
                                 <path 
                                 transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
                                 d={arcLine(state, 1)}
@@ -303,7 +287,7 @@
                                 stroke="none" 
                                 stroke-width="1" 
                                 />
-                                <circle 
+                                <!-- <circle 
                                 transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
                                 cx="0"
                                 cy="0"
@@ -311,14 +295,17 @@
                                 stroke="none" 
                                 r={minRadius(state, i) + (bar.width*0.9 + bar.padding)}
                                 opacity={deadlyState!==null?deadlyState.includes(state.stateName) ? 1 : 0:0}
-                                />
+                                /> -->
                             {/if}
+                            <!-- if the variable shown is not abortion stance -->
                             {#if showVar!=="activeBan"}
                                 <text 
                                 class="stateName"
                                 font-size={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?
                                             innerWidth > 640 ? cellInner/4 : cellInner/3:
-                                            innerWidth > 640 ? cellInner/7 : cellInner/5}
+                                                deadlyState!==null&&deadlyState.includes(state.stateName)?
+                                                    innerWidth > 640 ? cellInner/6 : cellInner/5:
+                                                    innerWidth > 640 ? cellInner/7 : cellInner/5}
                                 x={cellCenter(state, i)}
                                 y={cellCenter(state, i)+3}
                                 text-anchor="middle" 
@@ -327,11 +314,13 @@
                                                 state[showVar] > 0.5 ? 1 : 0 : 
                                                 state.deadlyIndex > 0.5 ? 1 : 0}
                                 font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
-                                                maxStates.includes(state.stateName)?900:300}
-                                fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
+                                                maxStates.includes(state.stateName)?700:300}
+                                fill={"white"}
                                 >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
                                 </text>
+                                <!-- fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"} -->
                             {:else}
+                            <!-- if variable shown is abortion stance -->
                                 <text 
                                 class="stateName"
                                 font-size={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?
@@ -344,11 +333,13 @@
                                                                                 state.deadlyIndex > 0.2 ? 1 : 0}
                                 font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
                                                 maxStates.includes(state.stateName)?900:300}
-                                fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"}
+                                fill={"white"}
                                 >{!blanksteps.includes(currentStep) ? 
                                     state[showVar]===0.33?"low threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"protected":""}
                                 </text>
+                                <!-- fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"} -->
                             {/if}
+                            <!-- if the click tip is activated, also add wording under the percentage -->
                             {#if clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv}
                                 <text
                                 class="stateName"
@@ -369,10 +360,8 @@
                         stroke-width="5" /> -->
                     </g>
                 </g>
+                <!-- bring tile to the front when clicked -->
                 {#if clickedState!==null&&currentStep===20}
-                <!-- transform="translate({clickedState.position[1]!==6?
-                        clickedState.position[0] * cellSize+","+clickedState.position[1] * cellSize:
-                        clickedState.position[0] * cellSize+","+4 * cellSize})" -->
                     <use 
                     id="use" 
                     xlink:href="#{clickedState.stateAbbrv}" 
@@ -380,51 +369,12 @@
                         (clickedState.position[0]+clickedState.xOffset) * cellSize+","+(clickedState.position[1]+clickedState.yOffset) * cellSize})"
                     on:click={()=>{clickedState=null}}
                     />
-                    <!-- {#each clickData[showVar] as data, i}
-
-                        <path 
-                        transform="translate({(clickedState.position[0] * cellSize)+cellCenterTtip},{(clickedState.position[0] * cellSize)+cellCenterTtip})"
-                        d={arcLineTtip(clickedState[data.var], i)}
-                        fill={"white"}
-                        stroke="none" 
-                        stroke-width="1" 
-                        /> -->
-                        <!-- <text 
-                        class="stateName"
-                        transform="translate({clickedState.position[0] * cellSize}, {clickedState.position[1] * cellSize})"
-                        font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
-                        x="5" 
-                        y={i*15+65} 
-                        text-anchor="left" 
-                        dy="0.71em" 
-                        font-weight=400
-                        fill="white"
-                        >
-                        {clickedState.stateName} is a dangerous state<br>
-                        {data.label}: {data.var!=="activeBan"?(clickedState[data.var]*100).toFixed()+"%":
-                                       clickedState[data.var]===0.33?"no threat":clickedState[data.var]===0.66?"restrict":clickedState[data.var]===1?"ban":"protected"}
-                        </text> -->
-                        <!-- <text 
-                        class="stateName"
-                        transform="translate({clickedState.position[0] * cellSize}, {clickedState.position[1] * cellSize})"
-                        font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
-                        x={Math.cos(x(1-clickedState[data.var]))*minRadius(clickedState, i)+cellCenter(clickedState, i)}
-                        y={Math.sin(x(1-clickedState[data.var]))*minRadius(clickedState, i)+cellCenter(clickedState, i)}
-                        text-anchor="left" 
-                        font-weight=400
-                        fill="white"
-                        >
-                         
-                        {data.var}: 
-                        {data.var!=="activeBan"?(clickedState[data.var]*100).toFixed()+"%":
-                                       clickedState[data.var]===0.33?"no threat":clickedState[data.var]===0.66?"restrict":clickedState[data.var]===1?"ban":"protected"}
-                        </text> -->
-                    <!-- {/each} -->
                 {/if}
             {/each}
         </g>
         
     </svg>
+    <!-- if in the scrolly part, show summary text for the user -->
     {#if currentStep!==20}
         <div class="maxState" style="min-height:45px">
             <h3>
@@ -438,12 +388,13 @@
             </h3>
         </div>
     {:else}
+    <!-- if outside of the scrolly part, show acronym legend -->
     <div 
     class="legend"
     style="text-align:center;margin-bottom:7px;min-height:80px"
     >
         <div 
-        style="text-align:left;font-size:{innerWidth > 640 ? cellInner/7 : cellInner/4}px;color:grey;max-width:300px;display:inline-block;"
+        style="text-align:left;font-size:{innerWidth > 640 ? cellInner/7 : cellInner/4}px;color:grey;max-width:370px;display:inline-block;"
         >*<br>
             {#each clickData[showVar].filter(d=>d.label!=="overall") as data, i}
                 <span
@@ -454,6 +405,7 @@
         </div>
     </div>
     {/if}
+    <!-- if outside of the scrolly part, show explore buttons -->
     {#if currentStep === 20}
             <div class="buttons">
                 <div class="buttonContainer">

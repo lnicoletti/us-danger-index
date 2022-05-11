@@ -199,6 +199,7 @@
 						abortionDollarsNorm: 1-AbortionDollarsNormScale(d.totalPubDollarsAbortion/d.femalePop),
 						femaleCrimesNorm: femaleCrimesNormScale(d.femaleCrimes/d.femalePop),
 						countiesWoAProvidersNorm: 1-(d.countiesWoAProvidersPct/100),
+						CounselBeforeAbortion: 1-(d.noCounselAbortion/100),
 						ERANorm: 1-d.ERA,
 						minWageNorm: 1-d.minWage,
 						parLeaveNorm: 1-d.parLeave,
@@ -211,7 +212,7 @@
 						aProvidersNormScale((d.aProvidersNum/d.femalePop))+
 						(1-(d.countiesWoAProvidersPct/100))+
 						FamPlanCenterNormScale((d.totalPubDollarsFamPlanCenter/d.femalePop))+
-						(1-d.noCounselAbortion)
+						(d.noCounselAbortion)
 						// +
 						// AbortionDollarsNormScale((d.totalPubDollarsAbortion/d.femalePop))+
 						// d.noCounselAbortion
