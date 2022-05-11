@@ -69,6 +69,7 @@
 		,{state: 'FL', ban: 0.66}
 	]
 	let states = [];
+	let loaded = false;
 	// let steps = ["Here's how to read this cartogram", 
 	// 			 "Row vs. Wade Index", 
 	// 			 "Row vs. Wade Index",
@@ -142,6 +143,7 @@
 				HI,AK,  ,TX,  ,  ,  ,  ,FL,  ,  
 			`;
 		});
+		loaded=true;
 
 	});
 
@@ -276,20 +278,22 @@
 	<section>
 		<Header {innerWidth}/>
 	</section>
-	<section>
-		<div class="chart">
-			<CartogramArc states = {statesIndex} {position} {innerWidth} {innerHeight} {currentStep}/>
-		</div>
-		<Scroll bind:value={currentStep}>
-			{#each steps as text, i}
-			<div class="step" class:active={currentStep === i}>
-				<div class="step-content">
-				{@html text}
-				</div>
+	{#if loaded}
+		<section>
+			<div class="chart">
+				<CartogramArc states = {statesIndex} {position} {innerWidth} {innerHeight} {currentStep}/>
 			</div>
-			{/each}
-		</Scroll>
-	</section>
+			<Scroll bind:value={currentStep}>
+				{#each steps as text, i}
+				<div class="step" class:active={currentStep === i}>
+					<div class="step-content">
+					{@html text}
+					</div>
+				</div>
+				{/each}
+			</Scroll>
+		</section>
+	{/if}
 	<section>
 		<Footer />
 	</section>
@@ -403,6 +407,7 @@
     z-index: 10;
 	font-family: 'Roboto Flex', sans-serif;
 	font-weight: 400;
+	font-size: 18px;
   }
 
   .step.active .step-content {

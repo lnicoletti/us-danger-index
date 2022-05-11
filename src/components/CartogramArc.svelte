@@ -4,7 +4,7 @@
     export let currentStep;
     // export let innerHeight;
     export let innerWidth;
-    import { ascending, descending, max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
+    import { ascending, descending, max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateBuGn, interpolateYlOrRd, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
     // import { fade, draw, fly } from 'svelte/transition';
     import Legend from './Legend.svelte';
     import Annotation from './Annotation.svelte';
@@ -209,11 +209,11 @@
     // $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
     // $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#5e3c99","#b2abd2","#fdb863","#e66101"])
     $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["lightblue","pink","red","darkred"])
-    // $: colorFR = scaleSequential(interpolateRdPu).domain([0, max(states, d=>d.frhSI)])
-    $: colorFR = scaleSequential(interpolateLab("white", "#014242")).domain([0.25, max(states, d=>d.frhSI)])
+    $: colorFR = scaleSequential(interpolateBuGn).domain([0.25, max(states, d=>d.frhSI)])
+    // $: colorFR = scaleSequential(interpolateLab("white", "#014242")).domain([0.25, max(states, d=>d.frhSI)])
     $: colorLS = scaleSequential(interpolateLab("white", "#0b0c29")).domain([0.1, max(states, d=>d.lsSI)])
     // $: colorLS = scaleSequential(interpolateGnBu).domain([0, max(states, d=>d.lsSI)])
-    $: colorVC = scaleSequential(interpolateOranges).domain([-0.1, max(states, d=>d.vcSI)])
+    $: colorVC = scaleSequential(interpolateYlOrRd).domain([-0.2, max(states, d=>d.vcSI)])
     $: colorDI = scaleSequential(interpolateBuPu).domain([0, max(states, d=>d.deadlyIndex)])
     $: colorPolitical = scaleOrdinal().domain(["republican", "democrat"]).range(["#dd2c35", "#0080c9"])
 
@@ -283,7 +283,7 @@
         highlightedState=null
     }
 
-    // $: console.log("test step", currentStep)
+    $: console.log("test step", currentStep)
 
     // $: console.log("test line value", arcLine({deadlyIndex:0.5}, 10))
 
@@ -337,7 +337,7 @@
                         >{state.stateAbbrv}
                         </text>
                         <!-- if not on the first grey step -->
-                        {#if !blanksteps.includes(currentStep)}
+                        {#if !blanksteps.includes(currentStep)&&currentStep!==undefined}
                         <!-- if the state is clicked, then show data for click tip -->
                             {#if clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv}
                                 {#each clickDataSort as data, i}
@@ -391,8 +391,8 @@
                                 text-anchor="middle" 
                                 opacity={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?1:
                                             !Politicalsteps.includes(currentStep)? 
-                                                state[showVar] > 0.5 ? 1 : 0 : 
-                                                state.deadlyIndex > 0.5 ? 1 : 0}
+                                                state[showVar] > 0.6 ? 1 : 0 : 
+                                                state.deadlyIndex > 0.6 ? 1 : 0}
                                 font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
                                                 maxStates.includes(state.stateName)?700:300}
                                 fill={"white"}
@@ -458,7 +458,7 @@
         {/if}
     </svg>
     <!-- if in the scrolly part, show summary text for the user -->
-    {#if currentStep!==20 || currentStep!==undefined || !blanksteps.includes(currentStep)}
+    {#if currentStep<20&&currentStep!==undefined}
         <div class="maxState" style="min-height:45px">
             <h3>
                 {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==0}
@@ -470,7 +470,9 @@
                 {/if}
             </h3>
         </div>
-    {:else}
+    <!-- {:else if currentStep!==undefined}
+        <div class="maxState" style="min-height:45px"></div> -->
+    {:else if currentStep!==undefined}
     <!-- if outside of the scrolly part, show acronym legend -->
     <div 
     class="legend"
