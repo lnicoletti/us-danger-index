@@ -22,11 +22,11 @@
     //                  {var:"lsSI", label: "Lack of Legal Protections"}, 
     //                  {var:"deadlyIndex", label: "overall"}];
     let clickData = {deadlyIndex:
-                    [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:"EAR", iOffset:0}, 
-                     {var:"frhSI", label: "Lack of Reproductive Health Services", acronym:"LRH", iOffset:0}, 
-                     {var:"vcSI", label: "Violent Crime Against Women", acronym:"VCW", iOffset:0}, 
-                     {var:"lsSI", label: "Lack of Legal Protections", acronym:"LLP", iOffset:0}, 
-                     {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0}],
+                    [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:"EAR", iOffset:0, riskType:""}, 
+                     {var:"frhSI", label: "Lack of Reproductive Health Services", acronym:"LRH", iOffset:0, riskType:"Lack"}, 
+                     {var:"vcSI", label: "Violent Crime Against Women", acronym:"VCW", iOffset:0, riskType:"Violent"}, 
+                     {var:"lsSI", label: "Lack of Legal Protections", acronym:"LLP", iOffset:0, riskType:"Unprotected"}, 
+                     {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
                      activeBan:
                      [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:"Abortion Stance", iOffset:0}],
                      frhSI:
@@ -39,12 +39,12 @@
                      vcSI:
                      [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000", acronym:"Crime 100k", iOffset:0}],
                      lsSI:
-                     [{var:"protSHW", label:"Protection Against Sexual Harassment at work?", acronym:"SHW", iOffset:2},
-                      {var:"firearmSurrender", label:"Firearm Surrender?", acronym:"FS", iOffset:2},
-                      {var:"unempBenefits", label:"Unemployment Benefits?", acronym:"UB", iOffset:2},
-                      {var:"parLeave", label:"Parental Leave?", acronym:"PL", iOffset:2},
-                      {var:"minWage", label:"Minimum Wage?", acronym:"MW", iOffset:2},
-                      {var:"ERA", label:"Employment Rights Act", acronym:"ERA", iOffset:2}],
+                     [{var:"protSHWNorm", label:"No Protection Against Sexual Harassment at work?", acronym:"SHW", iOffset:2},
+                      {var:"firearmSurrenderNorm", label:"No Firearm Surrender?", acronym:"FS", iOffset:2},
+                      {var:"unempBenefitsNorm", label:"No Unemployment Benefits?", acronym:"UB", iOffset:2},
+                      {var:"parLeaveNorm", label:"No Parental Leave?", acronym:"PL", iOffset:2},
+                      {var:"minWageNorm", label:"No Minimum Wage?", acronym:"MW", iOffset:2},
+                      {var:"ERANorm", label:"No Employment Rights Act?", acronym:"ERA", iOffset:2}],
     };
 
     $: clickDataSort = clickedState!==null?clickData[showVar].map(d=>{return {
@@ -348,6 +348,16 @@
                                 >{!blanksteps.includes(currentStep) ? 
                                     state[showVar]===0.33?"low threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"protected":""}
                                 </text>
+                            {/if}
+                            {#if clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv}
+                                <text
+                                class="stateName"
+                                x={cellCenter(state, i)}
+                                y={cellCenter(state, i)+cellInner/3}
+                                text-anchor="middle" 
+                                font-size={innerWidth > 640 ? cellInner/5 : cellInner/4}
+                                fill="white"
+                                >{clickData["deadlyIndex"].filter(d=>d.var===showVar)[0].riskType}</text>
                             {/if}
                         {/if}
                         <!-- <path 

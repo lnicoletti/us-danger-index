@@ -158,7 +158,7 @@
 			unempBenefits:+legalStructures.filter(d=>d.State===state[1][2])[0]["Guarantee unemployment benefits to victimes of domestic violence, sexual assault, and stalking?"],
 			parLeave:+legalStructures.filter(d=>d.State===state[1][2])[0]["Mandate paid parental leave?"],
 			minWage:+legalStructures.filter(d=>d.State===state[1][2])[0]["Set the minimum wage above the low-income threshold of $12 an hour?"],
-			noCounselAbortion:+legalStructures.filter(d=>d.State===state[1][2])[0]["Allow women to have an abortion without state-mandated in-person counseling?"],
+			noCounselAbortion: +legalStructures.filter(d=>d.State===state[1][2])[0]["Allow women to have an abortion without state-mandated in-person counseling?"],
 			ERA:+legalStructures.filter(d=>d.State===state[1][2])[0]["Ratify the Equal Rights Amendment?"],
 			// female repr health services
 			titlexNum: +Object.entries(femaleHealth.filter(d=>d["U.S. State"]===state[1][2])[0])[1][1],
@@ -199,13 +199,19 @@
 						abortionDollarsNorm: 1-AbortionDollarsNormScale(d.totalPubDollarsAbortion/d.femalePop),
 						femaleCrimesNorm: femaleCrimesNormScale(d.femaleCrimes/d.femalePop),
 						countiesWoAProvidersNorm: 1-(d.countiesWoAProvidersPct/100),
+						ERANorm: 1-d.ERA,
+						minWageNorm: 1-d.minWage,
+						parLeaveNorm: 1-d.parLeave,
+						unempBenefitsNorm: 1-d.unempBenefits,
+						firearmSurrenderNorm: 1-d.firearmSurrender,
+						protSHWNorm: 1-d.protSHW,
 						frhSI: 
 						1-((titlexNormScale((d.titlexNum/d.femalePop))+
 						famPlanCentersNormScale((d.famPlanCentersNum/d.femalePop))+
 						aProvidersNormScale((d.aProvidersNum/d.femalePop))+
 						(1-(d.countiesWoAProvidersPct/100))+
 						FamPlanCenterNormScale((d.totalPubDollarsFamPlanCenter/d.femalePop))+
-						d.noCounselAbortion
+						(1-d.noCounselAbortion)
 						// +
 						// AbortionDollarsNormScale((d.totalPubDollarsAbortion/d.femalePop))+
 						// d.noCounselAbortion
@@ -213,7 +219,7 @@
 						vcSI:
 						femaleCrimesNormScale((d.femaleCrimes/d.femalePop)),
 						lsSI:
-						1-((d.protSHW + d.firearmSurrender + d.unempBenefits + d.parLeave + d.minWage + d.ERA)/6),
+						1-(d.protSHW + d.firearmSurrender + d.unempBenefits + d.parLeave + d.minWage + d.ERA)/6,
 						yOffset: d.position[1]>=6?-2:0,
 						xOffset: d.position[0]>=9?-2:0,
 					}
