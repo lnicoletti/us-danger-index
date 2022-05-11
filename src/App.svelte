@@ -213,7 +213,9 @@
 						vcSI:
 						femaleCrimesNormScale((d.femaleCrimes/d.femalePop)),
 						lsSI:
-						1-((d.protSHW + d.firearmSurrender + d.unempBenefits + d.parLeave + d.minWage + d.ERA)/6)
+						1-((d.protSHW + d.firearmSurrender + d.unempBenefits + d.parLeave + d.minWage + d.ERA)/6),
+						yOffset: d.position[1]>=6?-2:0,
+						xOffset: d.position[0]>=9?-2:0,
 					}
 					)
 				).map(d=>({...d, 

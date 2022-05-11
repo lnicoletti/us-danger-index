@@ -197,7 +197,7 @@
 
     const handleClick = (d) => {
         clickedState=d
-        // console.log(clickedState)
+        console.log(clickedState)
     }
 
     const handleMouseLeave = (d) => {
@@ -218,7 +218,10 @@
         {/if}
         <g transform="translate({svgPadding}, {svgPadding})">
             {#each states as state, i}
-                <g transform="translate({state.position[0] * cellSize}, {state.position[1] * cellSize})">
+                <g transform="translate({
+                    clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv?
+                        (state.position[0]+state.xOffset) * cellSize+","+(state.position[1]+state.yOffset) * cellSize:
+                        state.position[0] * cellSize+","+state.position[1] * cellSize})">
                     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                     <g 
                     transform="translate({cellPadding}, {cellPadding})" 
@@ -363,7 +366,8 @@
                     <use 
                     id="use" 
                     xlink:href="#{clickedState.stateAbbrv}" 
-                    transform="translate({clickedState.position[0] * cellSize+","+clickedState.position[1] * cellSize})"
+                    transform="translate({
+                        (clickedState.position[0]+clickedState.xOffset) * cellSize+","+(clickedState.position[1]+clickedState.yOffset) * cellSize})"
                     on:click={()=>{clickedState=null}}
                     />
                     <!-- {#each clickData[showVar] as data, i}
