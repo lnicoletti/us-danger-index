@@ -5,8 +5,9 @@
     // export let innerHeight;
     export let innerWidth;
     import { ascending, descending, max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
-    import { fade, draw, fly } from 'svelte/transition';
+    // import { fade, draw, fly } from 'svelte/transition';
     import Legend from './Legend.svelte';
+    import Annotation from './Annotation.svelte';
 
     // init current index
     let indexDict = {activeBan: "Erosion of Abortion Rights", 
@@ -21,31 +22,108 @@
     //                  {var:"vcSI", label: "Violent Crime Against Women"}, 
     //                  {var:"lsSI", label: "Lack of Legal Protections"}, 
     //                  {var:"deadlyIndex", label: "overall"}];
+    // let clickData = {deadlyIndex:
+    //                 [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:"EAR", iOffset:0, riskType:""}, 
+    //                  {var:"frhSI", label: "Lack of Reproductive Health Services", acronym:"LRH", iOffset:0, riskType:"Lack"}, 
+    //                  {var:"vcSI", label: "Violent Crime Against Women", acronym:"VCW", iOffset:0, riskType:"Violent"}, 
+    //                  {var:"lsSI", label: "Lack of Legal Protections", acronym:"LLP", iOffset:0, riskType:"Unprotected"}, 
+    //                  {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
+    //                  activeBan:
+    //                  [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:"Abortion Stance", iOffset:0}],
+    //                  frhSI:
+    //                  [{var:"titleXNorm", label:"Below Average # of Title X Centers per 100,000", acronym:"TTX", iOffset:2},
+    //                   {var:"famPlanCentersNorm", label:"Below Average # of Family Planning Centers per 100,000", acronym:"FPC", iOffset:2},
+    //                   {var:"aProvidersNorm", label:"Below Average # of Abortion Providers per 100,000", acronym:"AP", iOffset:2},
+    //                   {var:"countiesWoAProvidersNorm", label:"Below Average % of Counties with a Known Abortion Provider", acronym:"CAB", iOffset:2},
+    //                   {var:"famPlanCenterSpendNorm", label:"Below Average Per Capita Public Expenditure For Family Planning", acronym:"FP$", iOffset:2},
+    //                   {var:"CounselBeforeAbortion", label:"Women are not Allowed to get an Abortion Without Attending State-Mandated Counseling", acronym:"MCA", iOffset:2}],
+    //                  vcSI:
+    //                  [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000", acronym:"Crime 100k", iOffset:0}],
+    //                  lsSI:
+    //                  [{var:"protSHWNorm", label:"No Protection Against Sexual Harassment at work?", acronym:"SHW", iOffset:2},
+    //                   {var:"firearmSurrenderNorm", label:"No Firearm Surrender?", acronym:"FS", iOffset:2},
+    //                   {var:"unempBenefitsNorm", label:"No Unemployment Benefits?", acronym:"UB", iOffset:2},
+    //                   {var:"parLeaveNorm", label:"No Parental Leave?", acronym:"PL", iOffset:2},
+    //                   {var:"minWageNorm", label:"No Minimum Wage?", acronym:"MW", iOffset:2},
+    //                   {var:"ERANorm", label:"No Employment Rights Act?", acronym:"ERA", iOffset:2}],
+    // };
+
     let clickData = {deadlyIndex:
-                    [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:"EAR", iOffset:0, riskType:""}, 
-                     {var:"frhSI", label: "Lack of Reproductive Health Services", acronym:"LRH", iOffset:0, riskType:"Lack"}, 
-                     {var:"vcSI", label: "Violent Crime Against Women", acronym:"VCW", iOffset:0, riskType:"Violent"}, 
-                     {var:"lsSI", label: "Lack of Legal Protections", acronym:"LLP", iOffset:0, riskType:"Unprotected"}, 
+                    [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:1, iOffset:0, riskType:""}, 
+                     {var:"frhSI", label: "Lack of Reproductive Health Services", acronym:2, iOffset:0, riskType:"Lack"}, 
+                     {var:"vcSI", label: "Violent Crime Against Women", acronym:3, iOffset:0, riskType:"Violent"}, 
+                     {var:"lsSI", label: "Lack of Legal Protections", acronym:4, iOffset:0, riskType:"Unprotected"}, 
                      {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
                      activeBan:
-                     [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:"Abortion Stance", iOffset:0}],
+                     [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:1, iOffset:0}],
                      frhSI:
-                     [{var:"titleXNorm", label:"Below Average # of Title X Centers per 100,000", acronym:"TTX", iOffset:2},
-                      {var:"famPlanCentersNorm", label:"Below Average # of Family Planning Centers per 100,000", acronym:"FPC", iOffset:2},
-                      {var:"aProvidersNorm", label:"Below Average # of Abortion Providers per 100,000", acronym:"AP", iOffset:2},
-                      {var:"countiesWoAProvidersNorm", label:"Below Average % of Counties with a Known Abortion Provider", acronym:"CAB", iOffset:2},
-                      {var:"famPlanCenterSpendNorm", label:"Below Average Per Capita Public Expenditure For Family Planning", acronym:"FP$", iOffset:2},
-                      {var:"CounselBeforeAbortion", label:"Women are not Allowed to get an Abortion Without Attending State-Mandated Counseling", acronym:"MCA", iOffset:2}],
+                     [{var:"titleXNorm", label:"# of Title X Centers per 100,000", acronym:1, iOffset:2},
+                      {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100,000", acronym:2, iOffset:2},
+                      {var:"aProvidersNorm", label:"# of Abortion Providers per 100,000", acronym:3, iOffset:2},
+                      {var:"countiesWoAProvidersNorm", label:"% of Counties with a Known Abortion Provider", acronym:4, iOffset:2},
+                      {var:"famPlanCenterSpendNorm", label:"Per Capita Public Expenditure For Family Planning", acronym:5, iOffset:2},
+                      {var:"noCounselAbortion", label:"Access to abortion without state-mandated in-person counseling", acronym:6, iOffset:2}],
                      vcSI:
-                     [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000", acronym:"Crime 100k", iOffset:0}],
+                     [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000", acronym:1, iOffset:0}],
                      lsSI:
-                     [{var:"protSHWNorm", label:"No Protection Against Sexual Harassment at work?", acronym:"SHW", iOffset:2},
-                      {var:"firearmSurrenderNorm", label:"No Firearm Surrender?", acronym:"FS", iOffset:2},
-                      {var:"unempBenefitsNorm", label:"No Unemployment Benefits?", acronym:"UB", iOffset:2},
-                      {var:"parLeaveNorm", label:"No Parental Leave?", acronym:"PL", iOffset:2},
-                      {var:"minWageNorm", label:"No Minimum Wage?", acronym:"MW", iOffset:2},
-                      {var:"ERANorm", label:"No Employment Rights Act?", acronym:"ERA", iOffset:2}],
+                     [{var:"protSHW", label:"Protection of all workers from sexual harassment in the workpace, regardless of company size", acronym:1, iOffset:2},
+                      {var:"firearmSurrender", label:"Required relinquishment of firearms from abusers subject to domestic violcence protective orders", acronym:2, iOffset:2},
+                      {var:"unempBenefits", label:"Protection of all workers from sexual harassment in the workpace, regardless of company size", acronym:3, iOffset:2},
+                      {var:"parLeave", label:"Mandated parental leave", acronym:4, iOffset:2},
+                      {var:"minWage", label:"Mandated minimum wage above the low-income threshold", acronym:5, iOffset:2},
+                      {var:"ERA", label:"Ratified Equal Rights Amendment", acronym:6, iOffset:2}],
     };
+
+    // data for annotations
+    $: clickAnnotation = currentStep===20?
+      [{textX:6.2, 
+        textY:1, 
+        cx: 6.5, 
+        cy:2,
+        lineX1:7.5,
+        lineX2:6.5,
+        lineY1:1,
+        lineY2:2,
+        annotation:["Click on a state to see", "how this score was calculated"],
+        active:true
+        }]:currentStep===2?
+      [{textX:0, 
+        textY:1.4, 
+        cx: 0.5, 
+        cy:2,
+        lineX1:0.4,
+        lineX2:0.5,
+        lineY1:1.3,
+        lineY2:2,
+        annotation:["In Washington", "abortion is", "legally protected"],
+        active:true
+        }]:
+    //     currentStep===3?
+    //   [{textX:0, 
+    //     textY:1.4, 
+    //     cx: 0.5, 
+    //     cy:2,
+    //     lineX1:0.4,
+    //     lineX2:0.5,
+    //     lineY1:1.3,
+    //     lineY2:2,
+    //     annotation:["In New Hampshire", "abortion is not", "legally protected"],
+    //     active:true
+    //     }]:
+    //     currentStep===4?
+    //   [{textX:0, 
+    //     textY:1.4, 
+    //     cx: 0.5, 
+    //     cy:2,
+    //     lineX1:0.4,
+    //     lineX2:0.5,
+    //     lineY1:1.3,
+    //     lineY2:2,
+    //     annotation:["In New Hampshire", "abortion is not", "legally protected"],
+    //     active:true
+    //     }]:
+        [{active:false
+    }]
 
     $: clickDataSort = clickedState!==null?clickData[showVar].map(d=>{return {
             value: clickedState[d.var],
@@ -99,7 +177,7 @@
 
     // scales for tooltipChart
     $: xTtip = scaleLinear()
-        .domain([0, 1.12])
+        .domain([0, 1.05])
         .range([0, 2 * Math.PI])
     $: barTtip = ({width: innerWidth>700?cellInner/5.5:cellInner/5, padding: 0});
     $: minRadiusTtip = (d, i) => (cellInner*3+cellPadding*4)*0.21;
@@ -193,6 +271,7 @@
 
     const handleMouseOver = (d) => {
         highlightedState=d.stateAbbrv
+        // console.log(highlightedState)
     }
 
     const handleClick = (d) => {
@@ -204,7 +283,7 @@
         highlightedState=null
     }
 
-    // $: console.log(colorScale(0.8))
+    // $: console.log("test step", currentStep)
 
     // $: console.log("test line value", arcLine({deadlyIndex:0.5}, 10))
 
@@ -267,16 +346,17 @@
                                     d={clickDataSort.length>1?arcLineTtip(data.value+0.02, i-data.iOffset):arcLineTtip(data.value+0.02, 3)}
                                     fill={"white"}
                                     stroke={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)}
-                                    stroke-width="2" 
+                                    stroke-width={innerWidth > 640 ? 2 : 1}
                                     />
                                     <text 
                                     transform="translate({cellCenter(state, i)},{clickDataSort.length>1?cellCenter(state, i)-innerRadiusTtip(data.value, i-data.iOffset):cellCenter(state, 3)-innerRadiusTtip(data.value, 3)})"
                                     fill={"white"}
-                                    x={-data.acronym.length*6.5}
+                                    x={innerWidth > 640 ? -cellInner/7.5 : -cellInner/6.5}
                                     y="-2"
                                     font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
                                     >{data.acronym}
                                     </text>
+                                    <!-- data.acronym.length*6.5 -->
                                 {/each}
                             {:else}
                             <!-- if the state is not clicked, then show normal dimensions -->
@@ -372,10 +452,13 @@
                 {/if}
             {/each}
         </g>
-        
+        <!-- Click annotation for explore app page -->
+        {#if clickedState===null}
+            <Annotation annotationData={clickAnnotation} {cellInner} {cellSize} {innerWidth}/>
+        {/if}
     </svg>
     <!-- if in the scrolly part, show summary text for the user -->
-    {#if currentStep!==20}
+    {#if currentStep!==20 || currentStep!==undefined || !blanksteps.includes(currentStep)}
         <div class="maxState" style="min-height:45px">
             <h3>
                 {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==0}
@@ -394,7 +477,7 @@
     style="text-align:center;margin-bottom:7px;min-height:80px"
     >
         <div 
-        style="text-align:left;font-size:{innerWidth > 640 ? cellInner/7 : cellInner/4}px;color:grey;max-width:370px;display:inline-block;"
+        style="text-align:left;font-size:{innerWidth > 640 ? cellInner/7 : cellInner/4}px;color:grey;max-width:400px;display:inline-block;"
         >*<br>
             {#each clickData[showVar].filter(d=>d.label!=="overall") as data, i}
                 <span
