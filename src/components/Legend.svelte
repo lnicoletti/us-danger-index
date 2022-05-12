@@ -36,12 +36,14 @@
                 [{deadlyIndex:1, position:[3,0], label:"v. high"}, 
                 {deadlyIndex:0.66, position:[2,0], label:"high"}, 
                 {deadlyIndex:0.33, position:[1,0], label:"low"}, 
-                {deadlyIndex:0.75, position:[0,0], label:""}]:
+                {deadlyIndex:0.00001, position:[0,0], label: showVar==="vcSI"?"crime/100k":
+                                                             showVar==="frhSI"?"RHS lack":
+                                                             showVar==="lsSI"?"LP lack":"danger"}]:
                 [{deadlyIndex:1, position:[4,0], label:"v. high"}, 
                 {deadlyIndex:0.66, position:[3,0], label:"high"}, 
                 {deadlyIndex:0.33, position:[2,0], label:"low"}, 
                 {deadlyIndex:0, position:[1,0], label:""},
-                {deadlyIndex:0.75, position:[0,0], label:""}]
+                {deadlyIndex:0.00001, position:[0,0], label:""}]
     // let data = [{deadlyIndex:1, position:[6.4,8.5], label:"v. high"}, 
     //             {deadlyIndex:0.66, position:[5.4,8.5], label:"high"}, 
     //             {deadlyIndex:0.33, position:[4.4,8.5], label:"low"}, 
@@ -102,7 +104,7 @@
                 text-anchor="middle" 
                 font-weight=700
                 fill={inTextColor}
-                >{i===3?"score":d.label}
+                >{d.label}
                 <!-- {(data.deadlyIndex*100).toFixed()}% -->
                 </text>
                 {:else}
@@ -113,7 +115,7 @@
                 text-anchor="middle" 
                 font-weight=700
                 fill={inTextColor}
-                >{d.deadlyIndex===0?"protected":d.deadlyIndex===0.33?"low threat":d.deadlyIndex===0.66?"restrict":d.deadlyIndex===1?"ban":"risk"}
+                >{d.deadlyIndex===0?"no risk":d.deadlyIndex===0.33?"low risk":d.deadlyIndex===0.66?"high risk":d.deadlyIndex===1?"ban":"risk of ban"}
                 </text>
                 {/if}
                 <!-- <path 

@@ -2,6 +2,7 @@
     export let states;
     export let position;
     export let currentStep;
+    export let steps;
     // export let innerHeight;
     export let innerWidth;
     import { ascending, descending, max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateBuGn, interpolateYlOrRd, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
@@ -75,7 +76,7 @@
     };
 
     // data for annotations
-    $: clickAnnotation = currentStep===20?
+    $: clickAnnotation = currentStep===21?
       [{textX:6.2, 
         textY:1, 
         cx: 6.5, 
@@ -86,7 +87,7 @@
         lineY2:2,
         annotation:["Click on a state to see", "how this score was calculated"],
         active:true
-        }]:currentStep===2?
+        }]:currentStep===3?
       [{textX:0, 
         textY:1.4, 
         cx: 0.5, 
@@ -136,7 +137,8 @@
 
     $: indexLabPre = ["activeBan", "frhSI", "vcSI", "lsSI"].includes(showVar) ? "according to the " : "";
     $: indexLabAft = ["activeBan", "frhSI", "vcSI", "lsSI"].includes(showVar) ? " Sub-Index" : "";
-    $: togglePolitical=false
+    // politics toggle
+    // $: togglePolitical=false
     // init deadly state
     let deadlyState;
     let maxState;
@@ -145,7 +147,7 @@
     let buttons = 1;
     // cartogram variables
     let svgPadding = 5;
-    let cellPadding = 2;
+    $: cellPadding = innerWidth>800?2:1;
     $: gridHeight = max(position, ([, [, j,]]) => j) + 1
     $: gridWidth = max(position, ([, [i]]) => i) + 1
     $: cellSize = innerWidth>1200?(innerWidth*0.5)/gridWidth:
@@ -153,6 +155,7 @@
                   innerWidth>1000?(innerWidth*0.65)/gridWidth:
                   innerWidth>640?(innerWidth*0.7)/gridWidth:(innerWidth*0.9)/gridWidth;
     $: cellInner = cellSize - cellPadding * 2;
+    $: cellInnerTtip = cellInner*3+cellPadding*4;
     $: w = gridWidth * cellSize + 2 * svgPadding;
     $: h = gridHeight * cellSize + 2 * svgPadding + cellSize*0.05; //+cellSize*1.3
 
@@ -160,8 +163,8 @@
     $: bar = ({width: innerWidth>700?cellInner/9:cellInner/12, padding: 0});
     // $: minRadius = cellInner*0.2;
     $: minRadius = (d, i) => clickedState!==null&&d.stateAbbrv===clickedState.stateAbbrv?
-                            (cellInner*3+cellPadding*4)*0.25:cellInner*0.17;
-    $: cellCenter = (d, i) => clickedState!==null&&d.stateAbbrv===clickedState.stateAbbrv?(cellInner*3+cellPadding*4)/2:cellInner/2
+                            (cellInnerTtip)*0.25:cellInner*0.17;
+    $: cellCenter = (d, i) => clickedState!==null&&d.stateAbbrv===clickedState.stateAbbrv?(cellInnerTtip)/2:cellInner/2
     $: innerRadius = (d, i) => minRadius(d, i) + (bar.width + bar.padding)*i;
     $: outerRadius = (d, i) => innerRadius(d, i) + bar.width;
     let maxRadius = 100;
@@ -180,10 +183,10 @@
         .domain([0, 1.05])
         .range([0, 2 * Math.PI])
     $: barTtip = ({width: innerWidth>700?cellInner/5.5:cellInner/5, padding: 0});
-    $: minRadiusTtip = (d, i) => (cellInner*3+cellPadding*4)*0.21;
+    $: minRadiusTtip = (d, i) => (cellInnerTtip)*0.21;
     $: innerRadiusTtip = (d, i) => minRadiusTtip(d, i) + (barTtip.width + barTtip.padding)*i;
     $: outerRadiusTtip = (d, i) => innerRadiusTtip(d, i) + barTtip.width;
-    // $: cellCenterTtip = (cellInner*3+cellPadding*4)/2
+    // $: cellCenterTtip = (cellInnerTtip)/2
     $: arcLineTtip = (d, i) => arc()
         .innerRadius(innerRadiusTtip(d, i))
         .outerRadius(outerRadiusTtip(d, i))
@@ -192,11 +195,11 @@
     
     // $: xLab = scaleLinear()
     //     .domain([0, maxValue])
-    //     .range([cellInner*3+cellPadding*4, 0])
+    //     .range([cellInnerTtip, 0])
     // $: yLab = 
     // scaleLinear()
     // .domain([0, 1])
-    // .range([0, cellInner*3+cellPadding*4])
+    // .range([0, cellInnerTtip])
 
     // $: if (currentStep>0) {
     $: maxState = states.filter(d => +d[showVar] === maxValue);
@@ -222,21 +225,48 @@
         .domain([0, maxValue])
         .range([cellInner/20, cellInner/6])
 
-    $: blanksteps = [0]
-    $: RWsteps = [1,2,3,4,5]
-    $: FRsteps = [6,7,8]
-    $: VCsteps = [9,10,11]
-    $: LSsteps = [12,13,14]
-    $: DIsteps = [15,16,17,19,20]
-    $: Politicalsteps = [18]
+    $: blanksteps = [1]
+    $: RWsteps = [2,3,4,5,6]
+    $: FRsteps = [7,8,9]
+    $: VCsteps = [10,11,12]
+    $: LSsteps = [13,14,15]
+    $: DIsteps = [16,17,18,20,21]
+    $: Politicalsteps = [19]
+    $: lastStep = steps.length-1
 
-    $: colorScale = RWsteps.includes(currentStep) ? colorRW : 
-                    FRsteps.includes(currentStep) ? colorFR: 
-                    VCsteps.includes(currentStep) ? colorVC:
-                    LSsteps.includes(currentStep) ? colorLS:
-                    DIsteps.includes(currentStep) ? colorDI:
+    // toggles for final buttons
+    $: toggleDI = false;
+    $: toggleRW = false;
+    $: toggleFR = false;
+    $: toggleVC = false;
+    $: toggleLS = false;
+    let togglePolitical=false;
+
+    $: if (currentStep < lastStep) {
+        toggleDI = false;
+        toggleRW = false;
+        toggleFR = false;
+        toggleVC = false;
+        toggleLS = false;
+        togglePolitical=false
+    }
+
+    // $: colorScale = RWsteps.includes(currentStep)&&togglePolitical===false ? colorRW: 
+    //                 FRsteps.includes(currentStep)&&togglePolitical===false ? colorFR: 
+    //                 VCsteps.includes(currentStep)&&togglePolitical===false ? colorVC:
+    //                 LSsteps.includes(currentStep)&&togglePolitical===false ? colorLS:
+    //                 DIsteps.includes(currentStep)&&togglePolitical===false ? colorDI:
+    //                 colorPolitical;
+    $: colorScale = togglePolitical===false?
+                        RWsteps.includes(currentStep)||toggleRW===true ? colorRW: 
+                        FRsteps.includes(currentStep)||toggleFR===true ? colorFR: 
+                        VCsteps.includes(currentStep)||toggleVC===true ? colorVC:
+                        LSsteps.includes(currentStep)||toggleLS===true ? colorLS:
+                        DIsteps.includes(currentStep)||toggleDI===true ? colorDI:
+                        Politicalsteps.includes(currentStep) ? colorPolitical:
+                        colorPolitical:
                     colorPolitical;
-
+    
     $: showVar =    RWsteps.includes(currentStep) ? "activeBan" : 
                     FRsteps.includes(currentStep) ? "frhSI": 
                     VCsteps.includes(currentStep) ? "vcSI":
@@ -253,17 +283,17 @@
     // console.log("av. blue", averageBlue)
 
     // annotation variables
-    $: highlightedState = currentStep===2?["WA"]:
-                          currentStep===3?["NH"]:
-                          currentStep===4?["FL"]:
-                          currentStep===5?["AZ"]:
-                          currentStep===8?["AK", "DC", "TX"]:
-                          currentStep===11?["NY", "AR"]:
-                          currentStep===14?["OR"]:
-                          currentStep===16?"DC":
-                          currentStep===17?"AR":null
+    $: highlightedState = currentStep===3?["WA"]:
+                          currentStep===4?["NH"]:
+                          currentStep===5?["FL"]:
+                          currentStep===6?["AZ"]:
+                          currentStep===9?["AK", "DC", "TX"]:
+                          currentStep===12?["NY", "AR"]:
+                          currentStep===15?["OR"]:
+                          currentStep===17?"DC":
+                          currentStep===18?"AR":null
 
-    let highlightSteps = [2,3,4,5,8,11,14,16,17]
+    let highlightSteps = [3,4,5,6,9,12,15,17,18]
 
     let clickedState = null;
     // $: console.log(highlightedState)
@@ -276,14 +306,36 @@
 
     const handleClick = (d) => {
         clickedState=d
-        console.log(clickedState)
+        // console.log(clickedState)
     }
 
     const handleMouseLeave = (d) => {
         highlightedState=null
     }
 
+    // remove tooltip on click outside the map
+    // $:  if (clickedState !== null) {
+    //         document.body.addEventListener("click", event => {
+    //         // console.log(clickedState)
+    //             clickedState=null
+    //         })
+    //         } else {
+    //             document.body.removeEventListener("click", event => {
+    //         // console.log(clickedState)
+    //             clickedState=null
+    //         })
+    //     }
+
+
+    // document.addEventListener('click', function(e) {
+    //     if ( !document.body.contains(e.target) ) {
+    //     // Do something when user clicked outside of wrapper element
+    //         clickedState=null
+    //     }
+    // })
+
     $: console.log("test step", currentStep)
+    // $: console.log(togglePolitical)
 
     // $: console.log("test line value", arcLine({deadlyIndex:0.5}, 10))
 
@@ -292,38 +344,40 @@
 <div class="chartElements">
     <svg width="{w}px" height="{h}px" ><!--viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet" fill={stateFill}
     -->
-        {#if currentStep > 0}
-        <Legend {svgPadding} {cellPadding} {cellInner} {cellSize} {gridWidth} {gridHeight} {innerWidth} {currentStep} {showVar} {colorScale} {togglePolitical}/>
+        {#if currentStep > 1}
+            <Legend {svgPadding} {cellPadding} {cellInner} {cellSize} {gridWidth} {gridHeight} {innerWidth} {currentStep} {showVar} {colorScale} {togglePolitical}/>
         {/if}
+        {#if currentStep > 0}
         <g transform="translate({svgPadding}, {svgPadding})">
             {#each states as state, i}
             <!-- add one g element for each state and translate it to it's cartogram position -->
                 <g transform="translate({
-                    clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv?
+                    clickedState!==null&&currentStep===lastStep&&state.stateAbbrv===clickedState.stateAbbrv?
                         (state.position[0]+state.xOffset) * cellSize+","+(state.position[1]+state.yOffset) * cellSize:
                         state.position[0] * cellSize+","+state.position[1] * cellSize})">
                     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                     <g 
                     transform="translate({cellPadding}, {cellPadding})" 
-                    cursor={currentStep===20?"pointer":""}
-                    on:mouseover={()=>{currentStep===20?handleMouseOver(state):null}}
-                    on:mouseleave={()=>{currentStep===20?handleMouseLeave(state):null}}
-                    on:click={()=>{currentStep===20?handleClick(state):null}}
+                    cursor={currentStep===lastStep?"pointer":""}
+                    on:click={()=>{currentStep===lastStep?handleClick(state):null}}
                     id="{state.stateAbbrv}"
+                    class="tile"
                     >
+                    <!-- on:mouseover={()=>{currentStep===lastStep?handleMouseOver(state):null}}
+                    on:mouseleave={()=>{currentStep===lastStep?handleMouseLeave(state):null}} -->
                     <!-- add rectangle + state name + path to each tile -->
                     <!-- position=relative
                     style="z-index:{state.stateAbbrv!==clickedState?-1:100}" -->
                         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                        <!-- width="{state.stateAbbrv==="NE"?cellInner*3+cellPadding*4:cellInner}" 
-                        height="{state.stateAbbrv==="NE"?cellInner*3+cellPadding*4:cellInner}"  -->
+                        <!-- width="{state.stateAbbrv==="NE"?cellInnerTtip:cellInner}" 
+                        height="{state.stateAbbrv==="NE"?cellInnerTtip:cellInner}"  -->
                         <rect 
-                        width="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===20?cellInner*3+cellPadding*4:cellInner}" 
-                        height="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===20?cellInner*3+cellPadding*4:cellInner}"
-                        opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)&&currentStep!==20?0.3:1}
+                        width="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===lastStep?cellInnerTtip:cellInner}" 
+                        height="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===lastStep?cellInnerTtip:cellInner}"
+                        opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)&&currentStep!==lastStep?0.3:1}
                         stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":colorScale(1):"none"}
                         stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
-                        fill={currentStep > 0 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
+                        fill={currentStep > 1 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
                         />
                         <text 
                         class="stateName"
@@ -339,7 +393,7 @@
                         <!-- if not on the first grey step -->
                         {#if !blanksteps.includes(currentStep)&&currentStep!==undefined}
                         <!-- if the state is clicked, then show data for click tip -->
-                            {#if clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv}
+                            {#if clickedState!==null&&currentStep===lastStep&&state.stateAbbrv===clickedState.stateAbbrv}
                                 {#each clickDataSort as data, i}
                                     <path 
                                     transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
@@ -355,6 +409,14 @@
                                     y="-2"
                                     font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
                                     >{data.acronym}
+                                    </text>
+                                    <text 
+                                    transform="translate({cellInnerTtip*0.98},{innerWidth<500?cellInnerTtip*0.1:cellInnerTtip*0.08})"
+                                    fill={"white"}
+                                    x={innerWidth > 640 ? -cellInner/7.5 : -cellInner/6.5}
+                                    y="-2"
+                                    font-size={innerWidth > 640 ? cellInner/5 : cellInner/4}
+                                    >X
                                     </text>
                                     <!-- data.acronym.length*6.5 -->
                                 {/each}
@@ -409,18 +471,20 @@
                                 x={cellCenter(state, i)}
                                 y={cellCenter(state, i)+3}
                                 text-anchor="middle" 
-                                opacity={!Politicalsteps.includes(currentStep)? state[showVar] > 0.2 ? 1 : 0 :
-                                                                                state.deadlyIndex > 0.2 ? 1 : 0}
+                                opacity={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?1:
+                                            !Politicalsteps.includes(currentStep)? 
+                                                state[showVar] > 0.2 ? 1 : 0 : 
+                                                state.deadlyIndex > 0.2 ? 1 : 0}
                                 font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
                                                 maxStates.includes(state.stateName)?900:300}
                                 fill={"white"}
                                 >{!blanksteps.includes(currentStep) ? 
-                                    state[showVar]===0.33?"low threat":state[showVar]===0.66?"restrict":state[showVar]===1?"ban":"protected":""}
+                                    state[showVar]===0.33?"low risk":state[showVar]===0.66?"high risk":state[showVar]===1?"ban":"no risk":""}
                                 </text>
                                 <!-- fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"} -->
                             {/if}
                             <!-- if the click tip is activated, also add wording under the percentage -->
-                            {#if clickedState!==null&&currentStep===20&&state.stateAbbrv===clickedState.stateAbbrv}
+                            {#if clickedState!==null&&currentStep===lastStep&&state.stateAbbrv===clickedState.stateAbbrv}
                                 <text
                                 class="stateName"
                                 x={cellCenter(state, i)}
@@ -441,7 +505,7 @@
                     </g>
                 </g>
                 <!-- bring tile to the front when clicked -->
-                {#if clickedState!==null&&currentStep===20}
+                {#if clickedState!==null&&currentStep===lastStep}
                     <use 
                     id="use" 
                     xlink:href="#{clickedState.stateAbbrv}" 
@@ -452,18 +516,19 @@
                 {/if}
             {/each}
         </g>
+        {/if}
         <!-- Click annotation for explore app page -->
         {#if clickedState===null}
             <Annotation annotationData={clickAnnotation} {cellInner} {cellSize} {innerWidth}/>
         {/if}
     </svg>
     <!-- if in the scrolly part, show summary text for the user -->
-    {#if currentStep<20&&currentStep!==undefined}
+    {#if currentStep<lastStep&&currentStep!==undefined}
         <div class="maxState" style="min-height:45px">
             <h3>
-                {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==0}
+                {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==1}
                 The most dangerous state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}">{currentIndex}</div> {indexLabAft} is <b>{deadlyState}</b>
-                {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==0}
+                {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==1}
                 There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}">{currentIndex}</div> {indexLabAft}
                 {:else if Politicalsteps.includes(currentStep)}
                 On average, <div class="specialWordWrap" style="background-color:#dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <div class="specialWordWrap" style="background-color:#0080c9">blue</div> states.
@@ -491,24 +556,40 @@
     </div>
     {/if}
     <!-- if outside of the scrolly part, show explore buttons -->
-    {#if currentStep === 20}
+    {#if currentStep === lastStep}
             <div class="buttons">
-                <div class="buttonContainer">
-                <!-- <div> -->
-                    <input 
-                    type=button group={buttons} 
-                    name="buttons" 
-                    value="politics" 
-                    style="background-color:{colorPolitical("democrat")};border:0px solid {colorPolitical("republican")}"
-                    on:click={
-                        ()=>{
-                            showVar="deadlyIndex"
-                            colorScale=colorPolitical
-                            togglePolitical=true
-                            // console.log(togglePolitical)
-                        }}>
-                    <!-- <span class="buttonLabel">Political Party</span> -->
-                </div>
+                <div class="checkBoxContainer">
+                    <!-- <div> -->
+                        <input 
+                        class="checkbox"
+                        type=checkbox group={buttons} 
+                        name="buttons" 
+                        bind:checked={togglePolitical}
+                        style="background-color:{colorPolitical("democrat")};border:0px solid {colorPolitical("republican")}"
+                        on:click={
+                            ()=>{
+                                // showVar="deadlyIndex"
+                                // togglePolitical= !togglePolitical
+                                // colorScale=colorPolitical
+                                // console.log(togglePolitical)
+                            }}>
+                        <span class="buttonLabel">Color by Political Affiliation</span>
+                        <!-- <input 
+                        type=checkbox group={buttons} 
+                        name="buttons" 
+                        value="politics" 
+                        style="background-color:{colorPolitical("democrat")};border:0px solid {colorPolitical("republican")}"
+                        on:click={
+                            ()=>{
+                                // showVar="deadlyIndex"
+                                togglePolitical= !togglePolitical
+                                colorScale=colorPolitical
+                                // console.log(togglePolitical)
+                            }}>
+                        <span class="buttonLabel">View by Political Affiliation</span> -->
+                 </div>
+            </div>
+            <div class="buttons">
                 <div class="buttonContainer">
                 <!-- <div> -->
                     <input 
@@ -520,8 +601,14 @@
                     on:click={
                         ()=>{
                             showVar="activeBan"
-                            colorScale=colorRW
-                            togglePolitical=false
+                            // colorScale=togglePolitical===true?colorPolitical:colorRW
+                            toggleRW = true
+                            toggleFR = false
+                            toggleVC = false
+                            toggleLS = false
+                            toggleDI = false
+                            // colorScale=togglePolitical===false?colorRW:colorPolitical
+                            // togglePolitical=false
                         }}>
                     <!-- <span class="buttonLabel">Erosion of Abortion Rights Index</span> -->
                 </div>
@@ -531,13 +618,19 @@
                     type=button 
                     group={buttons} 
                     name="buttons" 
-                    value={"Repr. Health Services"} 
+                    value={"Repr. Health Services Lack"} 
                     style="background-color:{colorFR(0.7)};border:0px solid {colorFR(1)}"
                     on:click={
                         ()=>{
                             showVar="frhSI"
-                            colorScale=colorFR
-                            togglePolitical=false
+                            toggleRW = false
+                            toggleFR = true
+                            toggleVC = false
+                            toggleLS = false
+                            toggleDI = false
+                            // colorScale=togglePolitical===true?colorPolitical:colorFR
+                            // toggleFR = true
+                            // togglePolitical=false
                         }}>
                     <!-- <span class="buttonLabel">Lack of Reproductive Health Services Index</span> -->
                 </div>
@@ -547,13 +640,19 @@
                     type=button 
                     group={buttons} 
                     name="buttons" 
-                    value={"Violent Crime"} 
+                    value={"Violent Crime ag. Women"} 
                     style="background-color:{colorVC(0.7)};border:0px solid {colorVC(1)}}"
                     on:click={
                         ()=>{
                             showVar="vcSI"
-                            colorScale=colorVC
-                            togglePolitical=false
+                            toggleRW = false
+                            toggleFR = false
+                            toggleVC = true
+                            toggleLS = false
+                            toggleDI = false
+                            // colorScale=togglePolitical===true?colorPolitical:colorVC
+                            // toggleVC = true
+                            // togglePolitical=false
                         }}>
                     <!-- <span class="buttonLabel">Violent Crime Against Women Index</span> -->
                 </div>
@@ -563,13 +662,19 @@
                     type=button 
                     group={buttons} 
                     name="buttons" 
-                    value={"Legal Protections"} 
+                    value={"Legal Protections Lack"} 
                     style="background-color:{colorLS(0.7)};border:0px solid {colorLS(1)}"
                     on:click={
                         ()=>{
                             showVar="lsSI"
-                            colorScale=colorLS
-                            togglePolitical=false
+                            toggleRW = false
+                            toggleFR = false
+                            toggleVC = false
+                            toggleLS = true
+                            toggleDI = false
+                            // colorScale=togglePolitical===true?colorPolitical:colorLS
+                            // toggleLS = true
+                            // togglePolitical=false
                         }}>
                     <!-- <span class="buttonLabel">Lack of Legal Protections Index</span> -->
                 </div>
@@ -585,8 +690,14 @@
                     on:click={
                         ()=>{
                             showVar="deadlyIndex"
-                            colorScale=colorDI
-                            togglePolitical=false
+                            toggleRW = false
+                            toggleFR = false
+                            toggleVC = false
+                            toggleLS = false
+                            toggleDI = true                            
+                            console.log(toggleDI)
+                            // colorScale=togglePolitical===true?colorPolitical:colorDI
+                            // togglePolitical=false
                         }}>
                     <!-- <span class="buttonLabel">Overall Danger Index</span> -->
                 </div>
@@ -637,6 +748,10 @@
         /* transform:skew(-.312rad); */
     }
 
+    text {
+        font-family: "Roboto Flex", sans-serif;
+    }
+
     input:hover {
         /* border-width: 2px; */
         opacity: 0.5;
@@ -646,6 +761,14 @@
     input:focus {
         font-weight: 700;
         /* border-width: 2px; */
+    }
+
+    .checkbox {
+        margin-bottom: 15px;
+    }
+    .checkBoxContainer {
+        align-items: center;
+        font-family: "Roboto Flex", sans-serif;
     }
 
     .buttons {
