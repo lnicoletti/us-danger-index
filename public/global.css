@@ -18,18 +18,45 @@ h3 {
 	font-weight: 300; */
 }
 
+.questions {
+	font-weight: 300;
+	font-style: italic;
+}
+
+.specialWordWrapPar {
+	/* background-color: #730f71; */
+	padding-right: 5px;
+	padding-left: 5px;
+	display: inline-block;
+	/* transform:skew(-.312rad); */
+	color:white;
+	border:1px solid white;
+	border-radius: 2.5px;
+
+}
+
+.specialPar {
+	text-align: left;
+	max-width: 50vw;
+	font-size: 18px;
+	margin:auto;
+	/* font-family: 'Jost', sans-serif; */
+	font-family: 'Roboto Flex', sans-serif;
+	font-weight: 400;
+}
+
 a {
-	color: rgb(0,100,200);
-	text-decoration: none;
+	text-decoration:underline; 
+	color:black
 }
 
-a:hover {
+/* a:hover {
 	text-decoration: underline;
-}
+} */
 
-a:visited {
+/* a:visited {
 	color: rgb(0,80,160);
-}
+} */
 
 label {
 	display: block;

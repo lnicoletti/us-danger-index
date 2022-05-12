@@ -76,7 +76,7 @@
     };
 
     // data for annotations
-    $: clickAnnotation = currentStep===21?
+    $: clickAnnotation = currentStep===lastStep?
       [{textX:6.2, 
         textY:1, 
         cx: 6.5, 
@@ -225,15 +225,6 @@
         .domain([0, maxValue])
         .range([cellInner/20, cellInner/6])
 
-    $: blanksteps = [1]
-    $: RWsteps = [2,3,4,5,6]
-    $: FRsteps = [7,8,9]
-    $: VCsteps = [10,11,12]
-    $: LSsteps = [13,14,15]
-    $: DIsteps = [16,17,18,20,21]
-    $: Politicalsteps = [19]
-    $: lastStep = steps.length-1
-
     // toggles for final buttons
     $: toggleDI = false;
     $: toggleRW = false;
@@ -282,18 +273,29 @@
 
     // console.log("av. blue", averageBlue)
 
-    // annotation variables
+    // annotation and step variables
+    $: blanksteps = [0,1]
+    $: RWsteps = [2,3,4,5,6]
+    $: FRsteps = [7,8,9,10]
+    $: VCsteps = [11,12,13,14]
+    $: LSsteps = [15,16,17]
+    $: DIsteps = [18,19,20,22,23]
+    $: Politicalsteps = [21]
+    $: lastStep = steps.length-1
+
     $: highlightedState = currentStep===3?["WA"]:
                           currentStep===4?["NH"]:
                           currentStep===5?["FL"]:
                           currentStep===6?["AZ"]:
-                          currentStep===9?["AK", "DC", "TX"]:
-                          currentStep===12?["NY", "AR"]:
-                          currentStep===15?["OR"]:
-                          currentStep===17?"DC":
-                          currentStep===18?"AR":null
+                          currentStep===9?["AK", "DC"]:
+                          currentStep===10?["TX"]:
+                          currentStep===13?["NY"]:
+                          currentStep===14?["AR"]:
+                          currentStep===17?["OR"]:
+                          currentStep===19?"DC":
+                          currentStep===20?"AR":null
 
-    let highlightSteps = [3,4,5,6,9,12,15,17,18]
+    let highlightSteps = [3,4,5,6,9,10,13,14,17,19,20]
 
     let clickedState = null;
     // $: console.log(highlightedState)
@@ -347,7 +349,7 @@
         {#if currentStep > 1}
             <Legend {svgPadding} {cellPadding} {cellInner} {cellSize} {gridWidth} {gridHeight} {innerWidth} {currentStep} {showVar} {colorScale} {togglePolitical}/>
         {/if}
-        {#if currentStep > 0}
+        <!-- {#if currentStep > 0} -->
         <g transform="translate({svgPadding}, {svgPadding})">
             {#each states as state, i}
             <!-- add one g element for each state and translate it to it's cartogram position -->
@@ -378,6 +380,7 @@
                         stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":colorScale(1):"none"}
                         stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
                         fill={currentStep > 1 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
+                        style={currentStep===0||currentStep===undefined?"filter: blur(4px)":""}
                         />
                         <text 
                         class="stateName"
@@ -388,6 +391,7 @@
                         dy="0.71em" 
                         font-weight=700
                         fill="white"
+                        style={currentStep===0||currentStep===undefined?"filter: blur(4px)":""}
                         >{state.stateAbbrv}
                         </text>
                         <!-- if not on the first grey step -->
@@ -516,7 +520,7 @@
                 {/if}
             {/each}
         </g>
-        {/if}
+        <!-- {/if} -->
         <!-- Click annotation for explore app page -->
         {#if clickedState===null}
             <Annotation annotationData={clickAnnotation} {cellInner} {cellSize} {innerWidth}/>
@@ -526,9 +530,9 @@
     {#if currentStep<lastStep&&currentStep!==undefined}
         <div class="maxState" style="min-height:45px">
             <h3>
-                {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep!==1}
+                {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep>1}
                 The most dangerous state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}">{currentIndex}</div> {indexLabAft} is <b>{deadlyState}</b>
-                {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep!==1}
+                {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep>1}
                 There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}">{currentIndex}</div> {indexLabAft}
                 {:else if Politicalsteps.includes(currentStep)}
                 On average, <div class="specialWordWrap" style="background-color:#dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <div class="specialWordWrap" style="background-color:#0080c9">blue</div> states.
