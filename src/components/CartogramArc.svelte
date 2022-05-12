@@ -213,8 +213,9 @@
     // $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#5e3c99","#b2abd2","#fdb863","#e66101"])
     $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["lightblue","pink","red","darkred"])
     $: colorFR = scaleSequential(interpolateBuGn).domain([0.25, max(states, d=>d.frhSI)])
+    // $: colorFR = scaleSequential(interpolateLab("#f7fcb9", "#238443")).domain([0.25, max(states, d=>d.frhSI)])
     // $: colorFR = scaleSequential(interpolateLab("white", "#014242")).domain([0.25, max(states, d=>d.frhSI)])
-    $: colorLS = scaleSequential(interpolateLab("white", "#0b0c29")).domain([0.1, max(states, d=>d.lsSI)])
+    $: colorLS = scaleSequential(interpolateLab("#edf8b1", "#2c7fb8")).domain([0.1, max(states, d=>d.lsSI)])
     // $: colorLS = scaleSequential(interpolateGnBu).domain([0, max(states, d=>d.lsSI)])
     $: colorVC = scaleSequential(interpolateYlOrRd).domain([-0.2, max(states, d=>d.vcSI)])
     $: colorDI = scaleSequential(interpolateBuPu).domain([0, max(states, d=>d.deadlyIndex)])
@@ -279,8 +280,8 @@
     $: FRsteps = [7,8,9,10]
     $: VCsteps = [11,12,13,14]
     $: LSsteps = [15,16,17]
-    $: DIsteps = [18,19,20,22,23]
-    $: Politicalsteps = [21]
+    $: DIsteps = [18,19,20,21,23,24]
+    $: Politicalsteps = [22]
     $: lastStep = steps.length-1
 
     $: highlightedState = currentStep===3?["WA"]:

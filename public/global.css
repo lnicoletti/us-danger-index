@@ -37,7 +37,7 @@ h3 {
 
 .specialPar {
 	text-align: left;
-	max-width: 50vw;
+	/* max-width: 50vw; */
 	font-size: 18px;
 	margin:auto;
 	/* font-family: 'Jost', sans-serif; */

@@ -15,17 +15,19 @@
     <!-- <h1 style="font-size:{titleFontSize}px">The <br><div class="specialWordWrap"><span class="specialWord">Most</span></div><br><div class="specialWordWrap"><span class="specialWord">Dangerous</span></div><br> U.S. States to reside in</h1> -->
     <h1 style="font-size:{titleFontSize}px">
         The <br>
-        <div class="specialWordWrapSquare"><span class="specialWord">M</span></div><div class="specialWordWrapSquare"><span class="specialWord">o</span></div><div class="specialWordWrapSquare"><span class="specialWord">s</span></div><div class="specialWordWrapSquare"><span class="specialWord">t</span></div>
+        <div class="specialWordWrapSquare" style="background-color: #852d8f;"><span class="specialWord">M</span></div><div class="specialWordWrapSquare" style="background-color: #730f71;"><span class="specialWord">o</span></div><div class="specialWordWrapSquare" style="background-color: #4d004b;"><span class="specialWord">s</span></div><div class="specialWordWrapSquare" style="background-color: #730f71;"><span class="specialWord">t</span></div>
             <br>
-        <div class="specialWordWrapSquare"><span class="specialWord">D</span></div><div class="specialWordWrapSquare"><span class="specialWord">a</span></div><div class="specialWordWrapSquare"><span class="specialWord">n</span></div><div class="specialWordWrapSquare"><span class="specialWord">g</span></div><div class="specialWordWrapSquare"><span class="specialWord">e</span></div><div class="specialWordWrapSquare"><span class="specialWord">r</span></div><div class="specialWordWrapSquare"><span class="specialWord">o</span></div><div class="specialWordWrapSquare"><span class="specialWord">u</span></div><div class="specialWordWrapSquare"><span class="specialWord">s</span></div><br> U.S. States to reside in</h1>
+        <div class="specialWordWrapSquare" style="background-color: #8f95c6;"><span class="specialWord">D</span></div><div class="specialWordWrapSquare" style="background-color: #8c74b5;"><span class="specialWord">a</span></div><div class="specialWordWrapSquare" style="background-color: #8952a5;"><span class="specialWord">n</span></div><div class="specialWordWrapSquare" style="background-color: #852d8f;"><span class="specialWord">g</span></div><div class="specialWordWrapSquare" style="background-color: #730f71;"><span class="specialWord">e</span></div><div class="specialWordWrapSquare" style="background-color: #4d004b;"><span class="specialWord">r</span></div><div class="specialWordWrapSquare" style="background-color: #730f71;"><span class="specialWord">o</span></div><div class="specialWordWrapSquare" style="background-color: #852d8f;"><span class="specialWord">u</span></div><div class="specialWordWrapSquare" style="background-color: #8952a5;"><span class="specialWord">s</span></div><br> U.S. States to reside in</h1>
     <h2 style="font-size:{subTitleFontSize}px">(if you are not a cis-gender man)</h2>
     <h3>A Tool Designed with Female Assigned at Birth (AFAB) and Femme Folx' Safety in Mind</h3>
     <div class="credits">
         by <a href='https://www.carolinecullinan.com/' target='_blank'><b>CAROLINE CULLINAN</b></a><br> and <a href='https://www.leonardonicoletti.com/' target='_blank'><b>LEONARDO NICOLETTI</b></a><br>
+        <i>Published May 13th, 2022</i>
     </div>
+    <!-- <p style="text-align:center;margin-bottom: 50px"><i>Published May 13th, 2022</i></p> -->
 </div>
-<p>As leaked by <a href="https://www.politico.com/news/2022/05/02/supreme-court-abortion-draft-opinion-00029473" target=__blank>Politico</a> on May 2, 2022, the Supreme Court vote to overturn Roe v. Wade further exemplifies institutional harm towards folx who do not identify as cisgender men.  In recognizing a persistent attack on the rights of people of marginalized genders, we created the following tool.  Specifically focused on the safety of female assigned at birth (AFAB) and femme folx, an overall danger index has been created to identify US states that have been rendered more or less dangerous for those who are not cisgender men.  In creating this tool, we hope to highlight and bring greater transparency to the fact that across all US states, institutional systems of oppression perpetuate gender-based harm.</p><br>
-<p>Interested in understanding what went into this overall danger index?  Scroll through the following story to find out.  Alternatively, click <button class="scrollButton" on:click={() => revertFrameOne()}>here</button> to jump to the bottom of the screen and access our tool immediately.</p><br><br>
+<p>As leaked by <a href="https://www.politico.com/news/2022/05/02/supreme-court-abortion-draft-opinion-00029473" target=__blank>Politico</a> on May 2, 2022, the Supreme Court vote to overturn Roe v. Wade further exemplifies institutional harm towards folx who do not identify as cisgender men.  In recognizing a persistent attack on the rights of people of marginalized genders, we created the following tool.  Specifically focused on the safety of female assigned at birth (AFAB) and femme folx, an <i>Overall Danger Index</i> has been created to identify US states that have been rendered more or less dangerous for those who are not cisgender men.  In creating this tool, we hope to highlight and bring greater transparency to the fact that across all US states, institutional systems of oppression perpetuate gender-based harm.</p><br>
+<p>Interested in understanding what went into this <i>Overall Danger Index</i>?  Scroll through the following story to find out.  Alternatively, click <button class="scrollButton" on:click={() => revertFrameOne()}>here</button> to jump to the bottom of the screen and access our tool immediately.</p><br><br>
 <p style="text-align:center">Scroll</p>
 <span class="material-symbols-outlined">
     arrow_downward
@@ -62,7 +64,7 @@
         /* transform:skew(-.312rad) */
     }
     .specialWordWrapSquare {
-        background-color: #4a095c;
+        /* background-color: #4a095c; */
         padding-right: 2px;
         padding-left: 2px;
         display: inline-block;
@@ -112,6 +114,7 @@
 		/* font-family: 'Inconsolata', monospace; */
 		/* font-family: 'Jost', sans-serif; */
 		font-family: 'Roboto Flex', sans-serif;
+        /* font-family: 'Trocchi', serif;; */
 		/* font-family: Georgia, 'Times New Roman', Times, serif; */
 	}
     h2 {
@@ -166,7 +169,7 @@
 		margin-top: 1.5em;
 		letter-spacing: 0.1em;
 		opacity: 1;
-		margin-bottom: 50px;
+        margin-bottom: 50px
 		/* visibility:hidden; */
 		/* transform: translate(10px,93px) */
 		/* transform: translate(10px, calc(35px + 3.5vw)) */
