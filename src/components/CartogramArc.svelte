@@ -582,7 +582,9 @@
     <!-- if outside of the scrolly part, show explore buttons -->
     {#if currentStep === lastStep}
             <div class="buttons">
-                <div class="checkBoxContainer">
+                <!-- <div class="checkBoxContainer"> -->
+                    <label class="checkBoxContainer">
+                        <span class="buttonLabel">Color by Political Affiliation</span>
                     <!-- <div> -->
                         <input 
                         class="checkbox"
@@ -597,7 +599,8 @@
                                 // colorScale=colorPolitical
                                 // console.log(togglePolitical)
                             }}>
-                        <span class="buttonLabel">Color by Political Affiliation</span>
+                        <span class="checkmark"></span>
+                        <!-- <span class="buttonLabel">Color by Political Affiliation</span> -->
                         <!-- <input 
                         type=checkbox group={buttons} 
                         name="buttons" 
@@ -611,7 +614,8 @@
                                 // console.log(togglePolitical)
                             }}>
                         <span class="buttonLabel">View by Political Affiliation</span> -->
-                 </div>
+                    </label>   
+                 <!-- </div> -->
             </div>
             <div class="buttons">
                 <div class="buttonContainer">
@@ -793,6 +797,68 @@
     .checkBoxContainer {
         align-items: center;
         font-family: "Roboto Flex", sans-serif;
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .checkBoxContainer input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .checkBoxContainer:hover input ~ .checkmark {
+    background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .checkBoxContainer input:checked ~ .checkmark {
+    background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .checkBoxContainer input:checked ~ .checkmark:after {
+    display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .checkBoxContainer .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
     }
 
     .buttons {

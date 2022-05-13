@@ -3,7 +3,7 @@
     import * as animateScroll from "svelte-scrollto";
 
     function revertFrameOne() {
-        animateScroll.scrollTo({element: '#lastStep', duration:4000});
+        animateScroll.scrollTo({element: '#lastStep', duration:6000});
     }
 
     $: titleFontSize = innerWidth>900?60:innerWidth>750?50:innerWidth>640?40:innerWidth>460?30:23//style="font-size:{titleFontSize}"
