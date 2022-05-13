@@ -5,7 +5,7 @@
     // export let innerHeight;
     export let innerWidth;
     import { extent, max, scaleSequential, interpolateReds} from 'd3';
-    import Legend from './Legend.svelte';
+    import Legend from './LegendOLD.svelte';
 
     // $: console.log("states", max(position, ([, [i]]) => i) + 1)
     // cartogram variables

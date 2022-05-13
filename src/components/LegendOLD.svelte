@@ -13,7 +13,7 @@
     import { scaleLinear, arc } from 'd3';
 
     let inTextColor = "white";
-    let outTextColor = "black";
+    let outTextColor = "grey";
     let tileColor = "lightgrey";
     // let bar = ({width: 6, padding: 0});
     // let minRadius = 10;
@@ -47,8 +47,7 @@
                 // {deadlyIndex:0.00001, position:[0,0], label:""}
             ]
 
-    $: legendLabel = showVar==="activeBan"?"Risk of Abortion Ban":
-                     showVar==="vcSI"?"Violent Crime Per 100,000 Women":
+    $: legendLabel = showVar==="vcSI"?"Violent Crime Per 100,000 Women":
                      showVar==="frhSI"?"Lack of Reproductive Health Services":
                      showVar==="lsSI"?"Lack of Legal Protections":"Overall Danger"
     // let data = [{deadlyIndex:1, position:[6.4,8.5], label:"v. high"}, 
@@ -61,7 +60,7 @@
 
 
 </script>
-    <g transform="translate({svgPadding}, {svgPadding*1.4})">
+    <g transform="translate({svgPadding}, {svgPadding})">
         {#each data as d, i}
         <g transform="translate({d.position[0] * cellSize}, {d.position[1] * cellSize})">
             <g transform="translate({cellPadding}, {cellPadding})">
@@ -69,7 +68,7 @@
                 <rect 
                 width="{cellInner}" 
                 height="{cellInner}" 
-                fill={showVar!==null&&showVar!=="party"&&togglePolitical!==true?colorScale(d.deadlyIndex):tileColor} 
+                fill={showVar!==null&&showVar!=="party"&&togglePolitical!==true&&i!==data.length-1?colorScale(d.deadlyIndex):tileColor} 
                 />
                 <text 
                 class="stateName"
@@ -141,17 +140,17 @@
             </g>
         </g>
         {/each}
-        <text 
+        <!-- <text 
             class="stateName"
             font-size={innerWidth > 640 ? cellInner/6 : cellInner/4}
-            x={(cellInner*data.length)/2}
-            y="-7" 
-            text-anchor="middle" 
+            x={cellInner*2.2}
+            y="-6" 
+            text-anchor="left" 
             dy="0.71em" 
-            font-weight=400
+            font-weight=700
             fill={outTextColor}
-            >{legendLabel}
-        </text>
+            >Danger is
+        </text> -->
     </g>
 
     <style>
