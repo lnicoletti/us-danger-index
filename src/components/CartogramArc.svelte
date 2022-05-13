@@ -68,9 +68,9 @@
                      activeBan:
                      [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:1, iOffset:0}],
                      frhSI:
-                     [{var:"titleXNorm", label:"# of Title X Centers per 100,000", acronym:1, iOffset:2},
-                      {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100,000", acronym:2, iOffset:2},
-                      {var:"aProvidersNorm", label:"# of Abortion Providers per 100,000", acronym:3, iOffset:2},
+                     [{var:"titleXNorm", label:"# of Title X Centers per 100,000 people", acronym:1, iOffset:2},
+                      {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100,000 people", acronym:2, iOffset:2},
+                      {var:"aProvidersNorm", label:"# of Abortion Providers per 100,000 people", acronym:3, iOffset:2},
                       {var:"countiesWoAProvidersNorm", label:"% of Counties with a Known Abortion Provider", acronym:4, iOffset:2},
                       {var:"famPlanCenterSpendNorm", label:"Per Capita Public Expenditure For Family Planning", acronym:5, iOffset:2},
                       {var:"noCounselAbortion", label:"Access to abortion without state-mandated in-person counseling", acronym:6, iOffset:2}],
@@ -79,7 +79,7 @@
                      lsSI:
                      [{var:"protSHW", label:"Protection of all workers from sexual harassment in the workpace, regardless of company size", acronym:1, iOffset:2},
                       {var:"firearmSurrender", label:"Required relinquishment of firearms from abusers subject to domestic violcence protective orders", acronym:2, iOffset:2},
-                      {var:"unempBenefits", label:"Protection of all workers from sexual harassment in the workpace, regardless of company size", acronym:3, iOffset:2},
+                      {var:"unempBenefits", label:"Guaranteed unemployment benefits to victims of domestic violence, sexual assault, and stalking", acronym:3, iOffset:2},
                       {var:"parLeave", label:"Mandated parental leave", acronym:4, iOffset:2},
                       {var:"minWage", label:"Mandated minimum wage above the low-income threshold", acronym:5, iOffset:2},
                       {var:"ERA", label:"Ratified Equal Rights Amendment", acronym:6, iOffset:2}],

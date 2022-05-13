@@ -11,7 +11,7 @@
 
 </script>
 
-<div class="titleContainer">
+<div class="titleContainer" style="text-align:center">
     <!-- <h1 style="font-size:{titleFontSize}px">The <br><div class="specialWordWrap"><span class="specialWord">Most</span></div><br><div class="specialWordWrap"><span class="specialWord">Dangerous</span></div><br> U.S. States to reside in</h1> -->
     <h1 style="font-size:{titleFontSize}px">
         The <br>
@@ -70,6 +70,7 @@
         display: inline-block;
         border: 1.5px solid white;
         width:6vw;
+        text-align: center;
         /* height:6vw */
         /* transform:skew(-.312rad) */
     }
@@ -137,7 +138,7 @@
 	h3 {
         color: black;
 		font-family: 'Roboto Flex', sans-serif;
-		font-weight: 300;
+		font-weight: 400;
 	}
 
 	p {
@@ -147,7 +148,7 @@
 		margin:auto;
 		/* font-family: 'Jost', sans-serif; */
         font-family: 'Roboto Flex', sans-serif;
-		font-weight: 300;
+		font-weight: 400;
         /* line-height: normal; */
 	}
 
