@@ -32,25 +32,38 @@
         .startAngle(0)
         .endAngle(x(+d.deadlyIndex))()
 
-    $: data = showVar!=="activeBan"?
-                [{deadlyIndex:1, position:[2,0], label:"v. high"}, 
-                {deadlyIndex:0.66, position:[1,0], label:"high"}, 
-                {deadlyIndex:0.33, position:[0,0], label:"low"}, 
+    $: data = showVar==="vcSI"||showVar==="frhSI"?
+                [{deadlyIndex:1, position:[2,0], label:"high"}, 
+                {deadlyIndex:0.5, position:[1,0], label:"medium"}, 
+                {deadlyIndex:0.2, position:[0,0], label:"low"}, 
                 // {deadlyIndex:0.00001, position:[0,0], label: showVar==="vcSI"?"crime/100k":
                 //                                              showVar==="frhSI"?"RHS lack":
                 //                                              showVar==="lsSI"?"LP lack":"danger"}
                                                             ]:
+                showVar==="lsSI"?
+                [{deadlyIndex:1, position:[2,0], label:"many"}, 
+                {deadlyIndex:0.5, position:[1,0], label:"some"}, 
+                {deadlyIndex:0, position:[0,0], label:"none"}
+                ]:
+                showVar==="activeBan"?
                 [{deadlyIndex:1, position:[3,0], label:"v. high"}, 
                 {deadlyIndex:0.66, position:[2,0], label:"high"}, 
                 {deadlyIndex:0.33, position:[1,0], label:"low"}, 
                 {deadlyIndex:0, position:[0,0], label:""},
                 // {deadlyIndex:0.00001, position:[0,0], label:""}
-            ]
+                ]:
+            [{deadlyIndex:1, position:[2,0], label:"high"}, 
+                {deadlyIndex:0.5, position:[1,0], label:"medium"}, 
+                {deadlyIndex:0.2, position:[0,0], label:"low"}, 
+                // {deadlyIndex:0.00001, position:[0,0], label: showVar==="vcSI"?"crime/100k":
+                //                                              showVar==="frhSI"?"RHS lack":
+                //                                              showVar==="lsSI"?"LP lack":"danger"}
+    ]
 
     $: legendLabel = showVar==="activeBan"?"Risk of Abortion Ban":
                      showVar==="vcSI"?"Violent Crime Per 100,000 Women":
-                     showVar==="frhSI"?"Lack of Reproductive Health Services":
-                     showVar==="lsSI"?"Lack of Legal Protections":"Overall Danger"
+                     showVar==="frhSI"?"Reproductive Health Services Support":
+                     showVar==="lsSI"?"Legal Protections":"Overall Danger"
     // let data = [{deadlyIndex:1, position:[6.4,8.5], label:"v. high"}, 
     //             {deadlyIndex:0.66, position:[5.4,8.5], label:"high"}, 
     //             {deadlyIndex:0.33, position:[4.4,8.5], label:"low"}, 

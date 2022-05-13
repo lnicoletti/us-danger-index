@@ -5,17 +5,22 @@
     export let steps;
     // export let innerHeight;
     export let innerWidth;
-    import { ascending, descending, max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateBuGn, interpolateYlOrRd, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
+    import { ascending, descending, min, max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateBuGn, interpolateYlOrRd, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
     // import { fade, draw, fly } from 'svelte/transition';
     import Legend from './Legend.svelte';
     import Annotation from './Annotation.svelte';
 
     // init current index
     let indexDict = {activeBan: "Erosion of Abortion Rights", 
-                     frhSI: "Lack of Reproductive Health Services", 
+                     frhSI: "Reproductive Health Services Support", 
                      vcSI: "Violent Crime Against Women", 
-                     lsSI: "Lack of Legal Protections", 
+                     lsSI: "Legal Protections", 
                      deadlyIndex: "overall"};
+                    // {activeBan: "Erosion of Abortion Rights", 
+                    //  frhSI: "Lack of Reproductive Health Services", 
+                    //  vcSI: "Violent Crime Against Women", 
+                    //  lsSI: "Lack of Legal Protections", 
+                    //  deadlyIndex: "overall"};
 
     // data for click event
     // let clickData = [{var:"activeBan", label:"Erosion of Abortion Rights"}, 
@@ -50,10 +55,15 @@
     // };
 
     let clickData = {deadlyIndex:
+                    // [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:1, iOffset:0, riskType:""}, 
+                    //  {var:"frhSI", label: "Lack of Reproductive Health Services", acronym:2, iOffset:0, riskType:"Lack"}, 
+                    //  {var:"vcSI", label: "Violent Crime Against Women", acronym:3, iOffset:0, riskType:"Violent"}, 
+                    //  {var:"lsSI", label: "Lack of Legal Protections", acronym:4, iOffset:0, riskType:"Unprotected"}, 
+                    //  {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
                     [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:1, iOffset:0, riskType:""}, 
-                     {var:"frhSI", label: "Lack of Reproductive Health Services", acronym:2, iOffset:0, riskType:"Lack"}, 
+                     {var:"frhSI", label: "Reproductive Health Services Support", acronym:2, iOffset:0, riskType:"Supported"}, 
                      {var:"vcSI", label: "Violent Crime Against Women", acronym:3, iOffset:0, riskType:"Violent"}, 
-                     {var:"lsSI", label: "Lack of Legal Protections", acronym:4, iOffset:0, riskType:"Unprotected"}, 
+                     {var:"lsSI", label: "Legal Protections", acronym:4, iOffset:0, riskType:"Protected"}, 
                      {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
                      activeBan:
                      [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:1, iOffset:0}],
@@ -169,8 +179,9 @@
     $: outerRadius = (d, i) => innerRadius(d, i) + bar.width;
     let maxRadius = 100;
     $: maxValue = max(states, d => Politicalsteps.includes(currentStep)?+d.deadlyIndex:+d[showVar]);
+    $: minValue = min(states, d => Politicalsteps.includes(currentStep)?+d.deadlyIndex:+d[showVar]);
     $: x = scaleLinear()
-        .domain([0, maxValue])
+        .domain([0, 1]) //maxValue
         .range([0, 2 * Math.PI])
     $: arcLine = (d, i) => arc()
         .innerRadius(innerRadius(d, i))
@@ -202,7 +213,7 @@
     // .range([0, cellInnerTtip])
 
     // $: if (currentStep>0) {
-    $: maxState = states.filter(d => +d[showVar] === maxValue);
+    $: maxState = showVar==="frhSI"||showVar==="lsSI"?states.filter(d => +d[showVar] === minValue):states.filter(d => +d[showVar] === maxValue);
     $: maxStates = maxState.map(d => d.stateName);
     $: deadlyState = maxState.length===1?maxState[0].stateName:null
     // }
@@ -212,10 +223,12 @@
     // $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
     // $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#5e3c99","#b2abd2","#fdb863","#e66101"])
     $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["lightblue","pink","red","darkred"])
-    $: colorFR = scaleSequential(interpolateBuGn).domain([0.25, max(states, d=>d.frhSI)])
+    // $: colorFR = scaleSequential(interpolateBuGn).domain([0.25, max(states, d=>d.frhSI)])
+    $: colorFR = scaleSequential(interpolateBuGn).domain([-0.1, max(states, d=>d.frhSI)])
     // $: colorFR = scaleSequential(interpolateLab("#f7fcb9", "#238443")).domain([0.25, max(states, d=>d.frhSI)])
     // $: colorFR = scaleSequential(interpolateLab("white", "#014242")).domain([0.25, max(states, d=>d.frhSI)])
-    $: colorLS = scaleSequential(interpolateLab("#edf8b1", "#2c7fb8")).domain([0.1, max(states, d=>d.lsSI)])
+    // $: colorLS = scaleSequential(interpolateLab("#edf8b1", "#2c7fb8")).domain([0.1, max(states, d=>d.lsSI)])
+    $: colorLS = scaleSequential(interpolateLab("#edf8b1", "#2c7fb8")).domain([-0.2, max(states, d=>d.lsSI)])
     // $: colorLS = scaleSequential(interpolateGnBu).domain([0, max(states, d=>d.lsSI)])
     $: colorVC = scaleSequential(interpolateYlOrRd).domain([-0.2, max(states, d=>d.vcSI)])
     $: colorDI = scaleSequential(interpolateBuPu).domain([0, max(states, d=>d.deadlyIndex)])
@@ -279,9 +292,9 @@
     $: RWsteps = [2,3,4,5,6]
     $: FRsteps = [7,8,9,10]
     $: VCsteps = [11,12,13,14]
-    $: LSsteps = [15,16,17]
-    $: DIsteps = [18,19,20,21,23,24]
-    $: Politicalsteps = [22]
+    $: LSsteps = [15,16,17,18]
+    $: DIsteps = [19,20,21,22,24,25]
+    $: Politicalsteps = [23]
     $: lastStep = steps.length-1
 
     $: highlightedState = currentStep===3?["WA"]:
@@ -293,10 +306,12 @@
                           currentStep===13?["NY"]:
                           currentStep===14?["AR"]:
                           currentStep===17?["OR"]:
-                          currentStep===19?"DC":
-                          currentStep===20?"AR":null
+                          currentStep===18?["FL","AL","MS","LA","SC","DE","NC","AR","KY","MO","NE","UT","ID"]:
+                          currentStep===20?"DC":
+                          currentStep===21?"AR":null
 
-    let highlightSteps = [3,4,5,6,9,10,13,14,17,19,20]
+    let highlightSteps = [3,4,5,6,9,10,13,14,17,18,20,21]
+    let noBottomTextSteps = [0,1,7,8,9,11,12,13,15,16,17,19,20,22,24]
 
     let clickedState = null;
     // $: console.log(highlightedState)
@@ -458,8 +473,8 @@
                                 text-anchor="middle" 
                                 opacity={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?1:
                                             !Politicalsteps.includes(currentStep)? 
-                                                state[showVar] > 0.6 ? 1 : 0 : 
-                                                state.deadlyIndex > 0.6 ? 1 : 0}
+                                                state[showVar] > 0.45 ? 1 : 0 : 
+                                                state.deadlyIndex > 0.45 ? 1 : 0}
                                 font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
                                                 maxStates.includes(state.stateName)?700:300}
                                 fill={"white"}
@@ -528,21 +543,25 @@
         {/if}
     </svg>
     <!-- if in the scrolly part, show summary text for the user -->
-    {#if currentStep<lastStep&&currentStep!==undefined}
+    {#if currentStep<lastStep && currentStep!==undefined}
         <div class="maxState" style="min-height:45px">
-            <h3>
-                {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep>1}
-                The most dangerous state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}">{currentIndex}</div> {indexLabAft} is <b>{deadlyState}</b>
-                {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep>1}
-                There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}">{currentIndex}</div> {indexLabAft}
-                {:else if Politicalsteps.includes(currentStep)}
-                On average, <div class="specialWordWrap" style="background-color:#dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <div class="specialWordWrap" style="background-color:#0080c9">blue</div> states.
-                {/if}
-            </h3>
+            {#if !noBottomTextSteps.includes(currentStep)}
+                <h3>
+                    {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep>1}
+                    The {showVar==="frhSI"?"least supported":showVar==="lsSI"?"most legally protected":"most dangerous"} state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}">{currentIndex}</div> {indexLabAft} is <b>{deadlyState}</b>
+                    {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep>1}
+                    There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}">{currentIndex}</div> {indexLabAft}
+                    {:else if Politicalsteps.includes(currentStep)}
+                    On average, <div class="specialWordWrap" style="background-color:#dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <div class="specialWordWrap" style="background-color:#0080c9">blue</div> states.
+                    {/if}
+                </h3>
+            {:else}
+            <h3></h3>
+            {/if}
         </div>
     <!-- {:else if currentStep!==undefined}
         <div class="maxState" style="min-height:45px"></div> -->
-    {:else if currentStep!==undefined}
+    {:else if currentStep!==undefined&&currentStep===lastStep}
     <!-- if outside of the scrolly part, show acronym legend -->
     <div 
     class="legend"
@@ -623,7 +642,7 @@
                     type=button 
                     group={buttons} 
                     name="buttons" 
-                    value={"Repr. Health Services Lack"} 
+                    value={"Repr. Health Services Support"} 
                     style="background-color:{colorFR(0.7)};border:0px solid {colorFR(1)}"
                     on:click={
                         ()=>{
@@ -667,7 +686,7 @@
                     type=button 
                     group={buttons} 
                     name="buttons" 
-                    value={"Legal Protections Lack"} 
+                    value={"Legal Protections"} 
                     style="background-color:{colorLS(0.7)};border:0px solid {colorLS(1)}"
                     on:click={
                         ()=>{
@@ -690,7 +709,7 @@
                     group={buttons} 
                     name="buttons"  
                     checked="checked" 
-                    value="Danger Index" 
+                    value="Overall Danger Index" 
                     style="background-color:{colorDI(1)};border:0px solid {colorDI(1)}"
                     on:click={
                         ()=>{
@@ -714,8 +733,8 @@
 <style>
 
     .chartElements {
-        /* z-index: -1;
-        position: relative; */
+        z-index: 1;
+        /* position: relative; */
         /* margin: 0; */
         position: relative;
         top: 50%;

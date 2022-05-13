@@ -93,7 +93,7 @@
 	// 			 "<div id='lastStep'>explore the app</div>"
 	// 	];
 			let steps = 
-				["<p><span class='questions'>Firstly, what constitutes danger?  Additionally, how does danger vary across states?</span></p><br> <div class='specialPar'>In creating the <span style='font-style:italic'>Overall Danger Index</span> for our tool, several sub-indices, related to:<div class='specialWordWrapPar' style='background-color:darkred'>the erosion of abortion rights</div>; <div class='specialWordWrapPar' style='background-color:rgb(21, 127, 60)'>a lack of reproductive health services</div>; <div class='specialWordWrapPar' style='background-color:rgb(200, 10, 34)'>violent crimes committed against women</div>; and <div class='specialWordWrapPar' style='background-color:rgb(103, 152, 184)'>the lack of state legal protections</div>, were considered.</div>",
+				["<p><span class='questions'>Firstly, what constitutes danger?  Additionally, how does danger vary across states?</span></p><br> <div class='specialPar'>In creating the <span style='font-style:italic'>Overall Danger Index</span> for our tool, several sub-indices, related to:<div class='specialWordWrapPar' style='background-color:darkred'>the erosion of abortion rights</div>; <div class='specialWordWrapPar' style='background-color:rgb(21, 127, 60)'>reproductive health services support</div>; <div class='specialWordWrapPar' style='background-color:rgb(200, 10, 34)'>violent crimes committed against women</div>; and <div class='specialWordWrapPar' style='background-color:rgb(103, 152, 184)'>state-level legal protections</div>, were considered.</div>",
 				"As outlined by a cartogram approach, we consider each of these sub-indices and, ultimately, our <span style='font-style:italic'>Overall Danger Index</span> at the state-level.", 
 				 "First, in creating the Erosion of Abortion Rights Sub-Index, we have considered state stances on banning or greatly restricting access to abortion if Roe v. Wade is to be overturned.<br><br>In the following cartogram, each square represents a US state, and the level of completion of each circle within each square represents the risk to the right of abortion imposed by each state.  For example, squares (i.e., states) denoted by full circles have trigger laws that would ban abortion.  Squares denoted by circles that are two-thirds completed represent states that are likely to restrict access to abortion.  Squares marked by one-third completed circles indicate states that pose no imminent threat to access to abortion.  Finally, if not marked with a complete or incomplete circle, a state legally protects abortion and an overturn of Roe v. Wade does not pose a risk to residents of that state.", 
 				 "In the following example, we can see that Washington legally protects rights to abortion, regardless of a Roe v. Wade overturning.",
@@ -110,7 +110,8 @@
 				 "In Arkansas (100%), however, women are subjected to the most amount of violent crime.",
 				 "Finally, in creating the Lack of Legal Protections Sub-Index, we have considered whether or not a state offers critical justice-based legal protections for women's rights as outlined by the <a href='https://giwps.georgetown.edu/us-index-legal-protections/' target=__blank>Georgetown Institute for Women, Peace, and Security</a (GIWPS).  In calculating this sub-index, we considered whether or not a state has laws for: 1) protection of all workers from sexual harassment in the workpace, regardless of company size; 2) guaranteed unempoyment benefits for victims of domestic violence, sexual assault, or stalking; 3) mandated parental leave; 4) mandated minimum wage above the low-income threshold; 5) ratified Equal Rights Amendment; and 6) required relinquishment of firearms from abusers subject to domestic violcence protective orders.", 
 				 "In this cartogram, each state's score for the Lack of Legal Protections Sub-Index can be observed.  States that lack the most in legal protections are indicated by squares with complete or almost-complete circles.  States that lack the least in legal protections are marked by squares with partial circles and smaller accompanying percentages.", 
-				 "In our last example, we can see that Oregon (17%) provides the most legal protections for residents.  Shockingly, residents of Idaho, Utah, Nebraska, Missouri, Kentucky, Delaware, Arkansas, North Carolina, South Carolina, Louisiana, Mississipi, Alabama, and Florida do not have any legal protections.", 
+				 "In our last example, we can see that Oregon (17%) provides the most legal protections for residents.",
+				 "Shockingly, residents of Idaho, Utah, Nebraska, Missouri, Kentucky, Delaware, Arkansas, North Carolina, South Carolina, Louisiana, Mississipi, Alabama, and Florida do not have any legal protections.", 
 				 "In considering all of these sub-indices, we created our <span style='font-style:italic'>Overall Danger Index</span>.", 
 				 "As illustrated here, Washington D.C. (20%) scores the lowest on our <span style='font-style:italic'>Overall Danger Index</span>,  rendering it the safest place for female assigned at birth (AFAB) and femme folx to reside in.", 
 				 "On the other hand, with a calculated value of 97%, Arkansas scores the highest on our <span style='font-style:italic'>Overall Danger Index</span>, making it the most dangerous place for female assigned at birth (AFAB) and femme folx to take up residence.", 
@@ -213,8 +214,19 @@
 						unempBenefitsNorm: 1-d.unempBenefits,
 						firearmSurrenderNorm: 1-d.firearmSurrender,
 						protSHWNorm: 1-d.protSHW,
+						// frhSI: 
+						// 1-((titlexNormScale((d.titlexNum/d.femalePop))+
+						// famPlanCentersNormScale((d.famPlanCentersNum/d.femalePop))+
+						// aProvidersNormScale((d.aProvidersNum/d.femalePop))+
+						// (1-(d.countiesWoAProvidersPct/100))+
+						// FamPlanCenterNormScale((d.totalPubDollarsFamPlanCenter/d.femalePop))+
+						// (d.noCounselAbortion)
+						// // +
+						// // AbortionDollarsNormScale((d.totalPubDollarsAbortion/d.femalePop))+
+						// // d.noCounselAbortion
+						// )/6),
 						frhSI: 
-						1-((titlexNormScale((d.titlexNum/d.femalePop))+
+						((titlexNormScale((d.titlexNum/d.femalePop))+
 						famPlanCentersNormScale((d.famPlanCentersNum/d.femalePop))+
 						aProvidersNormScale((d.aProvidersNum/d.femalePop))+
 						(1-(d.countiesWoAProvidersPct/100))+
@@ -226,14 +238,17 @@
 						)/6),
 						vcSI:
 						femaleCrimesNormScale((d.femaleCrimes/d.femalePop)),
+						// lsSI:
+						// 1-(d.protSHW + d.firearmSurrender + d.unempBenefits + d.parLeave + d.minWage + d.ERA)/6,
 						lsSI:
-						1-(d.protSHW + d.firearmSurrender + d.unempBenefits + d.parLeave + d.minWage + d.ERA)/6,
+						(d.protSHW + d.firearmSurrender + d.unempBenefits + d.parLeave + d.minWage + d.ERA)/6,
 						yOffset: d.position[1]>=6?-2:0,
 						xOffset: d.position[0]>=9?-2:0,
 					}
 					)
 				).map(d=>({...d, 
-						deadlyIndex: (d.activeBan + d.frhSI + d.vcSI + d.lsSI)/4
+							deadlyIndex: (d.activeBan + (1-d.frhSI) + d.vcSI + (1-d.lsSI))/4
+						// deadlyIndex: (d.activeBan + (1-d.frhSI) + d.vcSI + (1-d.lsSI))/4
 							}
 						)
 	);
@@ -371,6 +386,7 @@
     top: 2vh;
     margin: auto;
     height:100vh;
+	z-index: 1;
 	/* line-height: 100vh; */
 	/* vertical-align: middle; */
     /* display:table; */
@@ -393,6 +409,7 @@
     max-width: 50vw;
     margin-left:auto;
     margin-right:auto;
+	z-index: 2;
     /* z-index: 1000; */
   }
 
@@ -414,6 +431,7 @@
 	font-family: 'Roboto Flex', sans-serif;
 	font-weight: 400;
 	font-size: 18px;
+	z-index: 2;
   }
 
   .step.active .step-content {
