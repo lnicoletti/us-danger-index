@@ -10,6 +10,8 @@
     import Legend from './Legend.svelte';
     import Annotation from './Annotation.svelte';
 
+    // style variables
+    let buttonColor = "#ccc"
     // init current index
     let indexDict = {activeBan: "Erosion of Abortion Rights", 
                      frhSI: "Reproductive Health Services Support", 
@@ -631,7 +633,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Abortion Rights"}
-                    style="background-color:{colorRW(1)};border:0px solid {colorRW(1)}" 
+                    style="background-color:{buttonColor};border:2px solid white" 
                     on:click={
                         ()=>{
                             showVar="activeBan"
@@ -653,7 +655,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Repr. Health Services Support"} 
-                    style="background-color:{colorFR(0.7)};border:0px solid {colorFR(1)}"
+                    style="background-color:{buttonColor};border:2px solid white"
                     on:click={
                         ()=>{
                             showVar="frhSI"
@@ -675,7 +677,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Violent Crime ag. Women"} 
-                    style="background-color:{colorVC(0.7)};border:0px solid {colorVC(1)}}"
+                    style="background-color:{buttonColor};border:2px solid white"
                     on:click={
                         ()=>{
                             showVar="vcSI"
@@ -697,7 +699,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Legal Protections"} 
-                    style="background-color:{colorLS(0.7)};border:0px solid {colorLS(1)}"
+                    style="background-color:{buttonColor};border:2px solid white"
                     on:click={
                         ()=>{
                             showVar="lsSI"
@@ -720,7 +722,7 @@
                     name="buttons"  
                     checked="checked" 
                     value="Overall Danger Index" 
-                    style="background-color:{colorDI(1)};border:0px solid {colorDI(1)}"
+                    style="background-color:{buttonColor};border:2px solid white"
                     on:click={
                         ()=>{
                             showVar="deadlyIndex"
@@ -729,7 +731,7 @@
                             toggleVC = false
                             toggleLS = false
                             toggleDI = true                            
-                            console.log(toggleDI)
+                            // console.log(toggleDI)
                             // colorScale=togglePolitical===true?colorPolitical:colorDI
                             // togglePolitical=false
                         }}>
@@ -779,6 +781,7 @@
         text-transform: uppercase;
         border-width:0px;
         padding:5px;
+        /* border: 2px solid white */
         /* transform:skew(-.312rad); */
     }
 
@@ -787,13 +790,16 @@
     }
 
     input:hover {
-        /* border-width: 2px; */
-        opacity: 0.5;
+        border-color: 2px solid black;
+        /* opacity: 0.5; */
+        color:black
         /* filter:invert(100%); */
     }
 
     input:focus {
         font-weight: 700;
+        border: 2px solid black;
+        color:black
         /* border-width: 2px; */
     }
 
