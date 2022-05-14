@@ -66,7 +66,7 @@
                      {var:"lsSI", label: "Legal Protections", acronym:4, iOffset:0, riskType:"Protected"}, 
                      {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
                      activeBan:
-                     [{var:"activeBan", label:"Stance on Abortion Post Row vs. Wade", acronym:1, iOffset:0}],
+                     [{var:"activeBan", label:"Stance on Abortion Rights Given Potential Roe v. Wade Overturning", acronym:1, iOffset:0}],
                      frhSI:
                      [{var:"titleXNorm", label:"# of Title X Centers per 100,000 people", acronym:1, iOffset:2},
                       {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100,000 people", acronym:2, iOffset:2},
@@ -75,7 +75,7 @@
                       {var:"famPlanCenterSpendNorm", label:"Per Capita Public Expenditure For Family Planning", acronym:5, iOffset:2},
                       {var:"noCounselAbortion", label:"Access to abortion without state-mandated in-person counseling", acronym:6, iOffset:2}],
                      vcSI:
-                     [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000", acronym:1, iOffset:0}],
+                     [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000 women", acronym:1, iOffset:0}],
                      lsSI:
                      [{var:"protSHW", label:"Protection of all workers from sexual harassment in the workpace, regardless of company size", acronym:1, iOffset:2},
                       {var:"firearmSurrender", label:"Required relinquishment of firearms from abusers subject to domestic violcence protective orders", acronym:2, iOffset:2},
@@ -97,7 +97,7 @@
         lineY2:2,
         annotation:["Click on a state to see", "how this score was calculated"],
         active:true
-        }]:currentStep===3?
+        }]:currentStep===4?
       [{textX:0, 
         textY:1.4, 
         cx: 0.5, 
@@ -288,30 +288,31 @@
     // console.log("av. blue", averageBlue)
 
     // annotation and step variables
-    $: blanksteps = [0,1]
-    $: RWsteps = [2,3,4,5,6]
-    $: FRsteps = [7,8,9,10]
-    $: VCsteps = [11,12,13,14]
-    $: LSsteps = [15,16,17,18]
-    $: DIsteps = [19,20,21,22,24,25]
-    $: Politicalsteps = [23]
+    $: blanksteps = [0,1,2]
+    $: RWsteps = [3,4,5,6,7]
+    $: FRsteps = [8,9,10,11]
+    $: VCsteps = [12,13,14,15]
+    $: LSsteps = [16,17,18,19]
+    $: DIsteps = [20,21,22,23,25,26]
+    $: Politicalsteps = [24]
     $: lastStep = steps.length-1
 
-    $: highlightedState = currentStep===3?["WA"]:
-                          currentStep===4?["NH"]:
-                          currentStep===5?["FL"]:
-                          currentStep===6?["AZ"]:
-                          currentStep===9?["AK", "DC"]:
-                          currentStep===10?["TX"]:
-                          currentStep===13?["NY"]:
-                          currentStep===14?["AR"]:
-                          currentStep===17?["OR"]:
-                          currentStep===18?["FL","AL","MS","LA","SC","DE","NC","AR","KY","MO","NE","UT","ID"]:
-                          currentStep===20?"DC":
-                          currentStep===21?"AR":null
+    $: highlightedState = currentStep===4?["WA"]:
+                          currentStep===5?["NH"]:
+                          currentStep===6?["FL"]:
+                          currentStep===7?["AZ"]:
+                          currentStep===10?["AK", "DC"]:
+                          currentStep===11?["TX"]:
+                          currentStep===14?["NY"]:
+                          currentStep===15?["AR"]:
+                          currentStep===18?["OR"]:
+                          currentStep===19?["FL","AL","MS","LA","SC","DE","NC","AR","KY","MO","NE","UT","ID"]:
+                          currentStep===21?"DC":
+                          currentStep===22?"AR":null
 
-    let highlightSteps = [3,4,5,6,9,10,13,14,17,18,20,21]
-    let noBottomTextSteps = [0,1,7,8,9,11,12,13,15,16,17,19,20,22,24]
+    let highlightSteps = [4,5,6,7,10,11,14,15,18,19,21,22]
+    let noBottomTextSteps = [0,1,2,8,9,10,12,13,14,16,17,18,20,21,23,25]
+    let blurredSteps = [0,1]
 
     let clickedState = null;
     // $: console.log(highlightedState)
@@ -362,7 +363,7 @@
 <div class="chartElements">
     <svg width="{w}px" height="{h}px" ><!--viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet" fill={stateFill}
     -->
-        {#if currentStep > 1}
+        {#if !blanksteps.includes(currentStep)&&currentStep!==undefined}
             <Legend {svgPadding} {cellPadding} {cellInner} {cellSize} {gridWidth} {gridHeight} {innerWidth} {currentStep} {showVar} {colorScale} {togglePolitical}/>
         {/if}
         <!-- {#if currentStep > 0} -->
@@ -395,8 +396,8 @@
                         opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)&&currentStep!==lastStep?0.3:1}
                         stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":colorScale(1):"none"}
                         stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
-                        fill={currentStep > 1 ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
-                        style={currentStep===0||currentStep===undefined?"filter: blur(4px)":""}
+                        fill={!blanksteps.includes(currentStep)&&currentStep!==undefined ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
+                        style={blurredSteps.includes(currentStep)||currentStep===undefined?"filter: blur(4px)":""}
                         />
                         <text 
                         class="stateName"
@@ -407,7 +408,7 @@
                         dy="0.71em" 
                         font-weight=700
                         fill="white"
-                        style={currentStep===0||currentStep===undefined?"filter: blur(4px)":""}
+                        style={blurredSteps.includes(currentStep)||currentStep===undefined?"filter: blur(4px)":""}
                         >{state.stateAbbrv}
                         </text>
                         <!-- if not on the first grey step -->
