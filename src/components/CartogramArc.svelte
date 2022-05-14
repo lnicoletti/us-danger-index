@@ -394,7 +394,7 @@
                         width="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===lastStep?cellInnerTtip:cellInner}" 
                         height="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===lastStep?cellInnerTtip:cellInner}"
                         opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)&&currentStep!==lastStep?0.3:1}
-                        stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":colorScale(1):"none"}
+                        stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":showVar!=="activeBan"?colorScale(0.5):"#C70039":"none"}
                         stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
                         fill={!blanksteps.includes(currentStep)&&currentStep!==undefined ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
                         style={blurredSteps.includes(currentStep)||currentStep===undefined?"filter: blur(4px)":""}
@@ -472,15 +472,17 @@
                                 x={cellCenter(state, i)}
                                 y={cellCenter(state, i)+3}
                                 text-anchor="middle" 
-                                opacity={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?1:
-                                            !Politicalsteps.includes(currentStep)? 
-                                                state[showVar] > 0.45 ? 1 : 0 : 
-                                                state.deadlyIndex > 0.45 ? 1 : 0}
                                 font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
                                                 maxStates.includes(state.stateName)?700:300}
                                 fill={"white"}
                                 >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
                                 </text>
+                                <!-- opacity={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?1:
+                                    !Politicalsteps.includes(currentStep)? 
+                                            showVar!=="lsSI"||showVar!=="frhSI"?
+                                                state[showVar] > 0.2 ? 1 : 0 : 
+                                                state[showVar] > 0.45 ? 1 : 0 : 
+                                        state.deadlyIndex > 0.45 ? 1 : 0} -->
                                 <!-- fill={deadlyState!==null?deadlyState.includes(state.stateName) ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"white":"white"} -->
                             {:else}
                             <!-- if variable shown is abortion stance -->

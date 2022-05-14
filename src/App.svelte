@@ -379,22 +379,22 @@
 
 
 	.chart {
-    /* background: whitesmoke; */
-    /* width: 400px;
-    height: 400px; */
-    /* box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2); */
-    position: sticky;
-    top: 2vh;
-    margin: auto;
-    height:100vh;
-	z-index: 1;
-	/* line-height: 100vh; */
-	/* vertical-align: middle; */
-    /* display:table; */
-    /* position: relative; */
-    /* height: 100vh */
-    /* bottom: 50%; */
-  }
+		/* background: whitesmoke; */
+		/* width: 400px;
+		height: 400px; */
+		/* box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2); */
+		position: sticky;
+		top: 2vh;
+		margin: auto;
+		height:100vh;
+		z-index: 1;
+		/* line-height: 100vh; */
+		/* vertical-align: middle; */
+		/* display:table; */
+		/* position: relative; */
+		/* height: 100vh */
+		/* bottom: 50%; */
+	}
 
   /* .titleElements {
     display:table-cell;
