@@ -75,7 +75,10 @@
                       {var:"famPlanCenterSpendNorm", label:"Per Capita Public Expenditure For Family Planning", acronym:5, iOffset:2},
                       {var:"noCounselAbortion", label:"Access to abortion without state-mandated in-person counseling", acronym:6, iOffset:2}],
                      vcSI:
-                     [{var:"femaleCrimesNorm", label:"# of Violent Crimes per 100,000 women", acronym:1, iOffset:0}],
+                     [{var:"rapeNorm", label:"# of Rapes per 100,000 women", acronym:1, iOffset:0},
+                      {var:"assaultNorm", label:"# of Assaults per 100,000 women", acronym:2, iOffset:0},
+                      {var:"robberyNorm", label:"# of Robberies per 100,000 women", acronym:3, iOffset:0},
+                      {var:"homicideNorm", label:"# of Homicides per 100,000 women", acronym:4, iOffset:0}],
                      lsSI:
                      [{var:"protSHW", label:"Protection of all workers from sexual harassment in the workpace, regardless of company size", acronym:1, iOffset:2},
                       {var:"firearmSurrender", label:"Required relinquishment of firearms from abusers subject to domestic violcence protective orders", acronym:2, iOffset:2},

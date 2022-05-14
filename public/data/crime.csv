@@ -1,52 +1,52 @@
-﻿State,Code,2020ViolentCrimesFemales
-Alabama,AL,386
-Alaska,AK,
-Arizona,AZ,2288
-Arkansas,AR,10471
-California,CA,
-Colorado,CO,11843
-Connecticut,CT,2167
-Delaware,DE,1971
-District of Columbia,DC,78
-Florida,FL,
-Georgia,GA,12933
-Hawaii,HI,1067
-Idaho,ID,2365
-Illinois,IL,1157
-Indiana,IN,9132
-Iowa,IA,5194
-Kansas,KS,5570
-Kentucky,KY,5821
-Louisiana,LA,3766
-Maine,ME,660
-Maryland,MD,1470
-Massachusetts,MA,10001
-Michigan,MI,24755
-Minnesota,MN,5678
-Mississippi,MS,1214
-Missouri,MO,11000
-Montana,MT,2261
-Nebraska,NE,944
-Nevada,NV,2882
-New Hampshire,NH,1072
-New Jersey,NJ,
-New Mexico,NM,5054
-New York,NY,1090
-North Carolina,NC,18177
-North Dakota,ND,1115
-Ohio,OH,15104
-Oklahoma,OK,5311
-Oregon,OR,5880
-Pennsylvania,PA,
-Rhode Island,RI,1227
-South Carolina,SC,13312
-South Dakota,SD,1838
-Tennessee,TN,22444
-Texas,TX,52447
-Utah,UT,3817
-Vermont,VT,634
-Virginia,VA,8738
-Washington,WA,10170
-West Virginia,WV,2502
-Wisconsin,WI,9729
-Wyoming,WY,117
+﻿State,Code,2020ViolentCrimesFemales,rape,robbery,assault,homicide
+Alabama,AL,386,57,31,291,7
+Alaska,AK,,,,,
+Arizona,AZ,2288,474,282,1505,27
+Arkansas,AR,10471,1945,547,7905,74
+California,CA,,,,,
+Colorado,CO,11843,3177,1664,6938,64
+Connecticut,CT,2167,501,550,1086,30
+Delaware,DE,1971,238,268,1454,15
+District of Columbia,DC,78,4,35,39,0
+Florida,FL,,,,,
+Georgia,GA,12933,2073,1556,9173,131
+Hawaii,HI,1067,313,298,450,6
+Idaho,ID,2365,776,76,1501,12
+Illinois,IL,1157,106,95,952,4
+Indiana,IN,9132,1418,1456,6181,77
+Iowa,IA,5194,1140,333,3688,33
+Kansas,KS,5570,1041,402,4106,21
+Kentucky,KY,5821,1309,996,3437,79
+Louisiana,LA,3766,373,183,3174,36
+Maine,ME,660,322,49,286,3
+Maryland,MD,1470,456,381,616,17
+Massachusetts,MA,10001,1629,1090,7255,27
+Michigan,MI,24755,5143,1625,17825,162
+Minnesota,MN,5678,1319,1214,3122,23
+Mississippi,MS,1214,356,124,722,12
+Missouri,MO,11000,1761,1351,7801,87
+Montana,MT,2261,525,103,1617,16
+Nebraska,NE,944,395,34,509,6
+Nevada,NV,2882,760,397,1701,24
+New Hampshire,NH,1072,479,88,502,3
+New Jersey,NJ,,,,,
+New Mexico,NM,5054,684,763,3582,25
+New York,NY,1090,242,182,659,7
+North Carolina,NC,18177,2340,2536,13149,152
+North Dakota,ND,1115,323,47,736,9
+Ohio,OH,15104,3682,2604,8658,160
+Oklahoma,OK,5311,1184,529,3547,51
+Oregon,OR,5880,1445,693,3715,27
+Pennsylvania,PA,,,,,
+Rhode Island,RI,1227,365,101,755,6
+South Carolina,SC,13312,1857,1199,10142,114
+South Dakota,SD,1838,495,82,1251,10
+Tennessee,TN,22444,2499,2237,17576,132
+Texas,TX,52447,9546,9724,32836,341
+Utah,UT,3817,1417,460,1916,24
+Vermont,VT,634,200,19,413,2
+Virginia,VA,8738,2117,1061,5444,116
+Washington,WA,10170,2420,1897,5775,78
+West Virginia,WV,2502,635,129,1714,24
+Wisconsin,WI,9729,1571,1391,6701,66
+Wyoming,WY,117,72,3,42,0

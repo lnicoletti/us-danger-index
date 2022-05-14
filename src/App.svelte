@@ -182,6 +182,10 @@
 			totalPubDollarsFamPlanCenter: +Object.entries(femaleHealth.filter(d=>d["U.S. State"]===state[1][2])[0])[10][1],
 			// female crime
 			femaleCrimes: +femaleCrime.filter(d=>d.Code===state[0])[0]["2020ViolentCrimesFemales"],
+			rape: +femaleCrime.filter(d=>d.Code===state[0])[0]["rape"],
+			robbery: +femaleCrime.filter(d=>d.Code===state[0])[0]["robbery"],
+			assault: +femaleCrime.filter(d=>d.Code===state[0])[0]["assault"],
+			homicide: +femaleCrime.filter(d=>d.Code===state[0])[0]["homicide"],
 			// female population
 			femalePop: +statesPop.filter(d=>d.state===state[1][2])[0].femalePop,
 			// total population
@@ -199,6 +203,10 @@
 	$: FamPlanCenterNormScale = getNormScale("totalPubDollarsFamPlanCenter", states)
 	$: AbortionDollarsNormScale = getNormScale("totalPubDollarsAbortion", states)
 	$: femaleCrimesNormScale = getNormScale("femaleCrimes", states)
+	$: rapeNormScale = getNormScale("rape", states)
+	$: homicideNormScale = getNormScale("homicide", states)
+	$: assaultNormScale = getNormScale("assault", states)
+	$: robberyNormScale = getNormScale("robbery", states)
 
 	$: statesIndex = states.map(d=>({...d, 
 						titleXNorm: titlexNormScale(d.titlexNum/d.totPop),
@@ -239,6 +247,10 @@
 						)/6),
 						vcSI:
 						femaleCrimesNormScale((d.femaleCrimes/d.femalePop)),
+						homicideNorm: homicideNormScale(d.homicide/d.femalePop),
+						assaultNorm: assaultNormScale(d.assault/d.femalePop),
+						robberyNorm: robberyNormScale(d.robbery/d.femalePop),
+						rapeNorm: rapeNormScale(d.rape/d.femalePop),
 						// lsSI:
 						// 1-(d.protSHW + d.firearmSurrender + d.unempBenefits + d.parLeave + d.minWage + d.ERA)/6,
 						lsSI:
