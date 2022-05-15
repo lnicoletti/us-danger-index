@@ -30,7 +30,7 @@
 <p>Interested in understanding what went into this <i>Overall Danger Index</i>?  Scroll through the following story to find out.  Alternatively, click <button class="scrollButton" on:click={() => revertFrameOne()}>here</button> to jump to the bottom of the screen and access our tool immediately.</p><br><br>
 <p style="text-align:center">Scroll</p>
 <span class="material-symbols-outlined">
-    arrow_downward
+    arrow_drop_down
 </span>
 <!-- <p><span class="questions">Firstly, what constitutes danger?  Additionally, how does danger vary across states?</span></p><br>
 

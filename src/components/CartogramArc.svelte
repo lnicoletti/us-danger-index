@@ -11,7 +11,8 @@
     import Annotation from './Annotation.svelte';
 
     // style variables
-    let buttonColor = "#ccc"
+    let buttonColor = "white";
+    let buttonBorderColor = "black";
     // init current index
     let indexDict = {activeBan: "Erosion of Abortion Rights", 
                      frhSI: "Reproductive Health Services Support", 
@@ -592,7 +593,7 @@
             <div class="buttons">
                 <!-- <div class="checkBoxContainer"> -->
                     <label class="checkBoxContainer">
-                        <span class="buttonLabel">Color by Political Affiliation</span>
+                        <h5 class="buttonLabel">toggle to color by political affiliation</h5>
                     <!-- <div> -->
                         <input 
                         class="checkbox"
@@ -633,7 +634,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Abortion Rights"}
-                    style="background-color:{buttonColor};border:2px solid white" 
+                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}" 
                     on:click={
                         ()=>{
                             showVar="activeBan"
@@ -654,8 +655,8 @@
                     type=button 
                     group={buttons} 
                     name="buttons" 
-                    value={"Repr. Health Services Support"} 
-                    style="background-color:{buttonColor};border:2px solid white"
+                    value={"Repr. Health Services"} 
+                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}"
                     on:click={
                         ()=>{
                             showVar="frhSI"
@@ -677,7 +678,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Violent Crime ag. Women"} 
-                    style="background-color:{buttonColor};border:2px solid white"
+                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}"
                     on:click={
                         ()=>{
                             showVar="vcSI"
@@ -699,7 +700,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Legal Protections"} 
-                    style="background-color:{buttonColor};border:2px solid white"
+                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}"
                     on:click={
                         ()=>{
                             showVar="lsSI"
@@ -722,7 +723,7 @@
                     name="buttons"  
                     checked="checked" 
                     value="Overall Danger Index" 
-                    style="background-color:{buttonColor};border:2px solid white"
+                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}"
                     on:click={
                         ()=>{
                             showVar="deadlyIndex"
@@ -738,7 +739,7 @@
                     <!-- <span class="buttonLabel">Overall Danger Index</span> -->
                 </div>
             </div>
-            <h5>Choose a view</h5>
+            <h5>choose an index</h5>
     {/if}
 </div>
 
@@ -755,10 +756,10 @@
     }
 
     .buttonLabel {
-        width:8vw;
         font-family: "Roboto Flex", sans-serif;
-        font-size:11px;
-        font-weight:700px;
+        /* font-size:11px; */
+        font-weight: 600;
+        margin-top: 6px;
     }
 
     .buttonContainer {
@@ -777,7 +778,7 @@
         font-family: "Roboto Flex", sans-serif;
         font-size:11px;
         font-weight:400;
-        color:white;
+        color:black;
         text-transform: uppercase;
         border-width:0px;
         padding:5px;
@@ -790,17 +791,22 @@
     }
 
     input:hover {
-        border-color: 2px solid black;
+        /* border-width: 2px solid black; */
+        /* font-weight:700; */
         /* opacity: 0.5; */
-        color:black
+        /* color:black; */
+        /* color:white;
+        background-color: black; */
         /* filter:invert(100%); */
     }
 
     input:focus {
         font-weight: 700;
-        border: 2px solid black;
-        color:black
+        /* border: 2px solid black;
+        color:black */
         /* border-width: 2px; */
+        /* color:white;
+        background-color: black; */
     }
 
     .checkbox {
@@ -812,9 +818,10 @@
         display: block;
         position: relative;
         padding-left: 35px;
-        margin-bottom: 12px;
+        margin-bottom: 15px;
         cursor: pointer;
-        font-size: 22px;
+        /* font-size: 20px; */
+        /* border: 2px solid black; */
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -827,6 +834,7 @@
         cursor: pointer;
         height: 0;
         width: 0;
+        border: 2px solid black;
     }
 
     .checkmark {
@@ -835,17 +843,19 @@
         left: 0;
         height: 25px;
         width: 25px;
-        background-color: #eee;
+        background-color: white;
+        border: 2px solid black;
+        margin-bottom: 15px;
     }
 
     /* On mouse-over, add a grey background color */
     .checkBoxContainer:hover input ~ .checkmark {
-    background-color: #ccc;
+    background-color: white;
     }
 
     /* When the checkbox is checked, add a blue background */
     .checkBoxContainer input:checked ~ .checkmark {
-    background-color: #2196F3;
+    background-color: white;
     }
 
     /* Create the checkmark/indicator (hidden when not checked) */
@@ -866,7 +876,7 @@
     top: 5px;
     width: 5px;
     height: 10px;
-    border: solid white;
+    border: solid black;
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -915,7 +925,7 @@
     h5 {
         color: black;
 		font-family: 'Roboto Flex', sans-serif;
-		font-weight: 400;
+		font-weight: 600;
         margin-bottom: 10px;
         margin-top: 0px
 	}
