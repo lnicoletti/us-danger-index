@@ -2,7 +2,7 @@
     export let innerWidth;
     import * as animateScroll from "svelte-scrollto";
 
-    function revertFrameOne() {
+    function scrollToBottom() {
         animateScroll.scrollTo({element: '#lastStep', duration:6000});
     }
 
@@ -27,7 +27,7 @@
     <!-- <p style="text-align:center;margin-bottom: 50px"><i>Published May 13th, 2022</i></p> -->
 </div>
 <p>As leaked by <a href="https://www.politico.com/news/2022/05/02/supreme-court-abortion-draft-opinion-00029473" target=__blank>Politico</a> on May 2, 2022, the Supreme Court vote to overturn <i>Roe v. Wade</i> further exemplifies institutional harm towards folx who do not identify as cisgender men.  In recognizing a persistent attack on the rights of people of marginalized genders, we created the following tool.  Specifically focused on the safety of female assigned at birth (AFAB) and femme folx, an <i>Overall Danger Index</i> has been created to identify US states that have been rendered more or less dangerous for those who are not cisgender men.  In creating this tool, we hope to highlight and bring greater transparency to the fact that across all US states, institutional systems of oppression perpetuate gender-based harm.</p><br>
-<p>Interested in understanding what went into this <i>Overall Danger Index</i>?  Scroll through the following story to find out.  Alternatively, click <button class="scrollButton" on:click={() => revertFrameOne()}>here</button> to jump to the bottom of the screen and access our tool immediately.</p><br><br>
+<p>Interested in understanding what went into this <i>Overall Danger Index</i>?  Scroll through the following story to find out.  Alternatively, click <button class="scrollButton" on:click={() => scrollToBottom()}>here</button> to jump to the bottom of the screen and access our tool immediately.</p><br><br>
 <p style="text-align:center">Scroll</p>
 <span class="material-symbols-outlined">
     arrow_drop_down

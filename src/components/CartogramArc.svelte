@@ -5,7 +5,7 @@
     export let steps;
     // export let innerHeight;
     export let innerWidth;
-    import { ascending, descending, min, max, mean, scaleSequential, scaleSequentialQuantile, scaleSqrt, interpolateLab, interpolateOranges, interpolateBuGn, interpolateYlOrRd, interpolateRdYlBu, interpolateRdGy, interpolateGnBu, interpolateRdPu, interpolatePuOr, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
+    import { ascending, min, max, mean, scaleSequential, interpolateLab, interpolateBuGn, interpolateYlOrRd, scaleLinear, scaleOrdinal, arc, interpolateBuPu } from 'd3';
     // import { fade, draw, fly } from 'svelte/transition';
     import Legend from './Legend.svelte';
     import Annotation from './Annotation.svelte';
