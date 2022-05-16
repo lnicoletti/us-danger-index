@@ -235,7 +235,7 @@
     // color scales
     // $: colorRW = scaleSequential(interpolateRdYlBu).domain([max(states, d=>d.activeBan), 0])
     // $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["#5e3c99","#b2abd2","#fdb863","#e66101"])
-    $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["lightblue","pink","red","darkred"])
+    $: colorRW = scaleOrdinal().domain([0, 0.33, 0.66, 1]).range(["lightblue","pink","red","#ae0000"])
     // $: colorFR = scaleSequential(interpolateBuGn).domain([0.25, max(states, d=>d.frhSI)])
     $: colorFR = scaleSequential(interpolateBuGn).domain([-0.1, max(states, d=>d.frhSI)])
     // $: colorFR = scaleSequential(interpolateLab("#f7fcb9", "#238443")).domain([0.25, max(states, d=>d.frhSI)])
@@ -526,7 +526,7 @@
                                                 state[showVar] > 0.2 ? 1 : 0 : 
                                                 state.deadlyIndex > 0.2 ? 1 : 0}
                                 font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
-                                                maxStates.includes(state.stateName)?900:300}
+                                                maxStates.includes(state.stateName)?700:300}
                                 fill={"white"}
                                 >{!blanksteps.includes(currentStep) ? 
                                     state[showVar]===0.33?"low risk":state[showVar]===0.66?"high risk":state[showVar]===1?"ban":"no risk":""}
