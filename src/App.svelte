@@ -70,29 +70,24 @@
 	]
 	let states = [];
 	let loaded = false;
-	// let steps = ["Here's how to read this cartogram", 
-	// 			 "Row vs. Wade Index", 
-	// 			 "Row vs. Wade Index",
-	// 			 "Row vs. Wade Index",
-	// 			 "Row vs. Wade Index",
-	// 			 "Row vs. Wade Index",
-	// 			 "Female Reproductive Rights Index", 
-	// 			 "Female Reproductive Rights Index",
-	// 			 "Female Reproductive Rights Index",
-	// 			 "Violent Crime Index", 
-	// 			 "Violent Crime Index", 
-	// 			 "Violent Crime Index", 
-	// 			 "Legal Protection Index", 
-	// 			 "Legal Protection Index", 
-	// 			 "Legal Protection Index", 
-	// 			 "Danger Index", 
-	// 			 "Danger Index", 
-	// 			 "Danger Index", 
-	// 			 "Political Party",
-	// 			 "explore the app",
-	// 			 "<div id='lastStep'>explore the app</div>"
-	// 	];
-			let steps = 
+
+	// border color based on steps
+	$: blanksteps = [0,1,2]
+    $: RWsteps = [3,4,5,6,7]
+    $: FRsteps = [8,9,10,11]
+    $: VCsteps = [12,13,14,15]
+    $: LSsteps = [16,17,18,19]
+    $: DIsteps = [20,21,22,23,25,26]
+    $: Politicalsteps = [24]
+
+	$: stepBorderColor = RWsteps.includes(currentStep)?"darkred":
+						 FRsteps.includes(currentStep)?"rgb(0, 68, 27)":
+						 VCsteps.includes(currentStep)?"rgb(200, 10, 34)":
+						 LSsteps.includes(currentStep)?"rgb(56, 131, 184)":
+						 DIsteps.includes(currentStep)?"rgb(130, 35, 136)":
+						 Politicalsteps.includes(currentStep)?"#0080c9":"#ccc"
+	
+	let steps = 
 				["<div class='questions' style='text-align:center'>Firstly, what constitutes danger?<br><br><br><br><br>Additionally, how does danger vary across states?</div>",
 				"<div class='specialPar'>In creating the <span style='font-style:italic'>Overall Danger Index</span> for our tool, several sub-indices were considered:<br><div style='text-align:center'><div class='specialWordWrapPar' style='background-color:#ccc'>the erosion of abortion rights</div><br><div class='specialWordWrapPar' style='background-color:#ccc'>reproductive health services support</div><br><div class='specialWordWrapPar' style='background-color:#ccc'>violent crimes committed against women</div><br><div class='specialWordWrapPar' style='background-color:#ccc'>state-level legal protections</div></div></div>",
 				"<div>As outlined by a cartogram approach, we consider each of these sub-indices and, ultimately, our <i>Overall Danger Index</i> at the state-level.</div>", 
@@ -107,8 +102,8 @@
 				 "<div>Contrastingly, Texas (6%) lacks the most in reproductive health services for residents.</div>",
 				 "<div>We then considered instances of homicide, rape, robbery, and aggravated assault committed against women per state in order to calculate the <i>Violent Crime Against Women</i> Sub-Index.  In calculating this sub-index, state-level violent crime data for the year 2020 was considered in relation to the most recent state-level female population data.</div>", 
 				 "<div>Similarly to the previous cartograms and sub-indices, the following cartogram outlines each state's <i>Violent Crime Against Women</i> Sub-Index score.  Here, squares denoted by complete circles or almost-complete circles represent states that score highest on the <i>Violent Crime Against Women</i> Sub-Index.  In these states, women are subjected to higher levels of violent crime.  Squares marked by partial circles with smaller accompanying percentages represent states where women are subjected to lower levels of violent crime.</div>", 
-				 "<div>Here, we can see that women are subjected to the least amount of violent crime in the state of New York (2%).</div>", 
-				 "<div>In Arkansas (100%), however, women are subjected to the most amount of violent crime.</div>",
+				 "<div>Here, we can see that women are subjected to the least amount of violent crime in the state of New York (11 violent crimes/100k women).</div>", 
+				 "<div>In Arkansas (688 violent crimes/100k women), however, women are subjected to the most amount of violent crime.</div>",
 				 "<div>Finally, in creating the <i>Legal Protections</i> Sub-Index, we have considered whether or not a state offers critical justice-based legal protections for women's rights as outlined by the <a href='https://giwps.georgetown.edu/us-index-legal-protections/' target=__blank>Georgetown Institute for Women, Peace, and Security (GIWPS)</a>. In calculating this sub-index, we considered whether or not a state has laws for: 1) protection of all workers from sexual harassment in the workpace, regardless of company size; 2) guaranteed unempoyment benefits for victims of domestic violence, sexual assault, or stalking; 3) mandated parental leave; 4) mandated minimum wage above the low-income threshold; 5) ratified Equal Rights Amendment; and 6) required relinquishment of firearms from abusers subject to domestic violence protective orders.</div>", 
 				 "<div>In this cartogram, each state's score for the <i>Legal Protections</i> Sub-Index can be observed.  States that have the most legal protections for residents are indicated by squares with complete or almost-complete circles. States that have the least legal protections for residents are marked by squares with partial circles and smaller accompanying percentages.</div>", 
 				 "<div>In our last example, we can see that Oregon (83%) provides the most legal protections for residents.</div>",
@@ -120,7 +115,7 @@
 				 "<div>Our analysis illustrates that red states (i.e., states whose voters predominantly choose the Republican Party) are consistently more dangerous than blue states (i.e., states whose voters predominantly choose the Democratic Party) for female assigned at birth (AFAB) and femme folx.  In fact, our <span style='font-style:italic'>Overall Danger Index</span> indicates that, on average, red states are 74% more dangerous than blue states for these people.</div>",
 				 "<div>Interested in learning more? Check out our tool and explore the data for yourself.</div>",
 				 "<div id='lastStep'>explore the app</div>"
-		];
+	];
 
 	onMount(async () => {
 
@@ -319,7 +314,7 @@
 			<Scroll bind:value={currentStep}>
 				{#each steps as text, i}
 				<div class="step" class:active={currentStep === i}>
-					<div class="step-content">
+					<div class="step-content" style="border-left: 4px solid {stepBorderColor};">
 					{@html text}
 					</div>
 				</div>
@@ -433,13 +428,14 @@
     color: black;
     /* border-radius: 5px; */
     /* border: 2px solid black; */
+	/* border-left: 4px solid black; */
     padding: 0.5rem 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
 	text-align: justify;
     /* transition: background 500ms ease; */
-    /* box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2); */
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
     z-index: 10;
 	font-family: 'Roboto Flex', sans-serif;
 	font-weight: 400;
@@ -448,7 +444,7 @@
   }
 
   .step.active .step-content {
-    background: rgb(255, 255, 255, 0.92);
+    background: rgb(255, 255, 255, 1);
     color: black;
   }
 

@@ -61,7 +61,7 @@
     ]
 
     $: legendLabel = showVar==="activeBan"?"Risk of Abortion Ban":
-                     showVar==="vcSI"?"Violent Crime Per 100,000 Women":
+                     showVar==="vcSI"?"Violent Crime Rate Per 100k Women":
                      showVar==="frhSI"?"Reproductive Health Services Support":
                      showVar==="lsSI"?"Legal Protections":"Overall Danger"
     // let data = [{deadlyIndex:1, position:[6.4,8.5], label:"v. high"}, 
@@ -161,7 +161,7 @@
             y="-7" 
             text-anchor="middle" 
             dy="0.71em" 
-            font-weight=400
+            font-weight=600
             fill={outTextColor}
             >{legendLabel}
         </text>

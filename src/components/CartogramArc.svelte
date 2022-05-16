@@ -13,6 +13,7 @@
     // style variables
     let buttonColor = "white";
     let buttonBorderColor = "black";
+    let buttonBorderWidth = "1px";
     // init current index
     let indexDict = {activeBan: "Erosion of Abortion Rights", 
                      frhSI: "Reproductive Health Services Support", 
@@ -65,23 +66,23 @@
                     //  {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
                     [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:1, iOffset:0, riskType:""}, 
                      {var:"frhSI", label: "Reproductive Health Services Support", acronym:2, iOffset:0, riskType:"Supported"}, 
-                     {var:"vcSI", label: "Violent Crime Against Women", acronym:3, iOffset:0, riskType:"Violent"}, 
+                     {var:"vcSI", label: "Violent Crime Against Women", acronym:3, iOffset:0, riskType:"crimes/100k"}, 
                      {var:"lsSI", label: "Legal Protections", acronym:4, iOffset:0, riskType:"Protected"}, 
                      {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
                      activeBan:
                      [{var:"activeBan", label:"Stance on Abortion Rights Given Potential Roe v. Wade Overturning", acronym:1, iOffset:0}],
                      frhSI:
-                     [{var:"titleXNorm", label:"# of Title X Centers per 100,000 people", acronym:1, iOffset:2},
-                      {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100,000 people", acronym:2, iOffset:2},
-                      {var:"aProvidersNorm", label:"# of Abortion Providers per 100,000 people", acronym:3, iOffset:2},
+                     [{var:"titleXNorm", label:"# of Title X Centers per 100k people", acronym:1, iOffset:2},
+                      {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100k people", acronym:2, iOffset:2},
+                      {var:"aProvidersNorm", label:"# of Abortion Providers per 100k people", acronym:3, iOffset:2},
                       {var:"countiesWoAProvidersNorm", label:"% of Counties with a Known Abortion Provider", acronym:4, iOffset:2},
                       {var:"famPlanCenterSpendNorm", label:"Per Capita Public Expenditure For Family Planning", acronym:5, iOffset:2},
                       {var:"noCounselAbortion", label:"Access to abortion without state-mandated in-person counseling", acronym:6, iOffset:2}],
                      vcSI:
-                     [{var:"rapeNorm", label:"# of Rapes per 100,000 women", acronym:1, iOffset:0},
-                      {var:"assaultNorm", label:"# of Assaults per 100,000 women", acronym:2, iOffset:0},
-                      {var:"robberyNorm", label:"# of Robberies per 100,000 women", acronym:3, iOffset:0},
-                      {var:"homicideNorm", label:"# of Homicides per 100,000 women", acronym:4, iOffset:0}],
+                     [{var:"rapeNorm", label:"# of Rapes per 100k women", acronym:1, iOffset:0},
+                      {var:"assaultNorm", label:"# of Assaults per 100k women", acronym:2, iOffset:0},
+                      {var:"robberyNorm", label:"# of Robberies per 100k women", acronym:3, iOffset:0},
+                      {var:"homicideNorm", label:"# of Homicides per 100k women", acronym:4, iOffset:0}],
                      lsSI:
                      [{var:"protSHW", label:"Protection of all workers from sexual harassment in the workpace, regardless of company size", acronym:1, iOffset:2},
                       {var:"firearmSurrender", label:"Required relinquishment of firearms from abusers subject to domestic violcence protective orders", acronym:2, iOffset:2},
@@ -402,7 +403,12 @@
                         opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)&&currentStep!==lastStep?0.3:1}
                         stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":showVar!=="activeBan"?colorScale(0.5):"#C70039":"none"}
                         stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
-                        fill={!blanksteps.includes(currentStep)&&currentStep!==undefined ? colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party):"#ccc"}
+                        fill={!blanksteps.includes(currentStep)&&currentStep!==undefined ? 
+                                colorScale!==colorPolitical?
+                                    showVar==="vcSI"&&state[showVar]===0?
+                                        "lightgrey":
+                                            colorScale(state[showVar]):
+                                        colorScale(state.party):"#ccc"}
                         style={blurredSteps.includes(currentStep)||currentStep===undefined?"filter: blur(4px)":""}
                         />
                         <text 
@@ -426,6 +432,7 @@
                                     transform="translate({cellCenter(state, i)},{cellCenter(state, i)})"
                                     d={clickDataSort.length>1?arcLineTtip(data.value+0.02, i-data.iOffset):arcLineTtip(data.value+0.02, 3)}
                                     fill={"white"}
+                                    opacity={showVar==="vcSI"&&state[showVar]===0?0:1}
                                     stroke={colorScale!==colorPolitical?colorScale(state[showVar]):colorScale(state.party)}
                                     stroke-width={innerWidth > 640 ? 2 : 1}
                                     />
@@ -434,6 +441,7 @@
                                     fill={"white"}
                                     x={innerWidth > 640 ? -cellInner/7.5 : -cellInner/6.5}
                                     y="-2"
+                                    opacity={showVar==="vcSI"&&state[showVar]===0?0:1}
                                     font-size={innerWidth > 640 ? cellInner/6 : cellInner/5}
                                     >{data.acronym}
                                     </text>
@@ -481,7 +489,14 @@
                                 font-weight={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?700:
                                                 maxStates.includes(state.stateName)?700:300}
                                 fill={"white"}
-                                >{!blanksteps.includes(currentStep) ? !Politicalsteps.includes(currentStep)? (state[showVar]*100).toFixed()+"%":(state.deadlyIndex*100).toFixed()+"%":""}
+                                >{!blanksteps.includes(currentStep)?
+                                    !Politicalsteps.includes(currentStep)?
+                                        showVar==="vcSI"&&state[showVar]===0?"no data":
+                                        // new value
+                                        showVar==="vcSI"?(state.femaleCrimes/state.femalePop*100000).toFixed():
+                                        // delete ^ for old
+                                        (state[showVar]*100).toFixed()+"%":
+                                            (state.deadlyIndex*100).toFixed()+"%":""}
                                 </text>
                                 <!-- opacity={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?1:
                                     !Politicalsteps.includes(currentStep)? 
@@ -520,6 +535,7 @@
                                 y={cellCenter(state, i)+cellInner/3}
                                 text-anchor="middle" 
                                 font-size={innerWidth > 640 ? cellInner/5 : cellInner/4}
+                                opacity={showVar==="vcSI"&&state[showVar]===0?0:1}
                                 fill="white"
                                 >{clickData["deadlyIndex"].filter(d=>d.var===showVar)[0].riskType}</text>
                             {/if}
@@ -593,7 +609,7 @@
             <div class="buttons">
                 <!-- <div class="checkBoxContainer"> -->
                     <label class="checkBoxContainer">
-                        <h5 class="buttonLabel">toggle to color by political affiliation</h5>
+                        <h5 class="buttonLabel">color by political party</h5>
                     <!-- <div> -->
                         <input 
                         class="checkbox"
@@ -634,7 +650,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Abortion Rights"}
-                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}" 
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}" 
                     on:click={
                         ()=>{
                             showVar="activeBan"
@@ -656,7 +672,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Repr. Health Services"} 
-                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}"
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}"
                     on:click={
                         ()=>{
                             showVar="frhSI"
@@ -678,7 +694,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Violent Crime ag. Women"} 
-                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}"
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}"
                     on:click={
                         ()=>{
                             showVar="vcSI"
@@ -700,7 +716,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Legal Protections"} 
-                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}"
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}"
                     on:click={
                         ()=>{
                             showVar="lsSI"
@@ -723,7 +739,7 @@
                     name="buttons"  
                     checked="checked" 
                     value="Overall Danger Index" 
-                    style="background-color:{buttonColor};border:2px solid {buttonBorderColor}"
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}"
                     on:click={
                         ()=>{
                             showVar="deadlyIndex"
@@ -834,7 +850,7 @@
         cursor: pointer;
         height: 0;
         width: 0;
-        border: 2px solid black;
+        border: 1px solid black;
     }
 
     .checkmark {
@@ -844,7 +860,7 @@
         height: 25px;
         width: 25px;
         background-color: white;
-        border: 2px solid black;
+        border: 1px solid black;
         margin-bottom: 15px;
     }
 
@@ -876,7 +892,7 @@
     top: 5px;
     width: 5px;
     height: 10px;
-    border: solid black;
+    border: 1px solid black;
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
