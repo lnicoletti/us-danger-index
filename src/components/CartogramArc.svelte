@@ -13,10 +13,16 @@
     // style variables
     let buttonColor = "white";
     let buttonBorderColor = "black";
-    let buttonBorderWidth = "1px";
+    let buttonBorderWidth = "2px";
+
+    $: indexAnnotBorderColor = RWsteps.includes(currentStep)?"pink":
+						 FRsteps.includes(currentStep)?"rgb(76, 179, 131)":
+						 VCsteps.includes(currentStep)?"rgb(200, 10, 34)":
+						 LSsteps.includes(currentStep)?"rgb(56, 131, 184)":
+						 "rgb(130, 35, 136)"
     // init current index
     let indexDict = {activeBan: "Erosion of Abortion Rights", 
-                     frhSI: "Reproductive Health Services Support", 
+                     frhSI: "Reproductive Health Services", 
                      vcSI: "Violent Crime Against Women", 
                      lsSI: "Legal Protections", 
                      deadlyIndex: "overall"};
@@ -65,7 +71,7 @@
                     //  {var:"lsSI", label: "Lack of Legal Protections", acronym:4, iOffset:0, riskType:"Unprotected"}, 
                     //  {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
                     [{var:"activeBan", label:"Erosion of Abortion Rights", acronym:1, iOffset:0, riskType:""}, 
-                     {var:"frhSI", label: "Reproductive Health Services Support", acronym:2, iOffset:0, riskType:"Supported"}, 
+                     {var:"frhSI", label: "Reproductive Health Services", acronym:2, iOffset:0, riskType:"Supported"}, 
                      {var:"vcSI", label: "Violent Crime Against Women", acronym:3, iOffset:0, riskType:"crimes/100k"}, 
                      {var:"lsSI", label: "Legal Protections", acronym:4, iOffset:0, riskType:"Protected"}, 
                      {var:"deadlyIndex", label: "overall", acronym:"", iOffset:0, riskType:"Danger"}],
@@ -73,20 +79,20 @@
                      [{var:"activeBan", label:"Stance on Abortion Rights Given Potential Roe v. Wade Overturning", acronym:1, iOffset:0}],
                      frhSI:
                      [{var:"titleXNorm", label:"# of Title X Centers per 100k people", acronym:1, iOffset:2},
-                      {var:"famPlanCentersNorm", label:"# of Family Planning Centers per 100k people", acronym:2, iOffset:2},
+                      {var:"famPlanCentersNorm", label:"# Publicly Funded family planning centers per 100k people", acronym:2, iOffset:2},
                       {var:"aProvidersNorm", label:"# of Abortion Providers per 100k people", acronym:3, iOffset:2},
                       {var:"countiesWoAProvidersNorm", label:"% of Counties with a Known Abortion Provider", acronym:4, iOffset:2},
                       {var:"famPlanCenterSpendNorm", label:"Per Capita Public Expenditure For Family Planning", acronym:5, iOffset:2},
                       {var:"noCounselAbortion", label:"Access to abortion without state-mandated in-person counseling", acronym:6, iOffset:2}],
                      vcSI:
                      [{var:"rapeNorm", label:"# of Rapes per 100k women", acronym:1, iOffset:0},
-                      {var:"assaultNorm", label:"# of Assaults per 100k women", acronym:2, iOffset:0},
+                      {var:"assaultNorm", label:"# of Aggravated Assaults per 100k women", acronym:2, iOffset:0},
                       {var:"robberyNorm", label:"# of Robberies per 100k women", acronym:3, iOffset:0},
                       {var:"homicideNorm", label:"# of Homicides per 100k women", acronym:4, iOffset:0}],
                      lsSI:
                      [{var:"protSHW", label:"Protection of all workers from sexual harassment in the workpace, regardless of company size", acronym:1, iOffset:2},
-                      {var:"firearmSurrender", label:"Required relinquishment of firearms from abusers subject to domestic violcence protective orders", acronym:2, iOffset:2},
-                      {var:"unempBenefits", label:"Guaranteed unemployment benefits to victims of domestic violence, sexual assault, and stalking", acronym:3, iOffset:2},
+                      {var:"firearmSurrender", label:"Required relinquishment of firearms from abusers subject to domestic violence protective orders", acronym:2, iOffset:2},
+                      {var:"unempBenefits", label:"Guaranteed unempoyment benefits for victims of domestic violence, sexual assault, or stalking", acronym:3, iOffset:2},
                       {var:"parLeave", label:"Mandated parental leave", acronym:4, iOffset:2},
                       {var:"minWage", label:"Mandated minimum wage above the low-income threshold", acronym:5, iOffset:2},
                       {var:"ERA", label:"Ratified Equal Rights Amendment", acronym:6, iOffset:2}],
@@ -573,11 +579,11 @@
             {#if !noBottomTextSteps.includes(currentStep)}
                 <h3>
                     {#if deadlyState!==null && !Politicalsteps.includes(currentStep) && currentStep>1}
-                    The {showVar==="frhSI"?"least supported":showVar==="lsSI"?"most legally protected":"most dangerous"} state {indexLabPre} <div class="specialWordWrap" style="background-color:{colorScale(0.8)}">{currentIndex}</div> {indexLabAft} is <b>{deadlyState}</b>
+                    The {showVar==="frhSI"?"least supported":showVar==="lsSI"?"most legally protected":"most dangerous"} state {indexLabPre} <div class="specialWordWrap" style="border:2px solid {indexAnnotBorderColor}">{currentIndex}</div> {indexLabAft} is <b>{deadlyState}</b>
                     {:else if deadlyState===null && !Politicalsteps.includes(currentStep) && currentStep>1}
-                    There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="background-color:{showVar==="activeBan"?colorScale(1):colorScale(0.8)}">{currentIndex}</div> {indexLabAft}
+                    There are <b>{maxStates.length}</b> dangerous states {indexLabPre} <div class="specialWordWrap" style="border:2px solid {indexAnnotBorderColor}">{currentIndex}</div> {indexLabAft}
                     {:else if Politicalsteps.includes(currentStep)}
-                    On average, <div class="specialWordWrap" style="background-color:#dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <div class="specialWordWrap" style="background-color:#0080c9">blue</div> states.
+                    On average, <div class="specialWordWrap" style="border:2px solid #dd2c35">red</div> states are <b>{partyGap.toFixed()}%</b> more dangerous than <div class="specialWordWrap" style="border:2px solid #0080c9">blue</div> states.
                     {/if}
                 </h3>
             {:else}
@@ -650,7 +656,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Abortion Rights"}
-                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}" 
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {colorRW(0.33)}" 
                     on:click={
                         ()=>{
                             showVar="activeBan"
@@ -672,7 +678,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Repr. Health Services"} 
-                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}"
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {colorFR(0.3)}"
                     on:click={
                         ()=>{
                             showVar="frhSI"
@@ -694,7 +700,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Violent Crime ag. Women"} 
-                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}"
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {colorVC(0.8)}"
                     on:click={
                         ()=>{
                             showVar="vcSI"
@@ -716,7 +722,7 @@
                     group={buttons} 
                     name="buttons" 
                     value={"Legal Protections"} 
-                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}"
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {colorLS(0.8)}"
                     on:click={
                         ()=>{
                             showVar="lsSI"
@@ -739,7 +745,7 @@
                     name="buttons"  
                     checked="checked" 
                     value="Overall Danger Index" 
-                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {buttonBorderColor}"
+                    style="background-color:{buttonColor};border:{buttonBorderWidth} solid {colorDI(0.8)}"
                     on:click={
                         ()=>{
                             showVar="deadlyIndex"
@@ -773,8 +779,8 @@
 
     .buttonLabel {
         font-family: "Roboto Flex", sans-serif;
-        /* font-size:11px; */
-        font-weight: 600;
+        font-size:12px;
+        font-weight: 500;
         margin-top: 6px;
     }
 
@@ -792,10 +798,10 @@
 
         /* alternate */
         font-family: "Roboto Flex", sans-serif;
-        font-size:11px;
-        font-weight:400;
+        font-size:12px;
+        font-weight:500;
         color:black;
-        text-transform: uppercase;
+        /* text-transform: uppercase; */
         border-width:0px;
         padding:5px;
         /* border: 2px solid white */
@@ -825,6 +831,10 @@
         background-color: black; */
     }
 
+    label {
+        margin-bottom: 5px;
+    }
+
     .checkbox {
         margin-bottom: 15px;
     }
@@ -834,7 +844,7 @@
         display: block;
         position: relative;
         padding-left: 35px;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         cursor: pointer;
         /* font-size: 20px; */
         /* border: 2px solid black; */
@@ -850,18 +860,19 @@
         cursor: pointer;
         height: 0;
         width: 0;
-        border: 1px solid black;
+        border: 2px solid #ccc;
     }
 
     .checkmark {
         position: absolute;
-        top: 0;
-        left: 0;
-        height: 25px;
-        width: 25px;
+        top: 2px;
+        left: 7px;
+        height: 18px;
+        width: 18px;
         background-color: white;
-        border: 1px solid black;
-        margin-bottom: 15px;
+        border: 2px solid grey;
+        margin-bottom: 8px;
+        border-radius: 10%;
     }
 
     /* On mouse-over, add a grey background color */
@@ -871,7 +882,7 @@
 
     /* When the checkbox is checked, add a blue background */
     .checkBoxContainer input:checked ~ .checkmark {
-    background-color: white;
+    background-color: #ccc;
     }
 
     /* Create the checkmark/indicator (hidden when not checked) */
@@ -888,11 +899,11 @@
 
     /* Style the checkmark/indicator */
     .checkBoxContainer .checkmark:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: 1px solid black;
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: 2px solid white;
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -941,7 +952,7 @@
     h5 {
         color: black;
 		font-family: 'Roboto Flex', sans-serif;
-		font-weight: 600;
+		font-weight: 500;
         margin-bottom: 10px;
         margin-top: 0px
 	}
@@ -954,7 +965,7 @@
         padding-left: 5px;
         display: inline-block;
         /* transform:skew(-.312rad); */
-        color: white;
+        /* color: white; */
         font-weight: 500;
         border-radius: 2.5px;
     }

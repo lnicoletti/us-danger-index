@@ -80,8 +80,8 @@
     $: DIsteps = [20,21,22,23,25,26]
     $: Politicalsteps = [24]
 
-	$: stepBorderColor = RWsteps.includes(currentStep)?"darkred":
-						 FRsteps.includes(currentStep)?"rgb(0, 68, 27)":
+	$: stepBorderColor = RWsteps.includes(currentStep)?"pink":
+						 FRsteps.includes(currentStep)?"rgb(76, 179, 131)":
 						 VCsteps.includes(currentStep)?"rgb(200, 10, 34)":
 						 LSsteps.includes(currentStep)?"rgb(56, 131, 184)":
 						 DIsteps.includes(currentStep)?"rgb(130, 35, 136)":
@@ -89,7 +89,7 @@
 	
 	let steps = 
 				["<div class='questions' style='text-align:center'>Firstly, what constitutes danger?<br><br><br><br><br>Additionally, how does danger vary across states?</div>",
-				"<div class='specialPar'>In creating the <span style='font-style:italic'>Overall Danger Index</span> for our tool, several sub-indices were considered:<br><div style='text-align:center'><div class='specialWordWrapPar' style='background-color:#ccc'>the erosion of abortion rights</div><br><div class='specialWordWrapPar' style='background-color:#ccc'>reproductive health services support</div><br><div class='specialWordWrapPar' style='background-color:#ccc'>violent crimes committed against women</div><br><div class='specialWordWrapPar' style='background-color:#ccc'>state-level legal protections</div></div></div>",
+				"<div class='specialPar'>In creating the <span style='font-style:italic'>Overall Danger Index</span> for our tool, several sub-indices were considered:<br><div style='text-align:center'><div class='specialWordWrapPar' style='border:2px solid pink'>the erosion of abortion rights</div><br><div class='specialWordWrapPar' style='border:2px solid rgb(76, 179, 131)'>reproductive health services support</div><br><div class='specialWordWrapPar' style='border:2px solid rgb(200, 10, 34)'>violent crimes committed against women</div><br><div class='specialWordWrapPar' style='border:2px solid rgb(56, 131, 184)'>state-level legal protections</div></div></div>",
 				"<div>As outlined by a cartogram approach, we consider each of these sub-indices and, ultimately, our <i>Overall Danger Index</i> at the state-level.</div>", 
 				 "<div>First, in creating the <i>Erosion of Abortion Rights</i> Sub-Index, we have considered state stances on banning or greatly restricting access to abortion if Roe v. Wade is to be overturned.<br><br>In the following cartogram, each square represents a US state, and the level of completion of each circle within each square represents the risk to the right of abortion imposed by each state.  For example, squares (i.e., states) denoted by full circles have trigger laws that would ban abortion.  Squares denoted by circles that are two-thirds completed represent states that are likely to restrict access to abortion.  Squares marked by one-third completed circles indicate states that pose no imminent threat to access to abortion.  Finally, if not marked with a complete or incomplete circle, a state legally protects abortion and an overturn of Roe v. Wade does not pose a risk to residents of that state.</div>", 
 				 "<div>In the following example, we can see that Washington legally protects rights to abortion, regardless of a Roe v. Wade overturning.</div>",

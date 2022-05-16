@@ -28,9 +28,10 @@ h3 {
 	padding-right: 5px;
 	padding-left: 5px;
 	display: inline-block;
+	margin: 8px;
 	/* transform:skew(-.312rad); */
-	color:white;
-	border:1px solid white;
+	/* color:white;
+	border:1px solid white; */
 	border-radius: 2.5px;
 
 }

@@ -62,7 +62,7 @@
 
     $: legendLabel = showVar==="activeBan"?"Risk of Abortion Ban":
                      showVar==="vcSI"?"Violent Crime Rate Per 100k Women":
-                     showVar==="frhSI"?"Reproductive Health Services Support":
+                     showVar==="frhSI"?"Reproductive Health Services":
                      showVar==="lsSI"?"Legal Protections":"Overall Danger"
     // let data = [{deadlyIndex:1, position:[6.4,8.5], label:"v. high"}, 
     //             {deadlyIndex:0.66, position:[5.4,8.5], label:"high"}, 
