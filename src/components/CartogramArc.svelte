@@ -408,7 +408,7 @@
                         height="{clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv&&currentStep===lastStep?cellInnerTtip:cellInner}"
                         opacity={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)&&currentStep!==lastStep?0.3:1}
                         stroke={highlightSteps.includes(currentStep)?highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?"none":showVar!=="activeBan"?colorScale(0.5):"#C70039":"none"}
-                        stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:3}
+                        stroke-width={highlightedState!==null && !highlightedState.includes(state.stateAbbrv)?0:innerWidth<500?1.5:3}
                         fill={!blanksteps.includes(currentStep)&&currentStep!==undefined ? 
                                 colorScale!==colorPolitical?
                                     showVar==="vcSI"&&state[showVar]===0?
@@ -485,7 +485,7 @@
                                 <text 
                                 class="stateName"
                                 font-size={clickedState!==null&&state.stateAbbrv===clickedState.stateAbbrv?
-                                            innerWidth > 640 ? cellInner/4 : cellInner/3:
+                                            innerWidth > 640 ? cellInner/4 : innerWidth < 400?cellInner/3.5: cellInner/3:
                                                 deadlyState!==null&&deadlyState.includes(state.stateName)?
                                                     innerWidth > 640 ? cellInner/6 : cellInner/5:
                                                     innerWidth > 640 ? cellInner/7 : cellInner/5}
